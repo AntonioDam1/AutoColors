@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">AutoColorsPrueba</string>
+    <string name="agregar_favoritos">Agregar a favoritos</string>
+    <string name="copiar">Copiar hexadecimal</string>
 </resources>
