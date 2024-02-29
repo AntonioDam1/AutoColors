@@ -4,6 +4,14 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
+    <style name="CustomButton" parent="Widget.Material3.Button">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">120dp</item>
+        <item name="strokeColor">#95E6FF</item>
+        <item name="strokeWidth">3dp</item>
+        <item name="android:textColor">#FDFFFF</item>
+        <item name="backgroundTint">#2943D3</item>
+    </style>
 
     <style name="Theme.AutoColorsPrueba" parent="Base.Theme.AutoColorsPrueba" />
 </resources>

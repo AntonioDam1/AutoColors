@@ -5,13 +5,10 @@ import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import android.widget.Toolbar
+import androidx.appcompat.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.view.menu.MenuView.ItemView
-import com.google.android.material.appbar.AppBarLayout
 import com.skydoves.colorpickerview.AlphaTileView
 import com.skydoves.colorpickerview.ColorEnvelope
 import com.skydoves.colorpickerview.ColorPickerView
@@ -21,17 +18,30 @@ import com.skydoves.colorpickerview.sliders.BrightnessSlideBar
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
+import android.view.View.OnClickListener
+import androidx.core.view.forEach
+import com.google.android.material.badge.BadgeDrawable
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
+
+    lateinit var bottomNavigationView: BottomNavigationView
 
     private lateinit var colorPickerView: ColorPickerView
     private lateinit var alphaSlider: AlphaSlideBar
     private lateinit var brightnessSlideBar: BrightnessSlideBar
     private lateinit var alphaTileView: AlphaTileView
     private lateinit var textView: TextView
-    private lateinit var appToolbar: AppBarLayout
+
+    // private lateinit var appToolbar: Toolbar
     private lateinit var itemCopiar: MenuItem
     private lateinit var itemAgregar: MenuItem
+    private lateinit var itemFav: MenuItem
+    private lateinit var itemComparar: MenuItem
+
+
+    private lateinit var toolbar: Toolbar
 
     private var hexadecimal: String = ""
 
@@ -45,7 +55,10 @@ class MainActivity : AppCompatActivity() {
         brightnessSlideBar = findViewById(R.id.brightnessSlide)
         alphaTileView = findViewById(R.id.alphaTileView)
         textView = findViewById(R.id.textView)
-        appToolbar = findViewById(R.id.appBarLayout)
+        toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        setupBottomMenu()
+
 
 
 
@@ -57,7 +70,8 @@ class MainActivity : AppCompatActivity() {
                 textView.text = "#${envelope.hexCode}"
                 hexadecimal = "#${envelope.hexCode}"
 
-                appToolbar.setBackgroundColor(envelope.color)
+                toolbar.setBackgroundColor(envelope.color)
+                bottomNavigationView.setBackgroundColor(envelope.color)
 
 
             }
@@ -66,48 +80,112 @@ class MainActivity : AppCompatActivity() {
         colorPickerView.attachAlphaSlider(alphaSlider)
         colorPickerView.attachBrightnessSlider(brightnessSlideBar)
     }
-
-    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
-        super.onCreateContextMenu(menu, v, menuInfo)
-        menuInflater.inflate(R.menu.fav_menu, menu)
-        itemCopiar = menu.findItem(R.id.agregarFavoritos)
-        itemAgregar = menu.findItem(R.id.itemcopiar)
-    }
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.fav_menu, menu)
-        itemCopiar = menu.findItem(R.id.agregarFavoritos)
-        itemAgregar = menu.findItem(R.id.itemcopiar)
+    private fun onItemSelectedListener(item: MenuItem): Boolean {
+        val itemId = item.itemId
+        when (item.itemId) {
+            R.id.galeria -> {
+                val intent = Intent(this, galeria::class.java).apply {
+                }
+                startActivity(intent)
+            }
+//            R.id. page_fav -> {
+//                showPageFragment(R.drawable. ic_fav, R.string. bottom_nav_fav)
+//                return true
+//            }
+        }
         return true
     }
-//    override fun onContextMenuClosed (menu: Menu) {
+
+    private fun setupBottomMenu() {
+
+        bottomNavigationView = findViewById(R.id.bottom_navigation)
+        bottomNavigationView.setSelectedItemId(R.id.selector)
+
+        bottomNavigationView.setOnItemSelectedListener { item -> onItemSelectedListener(item) }
+
+        bottomNavigationView.menu.forEach { menuItem ->
+            val badge = bottomNavigationView.getOrCreateBadge(menuItem.itemId)
+            badge.isVisible = false
+            badge.badgeGravity = BadgeDrawable.TOP_START
+//            badgeCounts[menuItem.itemId] = 0
+        }
+    }
+
+
+        override fun onCreateContextMenu(
+            menu: ContextMenu,
+            v: View,
+            menuInfo: ContextMenu.ContextMenuInfo?
+        ) {
+            super.onCreateContextMenu(menu, v, menuInfo)
+            menuInflater.inflate(R.menu.fav_menu, menu)
+            itemCopiar = menu.findItem(R.id.agregarFavoritos)
+            itemAgregar = menu.findItem(R.id.itemcopiar)
+            itemComparar = menu.findItem(R.id.comparar)
+        }
+
+        override fun onCreateOptionsMenu(menu: Menu): Boolean {
+            menuInflater.inflate(R.menu.menu_toolbar, menu)
+            itemFav = menu.findItem(R.id.corazon)
+            // Asignar un click listener al ítem de menú corazón
+            itemFav.setOnMenuItemClickListener {
+                // Crear un Intent para iniciar la actividad de Galería
+                val intent = Intent(this@MainActivity, galeria::class.java)
+                // Iniciar la actividad
+                startActivity(intent)
+                // Devolver true para indicar que el evento ha sido consumido
+                true
+            }
+
+            // Devolver true para mostrar el menú en la barra de acción.
+
+
+            return true
+        }
+
+        //    override fun onContextMenuClosed (menu: Menu) {
 //        if (onContextItemSelected(itemCopiar))
 //        Toast.makeText( this, "Menú cerrado" , Toast.LENGTH_SHORT).show()
 //    }
-override fun onContextItemSelected(item: MenuItem): Boolean {
-    when (item.itemId) {
-        R.id.agregarFavoritos -> {
-            showToast("Agregado a Favoritos")
-            return true
+        override fun onContextItemSelected(item: MenuItem): Boolean {
+            when (item.itemId) {
+                R.id.agregarFavoritos -> {
+                    showToast("Agregado a Favoritos")
+                    return true
+                }
+
+                R.id.itemcopiar -> {
+
+                    val textoACopiar = hexadecimal.toString()// Reemplaza esto con tu texto
+                    copyToClipboard(textoACopiar)
+                    showToast("Texto copiado al portapapeles")
+                    return true
+                }
+
+                R.id.comparar -> {
+                    val intent = Intent(this@MainActivity, galeria::class.java).apply {
+                    }
+                    startActivity(intent)
+                    return true
+                }
+
+                else -> return super.onContextItemSelected(item)
+            }
         }
-        R.id.itemcopiar -> {
 
-            val textoACopiar = hexadecimal.toString()// Reemplaza esto con tu texto
-            copyToClipboard(textoACopiar)
-            showToast("Texto copiado al portapapeles")
-            return true
+        private fun copyToClipboard(text: String) {
+            val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clipData = ClipData.newPlainText("Texto copiado", text)
+            clipboardManager.setPrimaryClip(clipData)
         }
-        else -> return super.onContextItemSelected(item)
-    }
-}
 
-    private fun copyToClipboard(text: String) {
-        val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clipData = ClipData.newPlainText("Texto copiado", text)
-        clipboardManager.setPrimaryClip(clipData)
+        private fun showToast(message: String) {
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        }
+
     }
 
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
 
-}
+
+
+

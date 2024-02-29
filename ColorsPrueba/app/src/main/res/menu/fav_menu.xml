@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item
         android:id="@+id/agregarFavoritos"
         android:title="@string/agregar_favoritos" />
     <item
         android:id="@+id/itemcopiar"
         android:title="@string/copiar" />
+    <item
+        android:id="@+id/comparar"
+        android:title="@string/comparar"/>
 
 </menu>

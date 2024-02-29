@@ -2,4 +2,8 @@
     <string name="app_name">AutoColorsPrueba</string>
     <string name="agregar_favoritos">Agregar a favoritos</string>
     <string name="copiar">Copiar hexadecimal</string>
+    <string name="selector">Selector</string>
+    <string name="galeria">Galeria</string>
+    <string name="ver_fav">Ver favoritos</string>
+    <string name="comparar">Comparar</string>
 </resources>
