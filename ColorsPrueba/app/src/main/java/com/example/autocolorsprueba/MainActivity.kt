@@ -79,26 +79,26 @@ class MainActivity : AppCompatActivity() {
         itemAgregar = menu.findItem(R.id.itemcopiar)
         return true
     }
-//    override fun onContextMenuClosed (menu: Menu) {
+    //    override fun onContextMenuClosed (menu: Menu) {
 //        if (onContextItemSelected(itemCopiar))
 //        Toast.makeText( this, "Menú cerrado" , Toast.LENGTH_SHORT).show()
 //    }
-override fun onContextItemSelected(item: MenuItem): Boolean {
-    when (item.itemId) {
-        R.id.agregarFavoritos -> {
-            showToast("Agregado a Favoritos")
-            return true
-        }
-        R.id.itemcopiar -> {
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.agregarFavoritos -> {
+                showToast("Agregado a Favoritos")
+                return true
+            }
+            R.id.itemcopiar -> {
 
-            val textoACopiar = hexadecimal.toString()// Reemplaza esto con tu texto
-            copyToClipboard(textoACopiar)
-            showToast("Texto copiado al portapapeles")
-            return true
+                val textoACopiar = hexadecimal.toString()// Reemplaza esto con tu texto
+                copyToClipboard(textoACopiar)
+                showToast("Texto copiado al portapapeles")
+                return true
+            }
+            else -> return super.onContextItemSelected(item)
         }
-        else -> return super.onContextItemSelected(item)
     }
-}
 
     private fun copyToClipboard(text: String) {
         val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager

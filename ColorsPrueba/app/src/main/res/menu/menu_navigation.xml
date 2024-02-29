@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_selector"
+        android:icon="@drawable/ic_home"
+        android:title="Selector" />
+    <item
+        android:id="@+id/navigation_paletaImagen"
+        android:icon="@drawable/ic_galeria"
+        android:title="Galeria" />
+</menu>
