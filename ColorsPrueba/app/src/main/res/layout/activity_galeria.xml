@@ -32,34 +32,49 @@
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" /><![CDATA[
+
+    "        />
+
+
+
+
+
+
+
+
+
+
+
+    ]]>
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="300dp"
-        android:layout_height="250dp"
-        android:layout_marginStart="157dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="157dp"
-
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/botonImagen"
         style="@style/CustomButton"
-        android:onClick="AbrirGaleria"
-
         android:layout_width="wrap_content"
+
         android:layout_height="wrap_content"
         android:layout_marginStart="160dp"
         android:layout_marginEnd="160dp"
+        android:onClick="AbrirGaleria"
         android:text="Button"
         app:layout_constraintBottom_toTopOf="@+id/brightnessSlide"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.637" />
 
     <com.skydoves.colorpickerview.sliders.BrightnessSlideBar
         android:id="@+id/brightnessSlide"

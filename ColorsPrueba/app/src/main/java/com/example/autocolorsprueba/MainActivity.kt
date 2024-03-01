@@ -84,8 +84,10 @@ class MainActivity : AppCompatActivity() {
         val itemId = item.itemId
         when (item.itemId) {
             R.id.galeria -> {
-                val intent = Intent(this, galeria::class.java).apply {
-                }
+                val intent = Intent(this, galeria::class.java).apply {  }
+                val b = Bundle()
+                b.putString("hexadecimal",hexadecimal)
+                intent.putExtras(b  )
                 startActivity(intent)
             }
 //            R.id. page_fav -> {

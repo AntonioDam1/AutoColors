@@ -7,10 +7,11 @@ android {
     namespace = "com.example.autocolorsprueba"
     compileSdk = 34
 
+
     defaultConfig {
         applicationId = "com.example.autocolorsprueba"
-        minSdk = 24
-        targetSdk = 34
+        minSdk = 28
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 
@@ -46,4 +47,6 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
     implementation("androidx.activity:activity:1.6.1")
+//    implementation("androidx.activity:activity-ktx:1.8.2")
+//    implementation("androidx.fragment:fragment-ktx:1.6.2")
 }

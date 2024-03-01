@@ -5,6 +5,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -15,12 +16,15 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts.*
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.forEach
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -45,14 +49,15 @@ class galeria : AppCompatActivity() {
     private lateinit var itemFav: MenuItem
     private lateinit var itemComparar: MenuItem
 
-
     private lateinit var toolbar: Toolbar
+    private lateinit var  ivImage: ImageView
 
     private var hexadecimal: String = ""
 
 
     val pickMedia = registerForActivityResult(PickVisualMedia()){uri ->
         if (uri != null){
+            ivImage.setImageURI(uri)
             Log.i("aris","Seleccionado")
         }else{
             Log.i("aris","No Seleccionado")
@@ -64,7 +69,22 @@ class galeria : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
+//        binding = ActivityMainBinding.inflate(layoutInflater)
+
+//        setContentView(binding.root)
         setContentView(R.layout.activity_galeria)
+        ivImage= findViewById(R.id.imageView)
+        val bundle = intent.extras
+        val color : String = "#FF0000"
+        toolbar = findViewById(R.id.toolbar)
+//        println("hola")
+//        Log.d("hola","${bundle?.getString("hexadecimal")}")
+//        println("${bundle?.getString("hexadecimal")}")
+//        toolbar.setBackgroundColor(("${bundle?.getString("hexadecimal")}").toInt())
+//        toolbar.setBackgroundColor((color).toInt())
+
+
+
 
         alphaSlider = findViewById(R.id.alphaSlideBar)
         brightnessSlideBar = findViewById(R.id.brightnessSlide)
@@ -86,9 +106,10 @@ class galeria : AppCompatActivity() {
         val itemId = item.itemId
         when (item.itemId) {
             R.id.selector -> {
-                val intent = Intent(this, MainActivity::class.java).apply {
-                }
-                startActivity(intent)
+//                val intent = Intent(this, MainActivity::class.java).apply {
+                finish()
+//                }
+//                startActivity(intent)
             }
 //            R.id. page_fav -> {
 //                showPageFragment(R.drawable. ic_fav, R.string. bottom_nav_fav)
