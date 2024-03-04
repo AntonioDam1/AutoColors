@@ -1,15 +1,17 @@
 package com.example.autocolorsprueba
 
+import android.R.attr
 import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.view.ContextMenu
 import android.view.Menu
@@ -19,22 +21,23 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.forEach
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.skydoves.colorpickerview.AlphaTileView
+import com.skydoves.colorpickerview.ColorEnvelope
 import com.skydoves.colorpickerview.ColorPickerView
+import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
 import com.skydoves.colorpickerview.sliders.AlphaSlideBar
 import com.skydoves.colorpickerview.sliders.BrightnessSlideBar
-import kotlin.math.log
+import java.io.FileNotFoundException
+
 
 class galeria : AppCompatActivity() {
+     val REQUEST_CODE_GALLERY = 200
     lateinit var bottomNavigationView: BottomNavigationView
 
     private lateinit var colorPickerView: ColorPickerView
@@ -69,23 +72,13 @@ class galeria : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-//        binding = ActivityMainBinding.inflate(layoutInflater)
-
-//        setContentView(binding.root)
         setContentView(R.layout.activity_galeria)
-        ivImage= findViewById(R.id.imageView)
+        colorPickerView = findViewById(R.id.colorPickerViewGalery)
+
+//        ivImage= findViewById(R.id.imageView)
         val bundle = intent.extras
         val color : String = "#FF0000"
         toolbar = findViewById(R.id.toolbar)
-//        println("hola")
-//        Log.d("hola","${bundle?.getString("hexadecimal")}")
-//        println("${bundle?.getString("hexadecimal")}")
-//        toolbar.setBackgroundColor(("${bundle?.getString("hexadecimal")}").toInt())
-//        toolbar.setBackgroundColor((color).toInt())
-
-
-
-
         alphaSlider = findViewById(R.id.alphaSlideBar)
         brightnessSlideBar = findViewById(R.id.brightnessSlide)
         alphaTileView = findViewById(R.id.alphaTileView)
@@ -94,13 +87,89 @@ class galeria : AppCompatActivity() {
         setSupportActionBar(toolbar)
         setupBottomMenu()
         registerForContextMenu(alphaTileView)
+        colorPickerView.attachAlphaSlider(alphaSlider)
+        colorPickerView.attachBrightnessSlider(brightnessSlideBar)
 
         btnImage = findViewById(R.id.botonImagen)
         btnImage.setOnClickListener {
-            pickMedia.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
+//            pickMedia.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
+//            val photoPickerIntent = Intent(Intent.ACTION_PICK)
+//            photoPickerIntent.setType("image/*")
+//            startActivityForResult(photoPickerIntent, REQUEST_CODE_GALLERY)
+
+            if (Build.VERSION.SDK_INT < 19) {
+                var intent = Intent()
+                intent.type = "image/*"
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                intent.action = Intent.ACTION_GET_CONTENT
+                startActivityForResult(
+                    Intent.createChooser(intent, "Choose Pictures")
+                    , REQUEST_CODE_GALLERY
+                )
+            }
+            else { // For latest versions API LEVEL 19+
+                var intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                intent.addCategory(Intent.CATEGORY_OPENABLE)
+                intent.type = "image/*"
+                startActivityForResult(intent, REQUEST_CODE_GALLERY);
+            }
+
+
         }
 
+        colorPickerView.setColorListener(object : ColorEnvelopeListener {
+            override fun onColorSelected(envelope: ColorEnvelope, fromUser: Boolean) {
+                alphaTileView.setPaintColor(envelope.color)
+                textView.text = "#${envelope.hexCode}"
+                hexadecimal = "#${envelope.hexCode}"
+
+                toolbar.setBackgroundColor(envelope.color)
+                bottomNavigationView.setBackgroundColor(envelope.color)
+
+
+            }
+        })
+
     }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_GALLERY){
+
+            // if multiple images are selected
+            if (data?.getClipData() != null) {
+                var count = data.clipData?.itemCount
+
+                for (i in 0..count!! - 1) {
+                    var imageUri: Uri = data.clipData?.getItemAt(i)!!.uri
+                    //     iv_image.setImageURI(imageUri) Here you can assign your Image URI to the ImageViews
+                }
+
+            } else if (data?.getData() != null) {
+                // if single image is selected
+                try {
+                    var imageUri: Uri = data.data!!
+                    val imageStream = contentResolver.openInputStream(imageUri)
+                    val selectedImage = BitmapFactory.decodeStream(imageStream)
+                    val drawable: Drawable = BitmapDrawable(resources, selectedImage)
+                    colorPickerView.setPaletteDrawable(drawable)
+                } catch (e: FileNotFoundException) {
+                    e.printStackTrace()
+                }
+
+
+                var imageUri: Uri = data.data!!
+
+                //   iv_image.setImageURI(imageUri) Here you can assign the picked image uri to your imageview
+
+            }
+        }
+    }
+
+
 
     private fun onItemSelectedListener(item: MenuItem): Boolean {
         val itemId = item.itemId

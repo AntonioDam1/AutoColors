@@ -59,6 +59,8 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         setupBottomMenu()
 
+        colorPickerView.setPaletteDrawable(null)
+
 
 
 
