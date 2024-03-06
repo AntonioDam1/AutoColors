@@ -58,12 +58,6 @@ class MainActivity : AppCompatActivity() {
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         setupBottomMenu()
-
-        colorPickerView.setPaletteDrawable(null)
-
-
-
-
         registerForContextMenu(alphaTileView)
 
         colorPickerView.setColorListener(object : ColorEnvelopeListener {

@@ -56,17 +56,6 @@ class galeria : AppCompatActivity() {
     private lateinit var  ivImage: ImageView
 
     private var hexadecimal: String = ""
-
-
-    val pickMedia = registerForActivityResult(PickVisualMedia()){uri ->
-        if (uri != null){
-            ivImage.setImageURI(uri)
-            Log.i("aris","Seleccionado")
-        }else{
-            Log.i("aris","No Seleccionado")
-        }
-    }
-
     lateinit var btnImage: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,8 +63,6 @@ class galeria : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_galeria)
         colorPickerView = findViewById(R.id.colorPickerViewGalery)
-
-//        ivImage= findViewById(R.id.imageView)
         val bundle = intent.extras
         val color : String = "#FF0000"
         toolbar = findViewById(R.id.toolbar)
@@ -88,15 +75,11 @@ class galeria : AppCompatActivity() {
         setupBottomMenu()
         registerForContextMenu(alphaTileView)
         colorPickerView.attachAlphaSlider(alphaSlider)
+//        colorPickerView.setPaletteDrawable(@drawable)
         colorPickerView.attachBrightnessSlider(brightnessSlideBar)
 
         btnImage = findViewById(R.id.botonImagen)
         btnImage.setOnClickListener {
-//            pickMedia.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
-//            val photoPickerIntent = Intent(Intent.ACTION_PICK)
-//            photoPickerIntent.setType("image/*")
-//            startActivityForResult(photoPickerIntent, REQUEST_CODE_GALLERY)
-
             if (Build.VERSION.SDK_INT < 19) {
                 var intent = Intent()
                 intent.type = "image/*"
