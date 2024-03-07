@@ -6,12 +6,14 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.ContextMenu
 import android.view.Menu
@@ -21,6 +23,8 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -37,7 +41,7 @@ import java.io.FileNotFoundException
 
 
 class galeria : AppCompatActivity() {
-     val REQUEST_CODE_GALLERY = 200
+    val REQUEST_CODE_GALLERY = 200
     lateinit var bottomNavigationView: BottomNavigationView
 
     private lateinit var colorPickerView: ColorPickerView
@@ -57,6 +61,9 @@ class galeria : AppCompatActivity() {
 
     private var hexadecimal: String = ""
     lateinit var btnImage: Button
+
+    //Cámara
+    private lateinit var btnCamara: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -101,6 +108,12 @@ class galeria : AppCompatActivity() {
 
         }
 
+        //Cámara
+        btnCamara = findViewById(R.id.botonCamara)
+        btnCamara.setOnClickListener{
+            startForResult.launch(Intent(MediaStore.ACTION_IMAGE_CAPTURE))
+        }
+
         colorPickerView.setColorListener(object : ColorEnvelopeListener {
             override fun onColorSelected(envelope: ColorEnvelope, fromUser: Boolean) {
                 alphaTileView.setPaintColor(envelope.color)
@@ -116,6 +129,16 @@ class galeria : AppCompatActivity() {
 
     }
 
+    //funcion de la camara
+    private val startForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val intent = result.data
+                val imageBitmap = intent?.extras?.get("data") as Bitmap
+                val drawable: Drawable = BitmapDrawable(resources, imageBitmap)
+                colorPickerView.setPaletteDrawable(drawable)
+            }
+        }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

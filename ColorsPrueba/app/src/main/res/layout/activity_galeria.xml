@@ -34,23 +34,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.skydoves.colorpickerview.ColorPickerView
-        android:id="@+id/colorPickerViewGalery"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_gravity="center"
-        android:layout_margin="16dp"
-        android:layout_marginTop="35dp"
-        app:initialColor="@color/colorPrimary"
-        app:layout_constraintBottom_toTopOf="@+id/brightnessSlide"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:preferenceName="Test2"
-        app:selector="@drawable/colorpickerview_wheel" />
 
-
-<!--    <ImageView-->
+    <!--    <ImageView-->
 <!--        android:id="@+id/imageView"-->
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="200dp"-->
@@ -61,21 +46,24 @@
 <!--        app:layout_constraintTop_toBottomOf="@+id/toolbar"-->
 <!--        app:layout_constraintVertical_bias="0.0" />-->
 
-    <Button
-        android:id="@+id/botonImagen"
-        style="@style/CustomButton"
-        android:layout_width="wrap_content"
-
-        android:layout_height="wrap_content"
-        android:layout_marginStart="160dp"
-        android:layout_marginEnd="160dp"
-        android:onClick="AbrirGaleria"
-        android:text="Abrir galeria"
+    <com.skydoves.colorpickerview.ColorPickerView
+        android:id="@+id/colorPickerViewGalery"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_gravity="center"
+        android:layout_margin="16dp"
+        android:layout_marginTop="35dp"
+        app:initialColor="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@+id/brightnessSlide"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/colorPickerViewGalery"
-        app:layout_constraintVertical_bias="0.637" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.0"
+        app:preferenceName="Test2"
+        app:selector="@drawable/colorpickerview_wheel" >
+
+    </com.skydoves.colorpickerview.ColorPickerView>
 
     <com.skydoves.colorpickerview.sliders.BrightnessSlideBar
         android:id="@+id/brightnessSlide"
@@ -143,6 +131,34 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:tileSize="20" />
+
+    <Button
+        android:id="@+id/botonImagen"
+        style="@style/CustomButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="AbrirGaleria"
+        android:text="Abrir galeria"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.242"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.498" />
+
+    <Button
+        android:id="@+id/botonCamara"
+        style="@style/CustomButton"
+        android:layout_width="131dp"
+        android:layout_height="47dp"
+        android:onClick="TomarFoto"
+        android:text="Tomar Foto"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.775"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.499" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

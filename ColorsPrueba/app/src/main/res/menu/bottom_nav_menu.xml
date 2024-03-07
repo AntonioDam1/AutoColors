@@ -8,6 +8,10 @@
         android:id="@+id/galeria"
         android:icon="@drawable/ic_galeria"
         android:title="@string/galeria"/>
+    <item
+        android:id="@+id/filtrar"
+        android:icon="@drawable/ic_filter"
+        android:title="@string/Filtrar"/>
 
 
 </menu>

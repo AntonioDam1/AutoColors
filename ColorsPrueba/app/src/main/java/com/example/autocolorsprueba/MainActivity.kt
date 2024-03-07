@@ -91,6 +91,10 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtras(b  )
                 startActivity(intent)
             }
+            R.id.filtrar -> {
+                val intent = Intent(this, Filtrar::class.java).apply {  }
+                startActivity(intent)
+            }
 
 //            R.id. page_fav -> {
 //                showPageFragment(R.drawable. ic_fav, R.string. bottom_nav_fav)
