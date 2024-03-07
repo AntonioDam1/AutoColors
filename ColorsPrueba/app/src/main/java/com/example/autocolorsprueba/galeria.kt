@@ -159,6 +159,7 @@ class galeria : AppCompatActivity() {
         when (item.itemId) {
             R.id.selector -> {
 //                val intent = Intent(this, MainActivity::class.java).apply {
+
                 finish()
 //                }
 //                startActivity(intent)
@@ -174,7 +175,7 @@ class galeria : AppCompatActivity() {
     private fun setupBottomMenu() {
 
         bottomNavigationView = findViewById(R.id.bottom_navigation)
-        bottomNavigationView.setSelectedItemId(R.id.selector)
+        bottomNavigationView.selectedItemId = R.id.galeria
 
         bottomNavigationView.setOnItemSelectedListener { item -> onItemSelectedListener(item) }
 

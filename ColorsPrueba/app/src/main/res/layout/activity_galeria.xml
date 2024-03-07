@@ -40,7 +40,7 @@
         android:layout_height="250dp"
         android:layout_gravity="center"
         android:layout_margin="16dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="35dp"
         app:initialColor="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@+id/brightnessSlide"
         app:layout_constraintEnd_toEndOf="parent"
@@ -125,7 +125,7 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="65dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/bottom_nav_menu" />
 

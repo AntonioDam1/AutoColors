@@ -21,8 +21,13 @@ import android.content.Context
 import android.content.Intent
 import android.view.View.OnClickListener
 import androidx.core.view.forEach
+import com.example.autocolorsprueba.database.CochesRoomDatabase
+import com.example.autocolorsprueba.model.entity.ColorCoche
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -86,6 +91,7 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtras(b  )
                 startActivity(intent)
             }
+
 //            R.id. page_fav -> {
 //                showPageFragment(R.drawable. ic_fav, R.string. bottom_nav_fav)
 //                return true
@@ -97,7 +103,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupBottomMenu() {
 
         bottomNavigationView = findViewById(R.id.bottom_navigation)
-        bottomNavigationView.setSelectedItemId(R.id.selector)
+        bottomNavigationView.selectedItemId = R.id.selector
 
         bottomNavigationView.setOnItemSelectedListener { item -> onItemSelectedListener(item) }
 
@@ -105,7 +111,6 @@ class MainActivity : AppCompatActivity() {
             val badge = bottomNavigationView.getOrCreateBadge(menuItem.itemId)
             badge.isVisible = false
             badge.badgeGravity = BadgeDrawable.TOP_START
-//            badgeCounts[menuItem.itemId] = 0
         }
     }
 
@@ -127,8 +132,15 @@ class MainActivity : AppCompatActivity() {
             itemFav = menu.findItem(R.id.corazon)
             // Asignar un click listener al ítem de menú corazón
             itemFav.setOnMenuItemClickListener {
+//                var colorCoche = ColorCoche(0,"rojo",2023,"seat", "altea", "FFFFFF", "X122d")
+//                var database  = CochesRoomDatabase.getInstance(this)
+//
+//                GlobalScope.launch(Dispatchers.IO) {
+//                    database.colorCocheDao().insertAll(colorCoche)
+//                }
+
                 // Crear un Intent para iniciar la actividad de Galería
-                val intent = Intent(this@MainActivity, galeria::class.java)
+                val intent = Intent(this@MainActivity, FavoritosActivity::class.java)
                 // Iniciar la actividad
                 startActivity(intent)
                 // Devolver true para indicar que el evento ha sido consumido
@@ -141,13 +153,18 @@ class MainActivity : AppCompatActivity() {
             return true
         }
 
-        //    override fun onContextMenuClosed (menu: Menu) {
-//        if (onContextItemSelected(itemCopiar))
-//        Toast.makeText( this, "Menú cerrado" , Toast.LENGTH_SHORT).show()
-//    }
         override fun onContextItemSelected(item: MenuItem): Boolean {
+            var i = 0
             when (item.itemId) {
                 R.id.agregarFavoritos -> {
+                    var color = hexadecimal
+                    var colorCoche = ColorCoche(0,
+                        "nombre de $color", 2024, "seat", "altea", color, "codigo color")
+                    var database  = CochesRoomDatabase.getInstance(this)
+
+                    GlobalScope.launch(Dispatchers.IO) {
+                        database.colorCocheDao().insertAll(colorCoche)
+                    }
                     showToast("Agregado a Favoritos")
                     return true
                 }

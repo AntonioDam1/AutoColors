@@ -1,6 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    /* Persistencia de datos */
+    kotlin("kapt")
 }
 
 android {
@@ -37,6 +39,13 @@ android {
 }
 
 dependencies {
+    val room_version = "2.5.0"
+    /*room database*/
+    implementation("androidx.room:room-runtime:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+
+
+
     implementation ("com.github.skydoves:colorpickerview:2.3.0")
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -49,4 +58,6 @@ dependencies {
     implementation("androidx.activity:activity:1.6bn   .1")
 //    implementation("androidx.activity:activity-ktx:1.8.2")
 //    implementation("androidx.fragment:fragment-ktx:1.6.2")
+
+
 }
