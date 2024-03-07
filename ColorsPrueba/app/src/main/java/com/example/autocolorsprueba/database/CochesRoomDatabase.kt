@@ -9,7 +9,7 @@ import com.example.autocolorsprueba.model.entity.ColorCoche
 
 import kotlin.concurrent.Volatile
 
-@Database(entities = [ColorCoche::class], version = 1)
+@Database(entities = [ColorCoche::class], version = 2)
 abstract class CochesRoomDatabase : RoomDatabase() {
     abstract fun colorCocheDao(): ColorCocheDao
 

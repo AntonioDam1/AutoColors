@@ -7,6 +7,8 @@ import android.view.ContextMenu
 import android.view.MenuItem
 import android.view.View
 import android.view.View.OnCreateContextMenuListener
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.forEach
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,13 +26,19 @@ class FavoritosActivity : AppCompatActivity() {
     lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var toolbar: Toolbar
     private lateinit var itemBorra :MenuItem
+    private lateinit var nombre : TextView
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_favoritos)
+        recyclerView = findViewById(R.id.recyclerFavs)
         toolbar = findViewById(R.id.toolbar)
+//        nombre = findViewById(R.id.tvNombre)
         setSupportActionBar(toolbar)
         setupBottomMenu()
+        registerForContextMenu(recyclerView)
+
 
         initRecyclerView()
     }
@@ -48,13 +56,39 @@ class FavoritosActivity : AppCompatActivity() {
         }
 
     }
-//    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
-//        super.onCreateContextMenu(menu, v, menuInfo)
-//        menuInflater.inflate(R.menu.delete_item, menu)
-//        itemBorra = menu.findItem(R.id.borrar)
-//    }
 
-//    override fun onContextItemSelected(item: MenuItem): Boolean {
+    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        menuInflater.inflate(R.menu.delete_item, menu)
+
+    }
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        var i = 0
+        when (item.itemId) {
+            R.id.borrar -> {
+
+//                var database = CochesRoomDatabase.getInstance(this)
+//
+//                GlobalScope.launch(Dispatchers.IO) {
+//                    database.colorCocheDao().delete()
+//                }
+                showToast("Eliminado")
+                return true
+            }
+            else -> return super.onContextItemSelected(item)
+
+        }
+
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+
+
+    //    override fun onContextItemSelected(item: MenuItem): Boolean {
 //        return when (item.itemId) {
 //            R.id.borrar -> {
 //                var database  = CochesRoomDatabase.getInstance(this)
@@ -95,13 +129,15 @@ class FavoritosActivity : AppCompatActivity() {
 
     fun initRecyclerView(){
         var database  = CochesRoomDatabase.getInstance(this)
-        var cochesColores : List<ColorCoche>
+        var cochesColores : MutableList<ColorCoche>
         GlobalScope.launch(Dispatchers.IO) {
             cochesColores= database.colorCocheDao().getAll()
             runOnUiThread {
                 val recyclerView = findViewById<RecyclerView>(R.id.recyclerFavs)
+
                 recyclerView.layoutManager = LinearLayoutManager(this@FavoritosActivity)
                 recyclerView.adapter = ColorCocheAdapter(cochesColores)
+
             }
         }
 

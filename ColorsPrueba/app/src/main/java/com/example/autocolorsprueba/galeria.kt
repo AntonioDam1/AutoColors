@@ -181,11 +181,14 @@ class galeria : AppCompatActivity() {
         val itemId = item.itemId
         when (item.itemId) {
             R.id.selector -> {
-//                val intent = Intent(this, MainActivity::class.java).apply {
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.filtrar -> {
+                val intent = Intent(this@galeria, Filtrar::class.java)
+                    startActivity(intent)
 
-                finish()
-//                }
-//                startActivity(intent)
+
             }
 //            R.id. page_fav -> {
 //                showPageFragment(R.drawable. ic_fav, R.string. bottom_nav_fav)
@@ -229,7 +232,7 @@ class galeria : AppCompatActivity() {
         // Asignar un click listener al ítem de menú corazón
         itemFav.setOnMenuItemClickListener {
             // Crear un Intent para iniciar la actividad de Galería
-            val intent = Intent(this@galeria, MainActivity::class.java)
+            val intent = Intent(this@galeria, FavoritosActivity::class.java)
             // Iniciar la actividad
             startActivity(intent)
             // Devolver true para indicar que el evento ha sido consumido
