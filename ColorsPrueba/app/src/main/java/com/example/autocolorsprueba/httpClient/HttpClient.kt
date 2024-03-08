@@ -1,15 +1,19 @@
-package com.example.autocolorsprueba.httpClient
-
+import android.content.Context
 import android.os.AsyncTask
+import com.example.autocolorsprueba.database.CochesRoomDatabase
+import com.example.autocolorsprueba.model.entity.ColorCoche
+import com.google.gson.Gson
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 
-class HttpClient(private val listener: HttpClientListener) {
+class HttpClient(private val serverUrl: String, private val params: Map<String, String>, private val context : Context) {
 
-    fun executeGetRequest(serverUrl: String, params: Map<String, String>) {
+    fun executeGetRequest() {
         val encodedParams = StringBuilder()
         params.forEach { (key, value) ->
             encodedParams.append(URLEncoder.encode(key, "UTF-8"))
@@ -22,11 +26,10 @@ class HttpClient(private val listener: HttpClientListener) {
         }
 
         val url = URL("$serverUrl?$encodedParams")
-        HttpGetTask(listener).execute(url)
+        HttpGetTask().execute(url)
     }
 
-    private class HttpGetTask(private val listener: HttpClientListener) :
-        AsyncTask<URL, Void, String>() {
+    private inner class HttpGetTask : AsyncTask<URL, Void, String>() {
 
         override fun doInBackground(vararg urls: URL): String {
             val url = urls[0]
@@ -57,11 +60,29 @@ class HttpClient(private val listener: HttpClientListener) {
 
         override fun onPostExecute(result: String) {
             super.onPostExecute(result)
-            listener.onResponseReceived(result)
+            onResponseReceived(result)
         }
     }
 
-    interface HttpClientListener {
-        fun onResponseReceived(response: String)
+    private fun onResponseReceived(response: String) {
+
+        // Parse the JSON string into a list of Coches objects using Gson
+
+        val gson = Gson()
+
+        val cochesList = gson.fromJson(response, Array<ColorCoche>::class.java).toList()
+
+
+        // Insert the Coches objects into a Room database
+
+        val database = CochesRoomDatabase.getInstance(context)
+
+        GlobalScope.launch {
+
+            database.colorCocheDao().insertAll(*cochesList.toTypedArray())
+
+        }
+
     }
 }
+
