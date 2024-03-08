@@ -170,18 +170,18 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener {
         override fun onContextItemSelected(item: MenuItem): Boolean {
             var i = 0
             when (item.itemId) {
-//                R.id.agregarFavoritos -> {
-//                    var color = hexadecimal
-////                    var colorCoche = ColorCoche(0,
-////                        "nombre de $color", 2024, "seat", "altea", color, "codigo color")
-//                    var database  = CochesRoomDatabase.getInstance(this)
-//
-//                    GlobalScope.launch(Dispatchers.IO) {
-//                        database.colorCocheDao().insertAll(colorCoche)
-//                    }
-//                    showToast("Agregado a Favoritos")
-//                    return true
-//                }
+                R.id.agregarFavoritos -> {
+                    var color = hexadecimal
+                    var colorCoche = ColorCoche(0,
+                        "nombre de $color", 2024, "seat", "altea", color, "codigo color")
+                    var database  = CochesRoomDatabase.getInstance(this)
+
+                    GlobalScope.launch(Dispatchers.IO) {
+                        database.colorCocheDao().insertAll(colorCoche)
+                    }
+                    showToast("Agregado a Favoritos")
+                    return true
+                }
 
                 R.id.itemcopiar -> {
 

@@ -55,9 +55,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:tileSize="20" />
 
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="48dp"
+        tools:layout_editor_absoluteY="121dp" />
 
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="51dp"
+        tools:layout_editor_absoluteY="197dp" />
 
-
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="49dp"
+        tools:layout_editor_absoluteY="287dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
