@@ -25,6 +25,7 @@ import androidx.core.view.forEach
 import com.example.autocolorsprueba.database.CochesRoomDatabase
 import com.example.autocolorsprueba.httpClient.HttpClient
 import com.example.autocolorsprueba.model.entity.ColorCoche
+import com.example.autocolorsprueba.model.entity.ColorFav
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.Dispatchers
@@ -172,12 +173,13 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener {
             when (item.itemId) {
                 R.id.agregarFavoritos -> {
                     var color = hexadecimal
-                    var colorCoche = ColorCoche(0,
-                        "nombre de $color", 2024, "seat", "altea", color, "codigo color")
+//                    var colorFav = ColorFav(0,
+//                        "nombre de $color", 2024, "seat", "altea", color, "codigo color")
                     var database  = CochesRoomDatabase.getInstance(this)
 
                     GlobalScope.launch(Dispatchers.IO) {
-                        database.colorCocheDao().insertAll(colorCoche)
+
+
                     }
                     showToast("Agregado a Favoritos")
                     return true

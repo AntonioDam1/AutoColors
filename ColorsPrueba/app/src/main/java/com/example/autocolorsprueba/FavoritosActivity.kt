@@ -1,26 +1,31 @@
 package com.example.autocolorsprueba
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Color
+import android.graphics.Point
 import android.os.Bundle
 import android.view.ContextMenu
 import android.view.MenuItem
 import android.view.View
-import android.view.View.OnCreateContextMenuListener
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.forEach
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.autocolorsprueba.adapter.ColorCocheAdapter
+import com.example.autocolorsprueba.adapter.ColorFavAdapter
 import com.example.autocolorsprueba.database.CochesRoomDatabase
 import com.example.autocolorsprueba.model.entity.ColorCoche
+import com.example.autocolorsprueba.model.entity.ColorFav
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.skydoves.colorpickerview.preference.ColorPickerPreferenceManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+
 
 class FavoritosActivity : AppCompatActivity() {
     lateinit var bottomNavigationView: BottomNavigationView
@@ -38,6 +43,14 @@ class FavoritosActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         setupBottomMenu()
         registerForContextMenu(recyclerView)
+        val manager = ColorPickerPreferenceManager.getInstance(this)
+
+        manager.setSelectorPosition(
+            "MyColorPicker",
+            Point(20, 20)
+        ) // manipulates the saved selector's position data.
+
+
 
 
         initRecyclerView()
@@ -118,6 +131,10 @@ class FavoritosActivity : AppCompatActivity() {
 
                 startActivity(intent)
             }
+            R.id.filtrar -> {
+                val intent = Intent(this, Filtrar::class.java).apply {  }
+                startActivity(intent)
+            }
 
 //            R.id. page_fav -> {
 //                showPageFragment(R.drawable. ic_fav, R.string. bottom_nav_fav)
@@ -129,14 +146,14 @@ class FavoritosActivity : AppCompatActivity() {
 
     fun initRecyclerView(){
         var database  = CochesRoomDatabase.getInstance(this)
-        var cochesColores : MutableList<ColorCoche>
+        var coloresFavs : MutableList<ColorFav>
         GlobalScope.launch(Dispatchers.IO) {
-            cochesColores= database.colorCocheDao().getAll()
+            coloresFavs= database.colorFavDao().getAll()
             runOnUiThread {
                 val recyclerView = findViewById<RecyclerView>(R.id.recyclerFavs)
 
                 recyclerView.layoutManager = LinearLayoutManager(this@FavoritosActivity)
-                recyclerView.adapter = ColorCocheAdapter(cochesColores)
+                recyclerView.adapter = ColorFavAdapter(coloresFavs)
 
             }
         }

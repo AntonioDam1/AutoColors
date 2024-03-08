@@ -19,6 +19,9 @@
         android:theme="@style/Theme.AutoColorsPrueba"
         tools:targetApi="31">
         <activity
+            android:name=".ConsultasActivity"
+            android:exported="false" />
+        <activity
             android:name=".ColorCocheDetail"
             android:exported="false" />
         <activity

@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import com.example.autocolorsprueba.model.entity.ColorCoche
 
+
 @Dao
 interface ColorCocheDao {
     @Query("SELECT * FROM ColorCoche")

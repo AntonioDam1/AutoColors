@@ -5,13 +5,17 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.autocolorsprueba.model.dao.ColorCocheDao
+import com.example.autocolorsprueba.model.dao.ColorFavDao
 import com.example.autocolorsprueba.model.entity.ColorCoche
+import com.example.autocolorsprueba.model.entity.ColorFav
 
 import kotlin.concurrent.Volatile
 
-@Database(entities = [ColorCoche::class], version = 2)
+@Database(entities = [ColorCoche::class, ColorFav::class], version = 4)
 abstract class CochesRoomDatabase : RoomDatabase() {
     abstract fun colorCocheDao(): ColorCocheDao
+    abstract fun colorFavDao(): ColorFavDao
+
 
     companion object {
         private const val DATABASE_NAME = "AUTOCOLORFAVS.db"
