@@ -1,5 +1,6 @@
 package com.example.autocolorsprueba
 
+import HttpClient
 import android.os.Bundle
 import android.view.ContextMenu
 import android.view.Menu
@@ -197,8 +198,14 @@ class MainActivity : AppCompatActivity(){
 //                    httpClient.executeGetRequest(serverUrl, params)
 
 
-                    val intent = Intent(this@MainActivity, galeria::class.java).apply {
+                    val intent = Intent(this@MainActivity, ConsultasActivity::class.java).apply {
+
                     }
+                    val params = mutableMapOf<String, String>()
+                    params["HEXADECIMAL"] = hexadecimal.substring(2,hexadecimal.length).toString()
+                    val consulta = HttpClient("localhost",params, this )
+                    consulta.executeGetRequest()
+
                     startActivity(intent)
                     return true
                 }
