@@ -19,9 +19,11 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.View.OnClickListener
 import androidx.core.view.forEach
 import com.example.autocolorsprueba.database.CochesRoomDatabase
+import com.example.autocolorsprueba.httpClient.HttpClient
 import com.example.autocolorsprueba.model.entity.ColorCoche
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -29,7 +31,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener {
 
     lateinit var bottomNavigationView: BottomNavigationView
 
@@ -50,6 +52,10 @@ class MainActivity : AppCompatActivity() {
 
     private var hexadecimal: String = ""
 
+    private lateinit var httpClient: HttpClient
+    private lateinit var serverUrl: String
+    private lateinit var params: Map<String,String>
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +70,10 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         setupBottomMenu()
         registerForContextMenu(alphaTileView)
+
+        httpClient = HttpClient(this)
+        serverUrl = "https://0467-176-12-82-226.ngrok-free.app/endpoint"
+        params = mapOf("clave1" to "valor1", "clave2" to "valor2", "clave3" to "valor3")
 
         colorPickerView.setColorListener(object : ColorEnvelopeListener {
             override fun onColorSelected(envelope: ColorEnvelope, fromUser: Boolean) {
@@ -160,18 +170,18 @@ class MainActivity : AppCompatActivity() {
         override fun onContextItemSelected(item: MenuItem): Boolean {
             var i = 0
             when (item.itemId) {
-                R.id.agregarFavoritos -> {
-                    var color = hexadecimal
-                    var colorCoche = ColorCoche(0,
-                        "nombre de $color", 2024, "seat", "altea", color, "codigo color")
-                    var database  = CochesRoomDatabase.getInstance(this)
-
-                    GlobalScope.launch(Dispatchers.IO) {
-                        database.colorCocheDao().insertAll(colorCoche)
-                    }
-                    showToast("Agregado a Favoritos")
-                    return true
-                }
+//                R.id.agregarFavoritos -> {
+//                    var color = hexadecimal
+////                    var colorCoche = ColorCoche(0,
+////                        "nombre de $color", 2024, "seat", "altea", color, "codigo color")
+//                    var database  = CochesRoomDatabase.getInstance(this)
+//
+//                    GlobalScope.launch(Dispatchers.IO) {
+//                        database.colorCocheDao().insertAll(colorCoche)
+//                    }
+//                    showToast("Agregado a Favoritos")
+//                    return true
+//                }
 
                 R.id.itemcopiar -> {
 
@@ -182,15 +192,22 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.comparar -> {
-                    val intent = Intent(this@MainActivity, galeria::class.java).apply {
-                    }
-                    startActivity(intent)
+                    httpClient.executeGetRequest(serverUrl, params)
+
+//                    val httpClient = HttpClient(this)
+//                    val intent = Intent(this@MainActivity, galeria::class.java).apply {
+//                    }
+//                    startActivity(intent)
                     return true
                 }
 
                 else -> return super.onContextItemSelected(item)
             }
         }
+    override fun onResponseReceived(response: String) {
+        // Maneja la respuesta del servidor aquí
+        Log.d("Response", response)
+    }
 
         private fun copyToClipboard(text: String) {
             val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager

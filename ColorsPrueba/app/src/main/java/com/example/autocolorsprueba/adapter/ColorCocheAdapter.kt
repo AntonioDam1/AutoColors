@@ -69,8 +69,8 @@ class ColorCocheViewHolder(view: View): RecyclerView.ViewHolder(view){
 
     fun render(colorCoche: ColorCoche){
         hexadecimal.text = colorCoche.hexadecimal
-        nombre.text = colorCoche.nombre
-        codigo.text = colorCoche.codigo + ", " + colorCoche.modelo
+//        nombre.text = colorCoche.nombre
+//        codigo.text = colorCoche.codigo + ", " + colorCoche.modelo
         fondo.setBackgroundColor(Color.parseColor(colorCoche.hexadecimal))
 
 
