@@ -1,11 +1,13 @@
 package com.example.autocolorsprueba.adapter
 
+import android.content.Intent
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.autocolorsprueba.ColorCocheDetail
 import com.example.autocolorsprueba.R
 import com.example.autocolorsprueba.database.CochesRoomDatabase
 import com.example.autocolorsprueba.model.entity.ColorCoche
@@ -32,9 +34,10 @@ class ColorFavAdapter(val colorFavList: MutableList<ColorFav> ) : RecyclerView.A
         holder.render(item)
 
         holder.itemView.setOnClickListener {
-//            // Llama a la función que maneja la eliminación del elemento
-//            eliminarElemento(item, holder, position)
-
+            val intent = Intent(it.context, ColorCocheDetail::class.java)
+            intent.putExtra("nombre", item.nombre)
+            intent.putExtra("hexadecimal", item.hexadecimal)
+            intent.putExtras(item)
         }
     }
 
@@ -67,6 +70,8 @@ class ColorFavViewHolder(view: View): RecyclerView.ViewHolder(view){
     val codigo = view.findViewById<TextView>(R.id.tvCodigo)
     //    val match = view.findViewById<TextView>(R.id.tvMatch)
     val fondo = view.findViewById<TextView>(R.id.colorCoche)
+
+
 
     fun render(colorFav: ColorFav){
         hexadecimal.text = colorFav.hexadecimal

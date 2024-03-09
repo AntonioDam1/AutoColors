@@ -1,6 +1,5 @@
 package com.example.autocolorsprueba
 
-import android.R.attr
 import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -14,7 +13,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
@@ -25,7 +23,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.result.contract.ActivityResultContracts.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.forEach
@@ -75,7 +72,7 @@ class galeria : AppCompatActivity() {
         toolbar = findViewById(R.id.toolbar)
         alphaSlider = findViewById(R.id.alphaSlideBar)
         brightnessSlideBar = findViewById(R.id.brightnessSlide)
-        alphaTileView = findViewById(R.id.alphaTileView)
+        alphaTileView = findViewById(R.id.alphaTileViewOriginal)
         textView = findViewById(R.id.textView)
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)

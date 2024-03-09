@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
         colorPickerView = findViewById(R.id.colorPickerView)
         alphaSlider = findViewById(R.id.alphaSlideBar)
         brightnessSlideBar = findViewById(R.id.brightnessSlide)
-        alphaTileView = findViewById(R.id.alphaTileView)
+        alphaTileView = findViewById(R.id.alphaTileViewOriginal)
         textView = findViewById(R.id.textView)
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
         registerForContextMenu(alphaTileView)
 
         httpClient = HttpClient(this)
-        serverUrl = "https://5439-176-12-82-226.ngrok-free.app/endpoint"
+        serverUrl = "https://99c2-176-12-82-226.ngrok-free.app"
         params = mapOf("color" to "f44336", "marca" to "", "año" to "","match" to "97")
         colorPickerView.setColorListener(object : ColorEnvelopeListener {
             override fun onColorSelected(envelope: ColorEnvelope, fromUser: Boolean) {
@@ -228,6 +228,7 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
 
         for (coche in cochesList) {
             val cocheInfo = "ID: ${coche.uid}, Year: ${coche.year}, Maker: ${coche.marca}, Model: ${coche.modelo}, Paint Color: ${coche.nombre}, Code: ${coche.codigo}, url:${(coche.catalogueURL)}, hexadecimal:${(coche.hexadecimal)}"
+            Log.d("Coches", coche.toString())
             Log.d("Coches", cocheInfo)
 
 

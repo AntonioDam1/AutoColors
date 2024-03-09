@@ -32,7 +32,7 @@ class ConsultasActivity() : AppCompatActivity() {
         setSupportActionBar(toolbar)
         setupBottomMenu()
         registerForContextMenu(recyclerView)
-        initRecyclerView(listaC)
+        initRecyclerView()
 
     }
 
@@ -84,7 +84,7 @@ class ConsultasActivity() : AppCompatActivity() {
         return true
     }
 
-    fun initRecyclerView(listaCoches: MutableList<ColorCoche>){
+    fun initRecyclerView(){
         var database  = CochesRoomDatabase.getInstance(this)
         var cochesColores : MutableList<ColorCoche>
         GlobalScope.launch(Dispatchers.IO) {
@@ -93,7 +93,7 @@ class ConsultasActivity() : AppCompatActivity() {
                 val recyclerView = findViewById<RecyclerView>(R.id.recyclerFavs)
 
                 recyclerView.layoutManager = LinearLayoutManager(this@ConsultasActivity)
-                recyclerView.adapter = ColorCocheAdapter(listaCoches)
+                recyclerView.adapter = ColorCocheAdapter(cochesColores)
 
             }
         }

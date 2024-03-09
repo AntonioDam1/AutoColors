@@ -19,3 +19,4 @@ data class ColorCoche(
     @ColumnInfo(name = "BLUE") val blue: Int?,
     @ColumnInfo(name = "MATCHPERCENTAGE") val matchPercentage: String?
     )
+

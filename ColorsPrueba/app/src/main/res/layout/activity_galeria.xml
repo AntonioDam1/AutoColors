@@ -106,7 +106,7 @@
         android:textColor="@color/colorAccent"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/alphaTileView"
+        app:layout_constraintBottom_toTopOf="@+id/alphaTileViewOriginal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -118,7 +118,7 @@
         app:menu="@menu/bottom_nav_menu" />
 
     <com.skydoves.colorpickerview.AlphaTileView
-        android:id="@+id/alphaTileView"
+        android:id="@+id/alphaTileViewOriginal"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_gravity="center"
