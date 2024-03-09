@@ -1,6 +1,7 @@
 package com.example.autocolorsprueba
 
 import HttpClient
+import android.app.Activity
 import android.os.Bundle
 import android.view.ContextMenu
 import android.view.Menu
@@ -20,7 +21,17 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import android.util.Log
+import android.widget.Button
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.forEach
 import com.example.autocolorsprueba.database.CochesRoomDatabase
 //import com.example.autocolorsprueba.httpClient.HttpClient
@@ -31,13 +42,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.io.FileNotFoundException
 
 class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
-
+    //Navegación
     lateinit var bottomNavigationView: BottomNavigationView
 
+    //ColorPickerView
     private lateinit var colorPickerView: ColorPickerView
-    private lateinit var alphaSlider: AlphaSlideBar
     private lateinit var brightnessSlideBar: BrightnessSlideBar
     private lateinit var alphaTileView: AlphaTileView
     private lateinit var textView: TextView
@@ -49,13 +61,22 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
     private lateinit var itemComparar: MenuItem
 
 
+    //Toolbar
     private lateinit var toolbar: Toolbar
 
     private var hexadecimal: String = ""
-//
+
+    //Conexión con el servidor
     private lateinit var httpClient: HttpClient
     private lateinit var serverUrl: String
     private lateinit var params: Map<String,String>
+
+    //Galeria
+    val REQUEST_CODE_GALLERY = 200
+    private lateinit var btnImage: Button
+
+    //Cámara
+    private lateinit var btnCamara: Button
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,7 +84,6 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
         setContentView(R.layout.activity_main)
 
         colorPickerView = findViewById(R.id.colorPickerView)
-        alphaSlider = findViewById(R.id.alphaSlideBar)
         brightnessSlideBar = findViewById(R.id.brightnessSlide)
         alphaTileView = findViewById(R.id.alphaTileViewOriginal)
         textView = findViewById(R.id.textView)
@@ -77,7 +97,6 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
         params = mapOf("color" to "f44336", "marca" to "", "año" to "","match" to "97")
         colorPickerView.setColorListener(object : ColorEnvelopeListener {
             override fun onColorSelected(envelope: ColorEnvelope, fromUser: Boolean) {
-                alphaTileView.setPaintColor(envelope.color)
                 textView.text = "#${envelope.hexCode}"
                 hexadecimal = "#${envelope.hexCode}"
                 println(hexadecimal)
@@ -88,15 +107,65 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
 
             }
         })
-
-        colorPickerView.attachAlphaSlider(alphaSlider)
         colorPickerView.attachBrightnessSlider(brightnessSlideBar)
+
+
+        //Para poder abrir la Galeria
+        btnImage = findViewById(R.id.botonImagen)
+        btnImage.setOnClickListener {
+            if (Build.VERSION.SDK_INT < 19) {
+                var intent = Intent()
+                intent.type = "image/*"
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                intent.action = Intent.ACTION_GET_CONTENT
+                startActivityForResult(
+                    Intent.createChooser(intent, "Choose Pictures"), REQUEST_CODE_GALLERY
+                )
+            } else { // For latest versions API LEVEL 19+
+                var intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                intent.addCategory(Intent.CATEGORY_OPENABLE)
+                intent.type = "image/*"
+                startActivityForResult(intent, REQUEST_CODE_GALLERY);
+            }
+        }
+
+        //Para poder abrir la Galeria
+        //Cámara
+        btnCamara = findViewById(R.id.botonCamara)
+        btnCamara.setOnClickListener{
+            startForResult.launch(Intent(MediaStore.ACTION_IMAGE_CAPTURE))
+        }
+
+        colorPickerView.setColorListener(object : ColorEnvelopeListener {
+            override fun onColorSelected(envelope: ColorEnvelope, fromUser: Boolean) {
+                alphaTileView.setPaintColor(envelope.color)
+                textView.text = "#${envelope.hexCode}"
+                hexadecimal = "#${envelope.hexCode}"
+
+                toolbar.setBackgroundColor(envelope.color)
+                bottomNavigationView.setBackgroundColor(envelope.color)
+
+
+            }
+        })
     }
+    //funcion de la camara
+    private val startForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val intent = result.data
+                val imageBitmap = intent?.extras?.get("data") as Bitmap
+                val drawable: Drawable = BitmapDrawable(resources, imageBitmap)
+                colorPickerView.setPaletteDrawable(drawable)
+            }
+        }
+
     private fun onItemSelectedListener(item: MenuItem): Boolean {
         val itemId = item.itemId
         when (item.itemId) {
-            R.id.galeria -> {
-                val intent = Intent(this, galeria::class.java).apply {  }
+            R.id.taller -> {
+                val intent = Intent(this, ColorMaps::class.java).apply {  }
                 val b = Bundle()
                 b.putString("hexadecimal",hexadecimal)
                 intent.putExtras(b  )
@@ -113,6 +182,41 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
 //            }
         }
         return true
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_GALLERY){
+
+            // if multiple images are selected
+            if (data?.getClipData() != null) {
+                var count = data.clipData?.itemCount
+
+                for (i in 0..count!! - 1) {
+                    var imageUri: Uri = data.clipData?.getItemAt(i)!!.uri
+                    //     iv_image.setImageURI(imageUri) Here you can assign your Image URI to the ImageViews
+                }
+
+            } else if (data?.getData() != null) {
+                // if single image is selected
+                try {
+                    var imageUri: Uri = data.data!!
+                    val imageStream = contentResolver.openInputStream(imageUri)
+                    val selectedImage = BitmapFactory.decodeStream(imageStream)
+                    val drawable: Drawable = BitmapDrawable(resources, selectedImage)
+                    colorPickerView.setPaletteDrawable(drawable)
+                } catch (e: FileNotFoundException) {
+                    e.printStackTrace()
+                }
+
+
+                var imageUri: Uri = data.data!!
+
+                //   iv_image.setImageURI(imageUri) Here you can assign the picked image uri to your imageview
+
+            }
+        }
     }
 
     private fun setupBottomMenu() {

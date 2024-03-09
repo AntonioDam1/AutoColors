@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id ("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     /* Persistencia de datos */
     kotlin("kapt")
 }
@@ -39,12 +40,14 @@ android {
 }
 
 dependencies {
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
     val room_version = "2.5.0"
     /*room database*/
     implementation("androidx.room:room-runtime:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
 
-
+    /*IMPLEMENTACIONES DEL GOOGLE MAPS*/
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
 
     implementation ("com.github.skydoves:colorpickerview:2.3.0")
     implementation("androidx.core:core-ktx:1.12.0")

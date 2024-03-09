@@ -102,8 +102,8 @@ class Filtrar : AppCompatActivity() {
     private fun onItemSelectedListener(item: MenuItem): Boolean {
         val itemId = item.itemId
         when (item.itemId) {
-            R.id.galeria -> {
-                val intent = Intent(this, galeria::class.java).apply {  }
+            R.id.taller -> {
+                val intent = Intent(this, ColorMaps::class.java).apply {  }
                 val b = Bundle()
 
                 startActivity(intent)
