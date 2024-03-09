@@ -19,7 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class ConsultasActivity : AppCompatActivity() {
+class ConsultasActivity() : AppCompatActivity() {
     lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var toolbar: Toolbar
     private lateinit var nombre : TextView
@@ -32,7 +32,7 @@ class ConsultasActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         setupBottomMenu()
         registerForContextMenu(recyclerView)
-        initRecyclerView()
+        initRecyclerView(listaC)
 
     }
 
@@ -84,7 +84,7 @@ class ConsultasActivity : AppCompatActivity() {
         return true
     }
 
-    fun initRecyclerView(){
+    fun initRecyclerView(listaCoches: MutableList<ColorCoche>){
         var database  = CochesRoomDatabase.getInstance(this)
         var cochesColores : MutableList<ColorCoche>
         GlobalScope.launch(Dispatchers.IO) {
@@ -93,7 +93,7 @@ class ConsultasActivity : AppCompatActivity() {
                 val recyclerView = findViewById<RecyclerView>(R.id.recyclerFavs)
 
                 recyclerView.layoutManager = LinearLayoutManager(this@ConsultasActivity)
-                recyclerView.adapter = ColorCocheAdapter(cochesColores)
+                recyclerView.adapter = ColorCocheAdapter(listaCoches)
 
             }
         }

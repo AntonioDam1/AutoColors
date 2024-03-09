@@ -16,7 +16,7 @@ interface ColorCocheDao {
     fun loadAllByIds(userIds: IntArray): List<ColorCoche>
 
     @Insert
-    fun insertAll(vararg users: ColorCoche)
+    fun insertAll( coches: List<ColorCoche>)
 
     @Delete
     fun delete(user: ColorCoche)

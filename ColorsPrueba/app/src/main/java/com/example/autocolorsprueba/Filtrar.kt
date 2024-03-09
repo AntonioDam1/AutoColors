@@ -41,19 +41,19 @@ class Filtrar : AppCompatActivity() {
         val intent = Intent(this@Filtrar, ConsultasActivity::class.java).apply {
 
         }
-        val params = mutableMapOf<String, String>()
-        if (!hexadecimal.text.toString().isEmpty()){
-            params["HEXADECIMAL"] = hexadecimal.text.toString()
-
-        }
-        if (!year.text.toString().isEmpty()){
-            params["AÑO"] = hexadecimal.text.toString()
-        }
-        if (!marca.text.toString().isEmpty()){
-            params["MARCA"] = marca.text.toString()
-        }
-        val consulta = HttpClient("localhost",params, this )
-        consulta.executeGetRequest()
+//        val params = mutableMapOf<String, String>()
+//        if (!hexadecimal.text.toString().isEmpty()){
+//            params["HEXADECIMAL"] = hexadecimal.text.toString()
+//
+//        }
+//        if (!year.text.toString().isEmpty()){
+//            params["AÑO"] = hexadecimal.text.toString()
+//        }
+//        if (!marca.text.toString().isEmpty()){
+//            params["MARCA"] = marca.text.toString()
+//        }
+//        val consulta = HttpClient("localhost",params, this )
+//        consulta.executeGetRequest()
 
         startActivity(intent)
     }

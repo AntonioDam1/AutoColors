@@ -21,7 +21,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import android.view.View.OnClickListener
 import androidx.core.view.forEach
 import com.example.autocolorsprueba.database.CochesRoomDatabase
 //import com.example.autocolorsprueba.httpClient.HttpClient
@@ -33,7 +32,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity(){
+class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
 
     lateinit var bottomNavigationView: BottomNavigationView
 
@@ -54,9 +53,9 @@ class MainActivity : AppCompatActivity(){
 
     private var hexadecimal: String = ""
 //
-//    private lateinit var httpClient: HttpClient
-//    private lateinit var serverUrl: String
-//    private lateinit var params: Map<String,String>
+    private lateinit var httpClient: HttpClient
+    private lateinit var serverUrl: String
+    private lateinit var params: Map<String,String>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,10 +72,9 @@ class MainActivity : AppCompatActivity(){
         setupBottomMenu()
         registerForContextMenu(alphaTileView)
 
-//        httpClient = HttpClient(this)
-//        serverUrl = "https://0467-176-12-82-226.ngrok-free.app/endpoint"
-//        params = mapOf("clave1" to "valor1", "clave2" to "valor2", "clave3" to "valor3")
-
+        httpClient = HttpClient(this)
+        serverUrl = "https://5439-176-12-82-226.ngrok-free.app/endpoint"
+        params = mapOf("color" to "f44336", "marca" to "", "año" to "","match" to "97")
         colorPickerView.setColorListener(object : ColorEnvelopeListener {
             override fun onColorSelected(envelope: ColorEnvelope, fromUser: Boolean) {
                 alphaTileView.setPaintColor(envelope.color)
@@ -200,13 +198,13 @@ class MainActivity : AppCompatActivity(){
                 }
 
                 R.id.comparar -> {
-//                    httpClient.executeGetRequest(serverUrl, params)
+                    httpClient.executeGetRequest(serverUrl, params)
 
-
-                    val intent = Intent(this@MainActivity, ConsultasActivity::class.java).apply {
-
-
-                    }
+//
+//                    val intent = Intent(this@MainActivity, ConsultasActivity()::class.java).apply {
+////
+////
+//                    }
 //                    val params = mutableMapOf<String, String>()
 //                    params["HEXADECIMAL"] = hexadecimal.substring(2,hexadecimal.length).toString()
 //                    var serverUrl : String = "https://0467-176-12-82-226.ngrok-free.app/endpoint"
@@ -225,10 +223,29 @@ class MainActivity : AppCompatActivity(){
                 else -> return super.onContextItemSelected(item)
             }
         }
-//    override fun onResponseReceived(response: String) {
-//        // Maneja la respuesta del servidor aquí
-//        Log.d("Response", response)
-//    }
+    override fun onCochesReceived(cochesList: List<ColorCoche>) {
+//        val localbase = CochesRoomDatabase.getInstance(this)
+
+        for (coche in cochesList) {
+            val cocheInfo = "ID: ${coche.uid}, Year: ${coche.year}, Maker: ${coche.marca}, Model: ${coche.modelo}, Paint Color: ${coche.nombre}, Code: ${coche.codigo}, url:${(coche.catalogueURL)}, hexadecimal:${(coche.hexadecimal)}"
+            Log.d("Coches", cocheInfo)
+
+
+
+            println(cocheInfo.toString())
+        }
+        val intent = Intent(this@MainActivity, ConsultasActivity()::class.java).apply {
+
+        }
+        val b  = Bundle()
+        intent.putExtras(b)
+        startActivity(intent)
+
+//        GlobalScope.launch(Dispatchers.IO) {
+//            localbase.colorCocheDao().insertAll(cochesList)
+//        }
+    }
+
 
         private fun copyToClipboard(text: String) {
             val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
