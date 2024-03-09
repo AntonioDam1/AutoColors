@@ -82,6 +82,7 @@ class MainActivity : AppCompatActivity(){
                 alphaTileView.setPaintColor(envelope.color)
                 textView.text = "#${envelope.hexCode}"
                 hexadecimal = "#${envelope.hexCode}"
+                println(hexadecimal)
 
                 toolbar.setBackgroundColor(envelope.color)
                 bottomNavigationView.setBackgroundColor(envelope.color)
@@ -173,12 +174,16 @@ class MainActivity : AppCompatActivity(){
             var i = 0
             when (item.itemId) {
                 R.id.agregarFavoritos -> {
+                    var colorFav = ColorFav(0,
+                        "nombre de ", 2020, "seat",
+                        "altea", hexadecimal, "","",
+                        0,0,0,"")
                     var color = hexadecimal
-//                    var colorFav = ColorFav(0,
-//                        "nombre de $color", 2024, "seat", "altea", color, "codigo color")
+
                     var database  = CochesRoomDatabase.getInstance(this)
 
                     GlobalScope.launch(Dispatchers.IO) {
+                        database.colorFavDao().insertAll(colorFav)
 
 
                     }
@@ -200,14 +205,21 @@ class MainActivity : AppCompatActivity(){
 
                     val intent = Intent(this@MainActivity, ConsultasActivity::class.java).apply {
 
-                    }
-                    val params = mutableMapOf<String, String>()
-                    params["HEXADECIMAL"] = hexadecimal.substring(2,hexadecimal.length).toString()
-                    val consulta = HttpClient("localhost",params, this )
-                    consulta.executeGetRequest()
 
-                    startActivity(intent)
+                    }
+//                    val params = mutableMapOf<String, String>()
+//                    params["HEXADECIMAL"] = hexadecimal.substring(2,hexadecimal.length).toString()
+//                    var serverUrl : String = "https://0467-176-12-82-226.ngrok-free.app/endpoint"
+//                    var params = mapOf("color" to hexadecimal.substring(2,hexadecimal.length), "marca" to "", "año" to "","match" to "5")
+//
+//
+//                    val consulta = HttpClient("https://e579-176-12-82-226.ngrok-free.app",params, this )
+//                    consulta.executeGetRequest()
+
+
+//                    startActivity(intent)
                     return true
+
                 }
 
                 else -> return super.onContextItemSelected(item)

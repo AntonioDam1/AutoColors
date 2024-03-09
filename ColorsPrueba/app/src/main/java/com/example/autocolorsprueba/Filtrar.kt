@@ -50,7 +50,7 @@ class Filtrar : AppCompatActivity() {
             params["AÑO"] = hexadecimal.text.toString()
         }
         if (!marca.text.toString().isEmpty()){
-            params["AÑO"] = hexadecimal.text.toString()
+            params["MARCA"] = marca.text.toString()
         }
         val consulta = HttpClient("localhost",params, this )
         consulta.executeGetRequest()

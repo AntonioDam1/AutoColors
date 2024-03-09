@@ -70,6 +70,7 @@ class ColorFavViewHolder(view: View): RecyclerView.ViewHolder(view){
 
     fun render(colorFav: ColorFav){
         hexadecimal.text = colorFav.hexadecimal
+        println(hexadecimal)
 //        nombre.text = ColorFav.nombre
 //        codigo.text = ColorFav.codigo + ", " + ColorFav.modelo
         fondo.setBackgroundColor(Color.parseColor(colorFav.hexadecimal))
