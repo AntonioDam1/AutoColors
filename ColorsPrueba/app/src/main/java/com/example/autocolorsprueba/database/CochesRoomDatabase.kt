@@ -42,18 +42,7 @@ abstract class CochesRoomDatabase : RoomDatabase() {
 
         }
 
-        @ColumnInfo(name = "AÑO") val anio: Int?,
-        @ColumnInfo(name = "MARCA") val marca: String,
-        @ColumnInfo(name = "MODELO") val modelo: String?,
-        @ColumnInfo(name = "NOMBREPINTURA") val nombrePintura: String,
-        @ColumnInfo(name = "CODIGO") val hexadecimal: String,
-        @ColumnInfo(name = "CATALOGO_URL") val catalogueURL: String?,
-        @ColumnInfo(name = "HEXADECIMAL") val codigo: String?,
-        @ColumnInfo(name = "RED") val red: Int,
-        @ColumnInfo(name = "GREEN") val green: Int,
-        @ColumnInfo(name = "BLUE") val blue: Int,
-        @ColumnInfo(name = "CATALOGO_URL") val colorsampleURL: String,
-        @ColumnInfo(name = "MATCHPERCENTAGE") val matchPercentage: String?
+        
         private val MIGRATION_1_2 = object : Migration(2, 3) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 // Crea la nueva tabla 'color_coche' con los mismos campos que 'color_fav'
