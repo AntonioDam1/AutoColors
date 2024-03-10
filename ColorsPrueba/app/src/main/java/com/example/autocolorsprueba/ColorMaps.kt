@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -17,11 +18,12 @@ import com.google.android.gms.maps.model.MarkerOptions
 
 class ColorMaps : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocationClickListener {
 
-    private lateinit var map:GoogleMap
+    private lateinit var map: GoogleMap
 
-    companion object{
+    companion object {
         const val REQUEST_CODE_LOCATION = 0
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_color_maps)
@@ -29,43 +31,80 @@ class ColorMaps : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocatio
     }
 
     private fun createFragment() {
-        val mapFragment : SupportMapFragment = supportFragmentManager.findFragmentById(R.id.mapa) as SupportMapFragment
+        val mapFragment: SupportMapFragment = supportFragmentManager.findFragmentById(R.id.mapa) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-//        createMarker()
         map.setOnMyLocationClickListener(this)
         enableLocation()
+        createMarkers()
     }
 
-    private fun createMarker() {
-        val coordinate = LatLng(42.80847968283196, -1.637966036421036)
-        val market = MarkerOptions().position(coordinate).title("Taller Mecánico Jehova Es Mi Luz")
-        map.addMarker(market)
-        map.animateCamera(
-            CameraUpdateFactory.newLatLngZoom(coordinate, 18f),1000,null
+    private fun createMarkers() {
+        val talleres = listOf(
+            Taller("TALLERES MENDEBALDEA", 42.81068480607709, -1.673602270612605),
+            Taller("Talleres Mendikur", 42.82133925028498, -1.6916772616986957),
+            Taller("RG", 42.821993844713575, -1.691965294631434),
+            Taller("Satori", 42.821890904537305, -1.6914294246819421),
+            Taller("SAGAMOVIL", 42.81994436712439, -1.6899238853000362),
+            Taller("I10Motor", 42.82075855128641, -1.6951422379034222),
+            Taller("Mecanizados", 42.81885671061577, -1.6944359241878335),
+            Taller("AutoNariño", 42.81283239900596, -1.687110050653027),
+            Taller("Talleres Narvik", 42.812966061802506, -1.6841675942612542),
+            Taller("RodiMotors", 42.81158470986501, -1.641844510973203),
+            Taller("Talleres Baztan", 42.8116791569115, -1.6381108759824803),
+            Taller("Talleres LaTaza", 42.807617803675555, -1.6380250452930383),
+            Taller("Talleres Labritaller", 42.81731423637317, -1.6399133204641385),
+            Taller("Talleres Santa Marta", 42.81079764559236, -1.6334760187559962),
+            Taller("Taller Ayra", 42.82566815112215, -1.646466168302675),
+            Taller("Talleres Joan", 42.823759319310575, -1.6507828760525982)
         )
+
+        for (taller in talleres) {
+            val coordinate = LatLng(taller.latitude, taller.longitude)
+            val marker = MarkerOptions().position(coordinate).title(taller.name)
+            map.addMarker(marker)
+        }
     }
+
+    data class Taller(val name: String, val latitude: Double, val longitude: Double)
 
     private fun isLocationPermissionGranted() = ContextCompat.checkSelfPermission(this,
         Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
 
-    private fun enableLocation(){
+    private fun enableLocation() {
         if (!::map.isInitialized) return
-        if(isLocationPermissionGranted()){
+        if (isLocationPermissionGranted()) {
             map.isMyLocationEnabled = true
-        }else{
+
+            // Mueve la cámara a la ubicación del usuario una vez que esté habilitada
+            val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener { location: Location? ->
+                    location?.let {
+                        val userLocation = LatLng(location.latitude, location.longitude)
+                        map.animateCamera(
+                            CameraUpdateFactory.newLatLngZoom(userLocation, 15f),
+                            1000,
+                            null
+                        )
+                    }
+                }
+
+            // Agrega el marcador del taller después de centrar en la ubicación del usuario
+            createMarkers()
+        } else {
             requestLocationPermission()
         }
     }
 
-    private fun requestLocationPermission(){
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)){
+    private fun requestLocationPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
             Toast.makeText(this, "Debes otorgar permisos a la aplicación: Ajustes->Permisos->Aceptar",
                 Toast.LENGTH_SHORT).show()
-        }else{
+        } else {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE_LOCATION)
         }
     }
@@ -94,7 +133,7 @@ class ColorMaps : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocatio
     override fun onResumeFragments() {
         super.onResumeFragments()
         if (!::map.isInitialized) return
-        if (!isLocationPermissionGranted()){
+        if (!isLocationPermissionGranted()) {
             map.isMyLocationEnabled = true
             Toast.makeText(
                 this,
@@ -104,8 +143,7 @@ class ColorMaps : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocatio
         }
     }
 
-
     override fun onMyLocationClick(p0: Location) {
-        Toast.makeText(this,"Tu ubicación es ${p0.latitude}, ${p0.longitude}", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Tu ubicación es ${p0.latitude}, ${p0.longitude}", Toast.LENGTH_SHORT).show()
     }
 }
