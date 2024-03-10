@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.forEach
+import com.example.autocolorsprueba.adapter.ColorFavAdapter
 import com.example.autocolorsprueba.database.CochesRoomDatabase
 import com.example.autocolorsprueba.model.entity.ColorFav
 import com.google.android.material.badge.BadgeDrawable
@@ -29,6 +30,7 @@ class ColorCocheDetail : AppCompatActivity() {
     private lateinit var tvNombreDetalle : TextView
     private lateinit var tvCodigoDetalle : TextView
     private lateinit var favoritosActivity : FavoritosActivity
+    private lateinit var miAdaptador: ColorFavAdapter
     lateinit var bottomNavigationView: BottomNavigationView
 
 
@@ -78,18 +80,19 @@ class ColorCocheDetail : AppCompatActivity() {
 
     }
 
-    fun initializeFavoritosActivity() {
-        val intent = Intent(this, FavoritosActivity::class.java)
-        startActivity(intent)
-    }
-
     private fun borrarColor(){
 
 
         val item = intent.getSerializableExtra("ITEM_KEY") as ColorFav
 
 
-        favoritosActivity.borrarItem(item)
+        var database  = CochesRoomDatabase.getInstance(this)
+        var coloresFavs : MutableList<ColorFav>
+        coloresFavs= database.colorFavDao().getAll()
+
+        coloresFavs.remove(item)
+        miAdaptador.notifyDataSetChanged()
+
 
     }
 

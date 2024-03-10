@@ -3,6 +3,7 @@ package com.example.autocolorsprueba.model.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity
 data class ColorFav(
@@ -18,4 +19,4 @@ data class ColorFav(
     @ColumnInfo(name = "GREEN") val green: Int?,
     @ColumnInfo(name = "BLUE") val blue: Int?,
     @ColumnInfo(name = "MATCHPERCENTAGE") val matchPercentage: String?
-)
+): Serializable

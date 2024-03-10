@@ -38,7 +38,7 @@ class ColorFavAdapter(val colorFavList: MutableList<ColorFav> ) : RecyclerView.A
             intent.putExtra("origen","fav")
             intent.putExtra("nombre", item.nombre)
             intent.putExtra("hexadecimal", item.hexadecimal)
-            //intent.putExtra("ITEM_KEY",item)
+            intent.putExtra("ITEM_KEY",item)
             //intent.putExtras(item)
             holder.itemView.context.startActivity(intent)
         }
