@@ -33,6 +33,7 @@ class FavoritosActivity : AppCompatActivity() {
     private lateinit var itemBorra :MenuItem
     private lateinit var nombre : TextView
     private lateinit var recyclerView: RecyclerView
+    private lateinit var miAdaptador: ColorFavAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -159,5 +160,15 @@ class FavoritosActivity : AppCompatActivity() {
         }
 
     }
+
+    fun borrarItem(item: ColorFav) {
+        var database  = CochesRoomDatabase.getInstance(this)
+        var coloresFavs : MutableList<ColorFav>
+        coloresFavs= database.colorFavDao().getAll()
+
+        coloresFavs.remove(item)
+        miAdaptador.notifyDataSetChanged()
+    }
+
 
 }

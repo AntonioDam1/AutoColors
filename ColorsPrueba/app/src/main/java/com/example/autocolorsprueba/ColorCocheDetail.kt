@@ -1,23 +1,36 @@
 package com.example.autocolorsprueba
 
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.forEach
+import com.example.autocolorsprueba.database.CochesRoomDatabase
+import com.example.autocolorsprueba.model.entity.ColorFav
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.skydoves.colorpickerview.AlphaTileView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class ColorCocheDetail : AppCompatActivity() {
     private lateinit var botonBorrar : Button
-    private lateinit var botonAtras : Button
+    private lateinit var botonFav : Button
     private lateinit var toolbar: Toolbar
-    private lateinit var alphaTileViewOriginal: AlphaTileView
-    private lateinit var alphaTileViewColor: AlphaTileView
+    private lateinit var alphaTileViewOriginal: ImageView
+    private lateinit var alphaTileViewColor: ImageView
+    private lateinit var tvNombreDetalle : TextView
+    private lateinit var tvCodigoDetalle : TextView
+    private lateinit var favoritosActivity : FavoritosActivity
     lateinit var bottomNavigationView: BottomNavigationView
+
 
 
 
@@ -26,19 +39,78 @@ class ColorCocheDetail : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_color_coche_detail)
 
+        val origen = intent.getStringExtra("origen")
+        val nombre = intent.getStringExtra("nombre")
+        val hexadecimal = intent.getStringExtra("hexadecimal")
+
+
         botonBorrar = findViewById(R.id.buttonBorrar)
-        botonAtras = findViewById(R.id.buttonAtras)
+        botonFav = findViewById(R.id.buttonFav)
+        if (origen.equals("fav")){
+            botonFav.isEnabled = false
+        }
+
         toolbar = findViewById(R.id.toolbar)
         alphaTileViewColor = findViewById(R.id.alphaTileViewColor)
         alphaTileViewOriginal  =findViewById(R.id.alphaTileViewOriginal)
-        setupBottomMenu()
-        botonBorrar.setOnClickListener {
 
+        if (hexadecimal != null) {
+            alphaTileViewOriginal.setBackgroundColor(Color.parseColor(hexadecimal))
+        }
+
+        tvNombreDetalle = findViewById(R.id.tvNombreColorDetalle)
+        tvNombreDetalle.text = nombre
+        tvCodigoDetalle = findViewById(R.id.tvCodigoDetalle)
+        tvCodigoDetalle.text = hexadecimal
+        setupBottomMenu()
+
+
+
+
+        botonBorrar.setOnClickListener {
+            borrarColor()
+        }
+        botonFav.setOnClickListener{
+            //agregarFavoritos()
         }
 
 
 
     }
+
+    fun initializeFavoritosActivity() {
+        val intent = Intent(this, FavoritosActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun borrarColor(){
+
+
+        val item = intent.getSerializableExtra("ITEM_KEY") as ColorFav
+
+
+        favoritosActivity.borrarItem(item)
+
+    }
+
+//    private fun agregarFavoritos(){
+//        val hexadecimal = intent.getStringExtra("hexadecimal")
+//
+//        var colorFav = ColorFav(0,
+//            "nombre de ", 2020, "seat",
+//            "altea", hexadecimal, "","",
+//            0,0,0,"")
+//
+//        var database  = CochesRoomDatabase.getInstance(this)
+//
+//        GlobalScope.launch(Dispatchers.IO) {
+//            database.colorFavDao().insertAll(colorFav)
+//
+//
+//        }
+//        showToast("Agregado a Favoritos")
+//
+//    }
 
     private fun setupBottomMenu() {
 
@@ -76,4 +148,8 @@ class ColorCocheDetail : AppCompatActivity() {
         }
         return true
     }
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
 }
