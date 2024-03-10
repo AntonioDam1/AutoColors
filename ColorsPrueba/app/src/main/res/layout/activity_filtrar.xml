@@ -75,7 +75,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:gravity="center"
-        android:hint="FFFFFF"
+        android:hint="95"
         android:inputType="text"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"

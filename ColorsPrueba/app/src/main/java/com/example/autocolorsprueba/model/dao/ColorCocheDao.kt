@@ -23,4 +23,11 @@ interface ColorCocheDao {
 
     @Delete
     fun delete(user: ColorCoche)
+
+
+    @Query("DELETE FROM ColorCoche")
+    fun deleteAll()
+
+
+
 }

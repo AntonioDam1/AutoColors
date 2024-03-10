@@ -86,9 +86,12 @@ class ConsultasActivity() : AppCompatActivity() {
 
     fun initRecyclerView(){
         var database  = CochesRoomDatabase.getInstance(this)
+
         var cochesColores : MutableList<ColorCoche>
+
         GlobalScope.launch(Dispatchers.IO) {
             cochesColores= database.colorCocheDao().getAll()
+
             runOnUiThread {
                 val recyclerView = findViewById<RecyclerView>(R.id.recyclerConsultas)
 

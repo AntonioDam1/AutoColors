@@ -44,7 +44,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.FileNotFoundException
 
-class MainActivity : AppCompatActivity(){
+class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
     //Navegación
     lateinit var bottomNavigationView: BottomNavigationView
 
@@ -66,10 +66,10 @@ class MainActivity : AppCompatActivity(){
 
     private var hexadecimal: String = ""
 
-//    //Conexión con el servidor
-//    private lateinit var httpClient: HttpClient
-//    private lateinit var serverUrl: String
-//    private lateinit var params: Map<String,String>
+    //Conexión con el servidor
+    private lateinit var httpClient: HttpClient
+    private lateinit var serverUrl: String
+    private lateinit var params: Map<String,String>
 
     //Galeria
     val REQUEST_CODE_GALLERY = 200
@@ -91,10 +91,10 @@ class MainActivity : AppCompatActivity(){
         setSupportActionBar(toolbar)
         setupBottomMenu()
         registerForContextMenu(alphaTileView)
-//
-//        httpClient = HttpClient(this)
-//        serverUrl = "https://99c2-176-12-82-226.ngrok-free.app"
-//        params = mapOf("color" to "f44336", "marca" to "", "año" to "","match" to "97")
+
+        httpClient = HttpClient(this)
+        serverUrl = "https://52ad-176-12-82-226.ngrok-free.app/endpoint"
+
 
         colorPickerView.setColorListener(object : ColorEnvelopeListener {
             override fun onColorSelected(envelope: ColorEnvelope, fromUser: Boolean) {
@@ -294,7 +294,14 @@ class MainActivity : AppCompatActivity(){
                 }
 
                 R.id.comparar -> {
-//                    httpClient.executeGetRequest(serverUrl, params)
+
+                    params = mapOf(
+                        "color" to hexadecimal.substring(3),
+                        "marca" to "",
+                        "año" to "",
+                        "match" to "90"
+                    )
+                    httpClient.executeGetRequest(serverUrl, params)
 
 //
 //                    val intent = Intent(this@MainActivity, ConsultasActivity()::class.java).apply {
@@ -319,29 +326,28 @@ class MainActivity : AppCompatActivity(){
                 else -> return super.onContextItemSelected(item)
             }
         }
-//    override fun onCochesReceived(cochesList: List<ColorCoche>) {
-////        val localbase = CochesRoomDatabase.getInstance(this)
-//
-//        for (coche in cochesList) {
-//            val cocheInfo = "ID: ${coche.uid}, Year: ${coche.anio}, Maker: ${coche.marca}, Model: ${coche.modelo}, Paint Color: ${coche.nombrePintura}, Code: ${coche.codigo}, url:${(coche.catalogueURL)}, hexadecimal:${(coche.hexadecimal)}"
-//            Log.d("Coches", coche.toString())
-//            Log.d("Coches", cocheInfo)
-//
-//
-//
-//            println(cocheInfo.toString())
-//        }
-//        val intent = Intent(this@MainActivity, ConsultasActivity()::class.java).apply {
-//
-//        }
-//        val b  = Bundle()
-//        intent.putExtras(b)
-//        startActivity(intent)
-//
-////        GlobalScope.launch(Dispatchers.IO) {
-////            localbase.colorCocheDao().insertAll(cochesList)
-////        }
-//    }
+    override fun onCochesReceived(cochesList: List<HttpClient.Coches>){
+        var database = CochesRoomDatabase.getInstance(this)
+
+        GlobalScope.launch(Dispatchers.IO) {
+            database.colorCocheDao().deleteAll()
+        }
+        for (coche in cochesList) {
+            Log.d("Coche", coche.toString())
+            var colorCoche  = ColorCoche(coche.id, coche.year, coche.maker, coche.model, coche.paintColorName,
+                coche.code, coche.catalogueURL,coche.hexadecimal,coche.red,coche.green, coche.blue, coche.colorSampleURL, coche.matchPercentage)
+            Log.d("COLOR-COCHE", colorCoche.toString())
+
+
+            GlobalScope.launch(Dispatchers.IO) {
+                database.colorCocheDao().insert(colorCoche)
+            }
+        }
+        val intent = Intent(this@MainActivity, ConsultasActivity::class.java)
+
+        startActivity(intent)
+    }
+
 
 
         private fun copyToClipboard(text: String) {

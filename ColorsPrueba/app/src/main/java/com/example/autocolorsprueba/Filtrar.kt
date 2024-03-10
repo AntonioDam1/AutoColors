@@ -58,6 +58,10 @@ class Filtrar : AppCompatActivity(), HttpClient.HttpClientListener {
 
     override fun onCochesReceived(cochesList: List<HttpClient.Coches>){
         var database = CochesRoomDatabase.getInstance(this)
+
+        GlobalScope.launch(Dispatchers.IO) {
+            database.colorCocheDao().deleteAll()
+        }
         for (coche in cochesList) {
             Log.d("Coche", coche.toString())
             var colorCoche  = ColorCoche(coche.id, coche.year, coche.maker, coche.model, coche.paintColorName,
