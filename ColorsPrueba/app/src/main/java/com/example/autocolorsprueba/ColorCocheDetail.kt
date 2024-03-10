@@ -52,6 +52,10 @@ class ColorCocheDetail : AppCompatActivity() {
             botonFav.isEnabled = false
         }
 
+        if (origen.equals("car")){
+            botonBorrar.isEnabled = false
+        }
+
         toolbar = findViewById(R.id.toolbar)
         alphaTileViewColor = findViewById(R.id.alphaTileViewColor)
         alphaTileViewOriginal  =findViewById(R.id.alphaTileViewOriginal)
@@ -81,39 +85,27 @@ class ColorCocheDetail : AppCompatActivity() {
     }
 
     private fun borrarColor(){
-
-
         val item = intent.getSerializableExtra("ITEM_KEY") as ColorFav
 
 
         var database  = CochesRoomDatabase.getInstance(this)
         var coloresFavs : MutableList<ColorFav>
-        coloresFavs= database.colorFavDao().getAll()
-
-        coloresFavs.remove(item)
-        miAdaptador.notifyDataSetChanged()
 
 
+        GlobalScope.launch(Dispatchers.IO) {
+            coloresFavs= database.colorFavDao().getAll()
+            coloresFavs.remove(item)
+            database.colorFavDao().delete(item)
+
+        }
+        finish()
+
+        val intent = Intent(this, FavoritosActivity::class.java)
+        startActivity(intent)
+
+        showToast("Color borrado")
     }
 
-//    private fun agregarFavoritos(){
-//        val hexadecimal = intent.getStringExtra("hexadecimal")
-//
-//        var colorFav = ColorFav(0,
-//            "nombre de ", 2020, "seat",
-//            "altea", hexadecimal, "","",
-//            0,0,0,"")
-//
-//        var database  = CochesRoomDatabase.getInstance(this)
-//
-//        GlobalScope.launch(Dispatchers.IO) {
-//            database.colorFavDao().insertAll(colorFav)
-//
-//
-//        }
-//        showToast("Agregado a Favoritos")
-//
-//    }
 
     private fun setupBottomMenu() {
 

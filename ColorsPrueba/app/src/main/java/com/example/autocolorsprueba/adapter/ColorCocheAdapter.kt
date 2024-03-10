@@ -1,14 +1,11 @@
 package com.example.autocolorsprueba.adapter
 
-import android.content.Intent
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.example.autocolorsprueba.ColorCocheDetail
 import com.example.autocolorsprueba.R
 import com.example.autocolorsprueba.database.CochesRoomDatabase
 import com.example.autocolorsprueba.model.entity.ColorCoche
@@ -34,17 +31,12 @@ class ColorCocheAdapter(val colorCocheList: MutableList<ColorCoche> ) : Recycler
         holder.render(item)
 
         holder.itemView.setOnClickListener {
-//            // Llama a la función que maneja la eliminación del elemento
-//            eliminarElemento(item, holder, position)
             val intent = Intent(it.context, ColorCocheDetail::class.java)
-
-            intent.putExtra("origen","fav")
+            intent.putExtra("origen","car")
             intent.putExtra("marca", item.marca)
             intent.putExtra("hexadecimal", item.hexadecimal)
-
             //intent.putExtras(item)
             holder.itemView.context.startActivity(intent)
-
         }
    }
 
