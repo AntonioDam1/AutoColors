@@ -62,15 +62,18 @@ class ColorCocheAdapter(val colorCocheList: MutableList<ColorCoche> ) : Recycler
 
 class ColorCocheViewHolder(view: View): RecyclerView.ViewHolder(view){
     val hexadecimal = view.findViewById<TextView>(R.id.tvHexadecimal)
-    val nombre = view.findViewById<TextView>(R.id.tvNombre)
+    val marca = view.findViewById<TextView>(R.id.tvMarca)
     val codigo = view.findViewById<TextView>(R.id.tvCodigo)
-//    val match = view.findViewById<TextView>(R.id.tvMatch)
-    val fondo = view.findViewById<TextView>(R.id.colorCoche)
+    val match = view.findViewById<TextView>(R.id.tvMatch)
+    val fondo = view.findViewById<TextView>(R.id.colorin)
+    val anio = view.findViewById<TextView>(R.id.tvAnio)
 
     fun render(colorCoche: ColorCoche){
         hexadecimal.text = colorCoche.hexadecimal
-//        nombre.text = colorCoche.nombre
-//        codigo.text = colorCoche.codigo + ", " + colorCoche.modelo
+        marca.text = colorCoche.marca
+        codigo.text = colorCoche.codigo + ", " + colorCoche.modelo
+        match.text = colorCoche.matchPercentage.toString()
+        anio.text = colorCoche.anio.toString()
         fondo.setBackgroundColor(Color.parseColor(colorCoche.hexadecimal))
 
 

@@ -42,7 +42,7 @@ class ColorCocheDetail : AppCompatActivity() {
         setContentView(R.layout.activity_color_coche_detail)
 
         val origen = intent.getStringExtra("origen")
-        val nombre = intent.getStringExtra("nombre")
+        val marca = intent.getStringExtra("marca")
         val hexadecimal = intent.getStringExtra("hexadecimal")
 
 
@@ -61,7 +61,7 @@ class ColorCocheDetail : AppCompatActivity() {
         }
 
         tvNombreDetalle = findViewById(R.id.tvNombreColorDetalle)
-        tvNombreDetalle.text = nombre
+        tvNombreDetalle.text = marca
         tvCodigoDetalle = findViewById(R.id.tvCodigoDetalle)
         tvCodigoDetalle.text = hexadecimal
         setupBottomMenu()

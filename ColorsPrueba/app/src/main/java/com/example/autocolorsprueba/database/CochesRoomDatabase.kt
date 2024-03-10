@@ -14,7 +14,7 @@ import com.example.autocolorsprueba.model.entity.ColorFav
 
 import kotlin.concurrent.Volatile
 
-@Database(entities = [ColorCoche::class, ColorFav::class], version = 3)
+@Database(entities = [ColorCoche::class, ColorFav::class], version = 10)
 abstract class CochesRoomDatabase : RoomDatabase() {
     abstract fun colorCocheDao(): ColorCocheDao
     abstract fun colorFavDao(): ColorFavDao
@@ -32,7 +32,7 @@ abstract class CochesRoomDatabase : RoomDatabase() {
 
                 if (instance == null) {
                     instance = Room.databaseBuilder(context.applicationContext, CochesRoomDatabase::class.java, DATABASE_NAME)
-                        .addMigrations(MIGRATION_1_2)
+                        .fallbackToDestructiveMigration()
                         .build()
                     INSTANCE = instance
                 }
@@ -42,38 +42,57 @@ abstract class CochesRoomDatabase : RoomDatabase() {
 
         }
 
-        
-        private val MIGRATION_1_2 = object : Migration(2, 3) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                // Crea la nueva tabla 'color_coche' con los mismos campos que 'color_fav'
-                database.execSQL(
-                    "CREATE TABLE IF NOT EXISTS `color_coche` (" +
-                            "`uid` INTEGER PRIMARY KEY  NOT NULL, " +
-                            "`AÑO` INTEGER, " +
-                            "`MARCA` TEXT NOT NULL, " +
-                            "`MODELO` TEXT, " +
-                            "`NOMBREPINTURA` TEXT, " +
-                            "`CODIGO` TEXT, " +
-                            "`CATALOGO_URL` TEXT, " +
-                            "`HEXADECIMAL` TEXT NOT NULL, " +
-                            "`RED` INTEGER NOT NULL, " +
-                            "`GREEN` INTEGER NOT NULL, " +
-                            "`BLUE` INTEGER NOT NULL, " +
-                            "`MATCHPERCENTAGE` TEXT)"
-                )
-            }
-        }
 
-        private val MIGRATION_2_3 = object : Migration(2, 3) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                // Aquí defines cómo migrar los datos de la versión 2 a la versión 3
-            }
-        }
+//        private val MIGRATION_2_4 = object : Migration(2, 4) {
+//            override fun migrate(database: SupportSQLiteDatabase) {
+//                // Crea la nueva tabla 'color_coche' con los mismos campos que 'color_fav'
+//                database.execSQL(
+//                    "DROP TABLE IF EXISTS `ColorCoche`" +
+//                    "CREATE TABLE IF NOT EXISTS `ColorCoche` (" +
+//                            "`uid` INTEGER PRIMARY KEY  NOT NULL, " +
+//                            "`AÑO` INTEGER, " +
+//                            "`MARCA` TEXT NOT NULL, " +
+//                            "`MODELO` TEXT, " +
+//                            "`NOMBREPINTURA` TEXT, " +
+//                            "`CODIGO` TEXT, " +
+//                            "`CATALOGO_URL` TEXT, " +
+//                            "`HEXADECIMAL` TEXT NOT NULL, " +
+//                            "`RED` INTEGER NOT NULL, " +
+//                            "`GREEN` INTEGER NOT NULL, " +
+//                            "`BLUE` INTEGER NOT NULL, " +
+//                            "`COLORSAMPLE_URL` TEXT, " +
+//                            "`MATCHPERCENTAGE` TEXT)"
+//                )
+//            }
+//        }
 
-        private val MIGRATION_3_4 = object : Migration(3, 4) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                // Aquí defines cómo migrar los datos de la versión 3 a la versión 4
-            }
-        }
+//        private val MIGRATION_2_3 = object : Migration(2, 3) {
+//            override fun migrate(database: SupportSQLiteDatabase) {
+//                // Aquí defines cómo migrar los datos de la versión 2 a la versión 3
+//            }
+//        }
+//
+//        private val MIGRATION_2_4 = object : Migration(2, 4) {
+//            override fun migrate(database: SupportSQLiteDatabase) {
+//                // Aquí defines cómo migrar los datos de la versión 3 a la versión 4
+//                database.execSQL(
+//                    "DROP TABLE IF EXISTS `ColorCoche`" +
+//                            "CREATE TABLE IF NOT EXISTS `ColorCoche` (" +
+//                            "`uid` INTEGER PRIMARY KEY  NOT NULL, " +
+//                            "`AÑO` INTEGER, " +
+//                            "`MARCA` TEXT NOT NULL, " +
+//                            "`MODELO` TEXT, " +
+//                            "`NOMBREPINTURA` TEXT, " +
+//                            "`CODIGO` TEXT, " +
+//                            "`CATALOGO_URL` TEXT, " +
+//                            "`HEXADECIMAL` TEXT NOT NULL, " +
+//                            "`RED` INTEGER NOT NULL, " +
+//                            "`GREEN` INTEGER NOT NULL, " +
+//                            "`BLUE` INTEGER NOT NULL, " +
+//                            "`COLORSAMPLE_URL` TEXT, " +
+//                            "`MATCHPERCENTAGE` TEXT)"
+//                )
+//            }
+//        }
     }
 }

@@ -1,13 +1,18 @@
 package com.example.autocolorsprueba
 
+
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.forEach
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -15,25 +20,89 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.badge.BadgeDrawable
+import com.google.android.material.bottomnavigation.BottomNavigationView
+
 
 class ColorMaps : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocationClickListener {
 
+
     private lateinit var map: GoogleMap
+    private lateinit var toolbar: Toolbar
+    lateinit var bottomNavigationView: BottomNavigationView
+
+
+
+
+
 
     companion object {
         const val REQUEST_CODE_LOCATION = 0
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_color_maps)
         createFragment()
+        toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        setupBottomMenu()
+
+
     }
+
+
+    private fun setupBottomMenu() {
+
+
+        bottomNavigationView = findViewById(R.id.bottom_navigation)
+        bottomNavigationView.selectedItemId = R.id.taller
+
+
+        bottomNavigationView.setOnItemSelectedListener { item -> onItemSelectedListener(item) }
+
+
+        bottomNavigationView.menu.forEach { menuItem ->
+            val badge = bottomNavigationView.getOrCreateBadge(menuItem.itemId)
+            badge.isVisible = false
+            badge.badgeGravity = BadgeDrawable.TOP_START
+        }
+    }
+    private fun onItemSelectedListener(item: MenuItem): Boolean {
+        val itemId = item.itemId
+        when (item.itemId) {
+            R.id.filtrar -> {
+                val intent = Intent(this, Filtrar::class.java).apply {  }
+                val b = Bundle()
+
+
+                startActivity(intent)
+            }
+            R.id.selector -> {
+                val intent = Intent(this, MainActivity::class.java)
+
+
+                startActivity(intent)
+            }
+
+
+//            R.id. page_fav -> {
+//                showPageFragment(R.drawable. ic_fav, R.string. bottom_nav_fav)
+//                return true
+//            }
+        }
+        return true
+    }
+
+
+
 
     private fun createFragment() {
         val mapFragment: SupportMapFragment = supportFragmentManager.findFragmentById(R.id.mapa) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
+
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
@@ -41,6 +110,7 @@ class ColorMaps : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocatio
         enableLocation()
         createMarkers()
     }
+
 
     private fun createMarkers() {
         val talleres = listOf(
@@ -62,6 +132,7 @@ class ColorMaps : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocatio
             Taller("Talleres Joan", 42.823759319310575, -1.6507828760525982)
         )
 
+
         for (taller in talleres) {
             val coordinate = LatLng(taller.latitude, taller.longitude)
             val marker = MarkerOptions().position(coordinate).title(taller.name)
@@ -69,15 +140,19 @@ class ColorMaps : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocatio
         }
     }
 
+
     data class Taller(val name: String, val latitude: Double, val longitude: Double)
+
 
     private fun isLocationPermissionGranted() = ContextCompat.checkSelfPermission(this,
         Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+
 
     private fun enableLocation() {
         if (!::map.isInitialized) return
         if (isLocationPermissionGranted()) {
             map.isMyLocationEnabled = true
+
 
             // Mueve la cámara a la ubicación del usuario una vez que esté habilitada
             val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -93,12 +168,14 @@ class ColorMaps : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocatio
                     }
                 }
 
+
             // Agrega el marcador del taller después de centrar en la ubicación del usuario
             createMarkers()
         } else {
             requestLocationPermission()
         }
     }
+
 
     private fun requestLocationPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
@@ -108,6 +185,7 @@ class ColorMaps : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocatio
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE_LOCATION)
         }
     }
+
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -130,6 +208,7 @@ class ColorMaps : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocatio
         }
     }
 
+
     override fun onResumeFragments() {
         super.onResumeFragments()
         if (!::map.isInitialized) return
@@ -142,6 +221,7 @@ class ColorMaps : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocatio
             ).show()
         }
     }
+
 
     override fun onMyLocationClick(p0: Location) {
         Toast.makeText(this, "Tu ubicación es ${p0.latitude}, ${p0.longitude}", Toast.LENGTH_SHORT).show()

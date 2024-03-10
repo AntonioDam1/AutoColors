@@ -63,7 +63,7 @@ class HttpClient(private val listener: HttpClientListener) {
 
         override fun onPostExecute(result: String) {
             super.onPostExecute(result)
-            val cochesList = Gson().fromJson<List<ColorCoche>>(result, object : TypeToken<List<ColorCoche>>() {}.type)
+            val cochesList = Gson().fromJson<List<Coches>>(result, object : TypeToken<List<Coches>>() {}.type)
             listener.onCochesReceived(cochesList)
 //            super.onPostExecute(result)
 //            listener.onCochesReceived(result)
@@ -72,7 +72,7 @@ class HttpClient(private val listener: HttpClientListener) {
 
 
     interface HttpClientListener {
-        fun onCochesReceived(cochesList: List<ColorCoche>)
+        fun onCochesReceived(cochesList: List<Coches>)
     }
 
 

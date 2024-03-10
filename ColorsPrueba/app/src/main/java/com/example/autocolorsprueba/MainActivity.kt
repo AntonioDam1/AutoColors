@@ -44,7 +44,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.FileNotFoundException
 
-class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
+class MainActivity : AppCompatActivity(){
     //Navegación
     lateinit var bottomNavigationView: BottomNavigationView
 
@@ -66,10 +66,10 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
 
     private var hexadecimal: String = ""
 
-    //Conexión con el servidor
-    private lateinit var httpClient: HttpClient
-    private lateinit var serverUrl: String
-    private lateinit var params: Map<String,String>
+//    //Conexión con el servidor
+//    private lateinit var httpClient: HttpClient
+//    private lateinit var serverUrl: String
+//    private lateinit var params: Map<String,String>
 
     //Galeria
     val REQUEST_CODE_GALLERY = 200
@@ -91,10 +91,11 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
         setSupportActionBar(toolbar)
         setupBottomMenu()
         registerForContextMenu(alphaTileView)
+//
+//        httpClient = HttpClient(this)
+//        serverUrl = "https://99c2-176-12-82-226.ngrok-free.app"
+//        params = mapOf("color" to "f44336", "marca" to "", "año" to "","match" to "97")
 
-        httpClient = HttpClient(this)
-        serverUrl = "https://99c2-176-12-82-226.ngrok-free.app"
-        params = mapOf("color" to "f44336", "marca" to "", "año" to "","match" to "97")
         colorPickerView.setColorListener(object : ColorEnvelopeListener {
             override fun onColorSelected(envelope: ColorEnvelope, fromUser: Boolean) {
                 textView.text = "#${envelope.hexCode}"
@@ -271,19 +272,15 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
             var i = 0
             when (item.itemId) {
                 R.id.agregarFavoritos -> {
-                    var colorFav = ColorFav(0,
-                        "nombre de ", 2020, "seat",
-                        "altea", hexadecimal, "","",
-                        0,0,0,"")
-                    var color = hexadecimal
-
+                    var colorCoche = ColorFav(0,0,"","", "","",
+                        "",hexadecimal,0,0,0, "",0.0)
                     var database  = CochesRoomDatabase.getInstance(this)
 
                     GlobalScope.launch(Dispatchers.IO) {
-                        database.colorFavDao().insertAll(colorFav)
-
-
+                        database.colorFavDao().insert(colorCoche)
                     }
+
+
                     showToast("Agregado a Favoritos")
                     return true
                 }
@@ -297,7 +294,7 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
                 }
 
                 R.id.comparar -> {
-                    httpClient.executeGetRequest(serverUrl, params)
+//                    httpClient.executeGetRequest(serverUrl, params)
 
 //
 //                    val intent = Intent(this@MainActivity, ConsultasActivity()::class.java).apply {
@@ -322,29 +319,29 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
                 else -> return super.onContextItemSelected(item)
             }
         }
-    override fun onCochesReceived(cochesList: List<ColorCoche>) {
-//        val localbase = CochesRoomDatabase.getInstance(this)
-
-        for (coche in cochesList) {
-            val cocheInfo = "ID: ${coche.uid}, Year: ${coche.year}, Maker: ${coche.marca}, Model: ${coche.modelo}, Paint Color: ${coche.nombre}, Code: ${coche.codigo}, url:${(coche.catalogueURL)}, hexadecimal:${(coche.hexadecimal)}"
-            Log.d("Coches", coche.toString())
-            Log.d("Coches", cocheInfo)
-
-
-
-            println(cocheInfo.toString())
-        }
-        val intent = Intent(this@MainActivity, ConsultasActivity()::class.java).apply {
-
-        }
-        val b  = Bundle()
-        intent.putExtras(b)
-        startActivity(intent)
-
-//        GlobalScope.launch(Dispatchers.IO) {
-//            localbase.colorCocheDao().insertAll(cochesList)
+//    override fun onCochesReceived(cochesList: List<ColorCoche>) {
+////        val localbase = CochesRoomDatabase.getInstance(this)
+//
+//        for (coche in cochesList) {
+//            val cocheInfo = "ID: ${coche.uid}, Year: ${coche.anio}, Maker: ${coche.marca}, Model: ${coche.modelo}, Paint Color: ${coche.nombrePintura}, Code: ${coche.codigo}, url:${(coche.catalogueURL)}, hexadecimal:${(coche.hexadecimal)}"
+//            Log.d("Coches", coche.toString())
+//            Log.d("Coches", cocheInfo)
+//
+//
+//
+//            println(cocheInfo.toString())
 //        }
-    }
+//        val intent = Intent(this@MainActivity, ConsultasActivity()::class.java).apply {
+//
+//        }
+//        val b  = Bundle()
+//        intent.putExtras(b)
+//        startActivity(intent)
+//
+////        GlobalScope.launch(Dispatchers.IO) {
+////            localbase.colorCocheDao().insertAll(cochesList)
+////        }
+//    }
 
 
         private fun copyToClipboard(text: String) {

@@ -17,6 +17,8 @@ interface ColorFavDao {
 
     @Insert
     fun insertAll(vararg users: ColorFav)
+    @Insert
+    fun insert(vararg users: ColorFav)
 
     @Delete
     fun delete(user: ColorFav)

@@ -18,6 +18,9 @@ interface ColorCocheDao {
     @Insert
     fun insertAll( coches: List<ColorCoche>)
 
+    @Insert
+    fun insert( coche: ColorCoche)
+
     @Delete
     fun delete(user: ColorCoche)
 }

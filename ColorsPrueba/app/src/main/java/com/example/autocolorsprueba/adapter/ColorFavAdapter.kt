@@ -36,7 +36,7 @@ class ColorFavAdapter(val colorFavList: MutableList<ColorFav> ) : RecyclerView.A
         holder.itemView.setOnClickListener {
             val intent = Intent(it.context, ColorCocheDetail::class.java)
             intent.putExtra("origen","fav")
-            intent.putExtra("nombre", item.nombre)
+            intent.putExtra("marca", item.marca)
             intent.putExtra("hexadecimal", item.hexadecimal)
             intent.putExtra("ITEM_KEY",item)
             //intent.putExtras(item)
@@ -69,19 +69,19 @@ class ColorFavAdapter(val colorFavList: MutableList<ColorFav> ) : RecyclerView.A
 
 class ColorFavViewHolder(view: View): RecyclerView.ViewHolder(view){
     val hexadecimal = view.findViewById<TextView>(R.id.tvHexadecimal)
-    val nombre = view.findViewById<TextView>(R.id.tvNombre)
+    val marca = view.findViewById<TextView>(R.id.tvMarca)
     val codigo = view.findViewById<TextView>(R.id.tvCodigo)
-    //    val match = view.findViewById<TextView>(R.id.tvMatch)
-    val fondo = view.findViewById<TextView>(R.id.colorCoche)
+    val match = view.findViewById<TextView>(R.id.tvMatch)
+    val fondo = view.findViewById<TextView>(R.id.colorin)
+    val anio = view.findViewById<TextView>(R.id.tvAnio)
 
-
-
-    fun render(colorFav: ColorFav){
-        hexadecimal.text = colorFav.hexadecimal
-        println(hexadecimal)
-//        nombre.text = ColorFav.nombre
-//        codigo.text = ColorFav.codigo + ", " + ColorFav.modelo
-        fondo.setBackgroundColor(Color.parseColor(colorFav.hexadecimal))
+    fun render(colorCoche: ColorFav){
+        hexadecimal.text = colorCoche.hexadecimal
+        marca.text = colorCoche.marca
+        codigo.text = colorCoche.codigo + ", " + colorCoche.modelo
+        match.text = colorCoche.matchPercentage.toString()
+        anio.text = colorCoche.anio.toString()
+        fondo.setBackgroundColor(Color.parseColor(colorCoche.hexadecimal))
 
 
     }
