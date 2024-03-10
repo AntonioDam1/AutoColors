@@ -1,11 +1,13 @@
 package com.example.autocolorsprueba.adapter
 
+import android.content.Intent
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.autocolorsprueba.ColorCocheDetail
 import com.example.autocolorsprueba.R
 import com.example.autocolorsprueba.database.CochesRoomDatabase
 import com.example.autocolorsprueba.model.entity.ColorCoche
