@@ -90,7 +90,7 @@ class ConsultasActivity() : AppCompatActivity() {
         GlobalScope.launch(Dispatchers.IO) {
             cochesColores= database.colorCocheDao().getAll()
             runOnUiThread {
-                val recyclerView = findViewById<RecyclerView>(R.id.recyclerFavs)
+                val recyclerView = findViewById<RecyclerView>(R.id.recyclerConsultas)
 
                 recyclerView.layoutManager = LinearLayoutManager(this@ConsultasActivity)
                 recyclerView.adapter = ColorCocheAdapter(cochesColores)
