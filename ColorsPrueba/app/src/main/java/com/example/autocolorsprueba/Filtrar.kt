@@ -87,7 +87,7 @@ class Filtrar : AppCompatActivity() {
     private fun setupBottomMenu() {
 
         bottomNavigationView = findViewById(R.id.bottom_navigation)
-        bottomNavigationView.selectedItemId = R.id.selector
+        bottomNavigationView.selectedItemId = R.id.filtrar
 
         bottomNavigationView.setOnItemSelectedListener { item -> onItemSelectedListener(item) }
 

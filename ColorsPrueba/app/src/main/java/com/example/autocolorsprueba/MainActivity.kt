@@ -142,7 +142,6 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
                 alphaTileView.setPaintColor(envelope.color)
                 textView.text = "#${envelope.hexCode}"
                 hexadecimal = "#${envelope.hexCode}"
-
                 toolbar.setBackgroundColor(envelope.color)
                 bottomNavigationView.setBackgroundColor(envelope.color)
 
@@ -176,10 +175,6 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
                 startActivity(intent)
             }
 
-//            R.id. page_fav -> {
-//                showPageFragment(R.drawable. ic_fav, R.string. bottom_nav_fav)
-//                return true
-//            }
         }
         return true
     }
