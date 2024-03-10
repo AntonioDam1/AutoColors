@@ -1,6 +1,7 @@
 package com.example.autocolorsprueba.database
 
 import android.content.Context
+import androidx.room.ColumnInfo
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -13,7 +14,7 @@ import com.example.autocolorsprueba.model.entity.ColorFav
 
 import kotlin.concurrent.Volatile
 
-@Database(entities = [ColorCoche::class, ColorFav::class], version = 2)
+@Database(entities = [ColorCoche::class, ColorFav::class], version = 3)
 abstract class CochesRoomDatabase : RoomDatabase() {
     abstract fun colorCocheDao(): ColorCocheDao
     abstract fun colorFavDao(): ColorFavDao
@@ -40,22 +41,35 @@ abstract class CochesRoomDatabase : RoomDatabase() {
 
 
         }
-        private val MIGRATION_1_2 = object : Migration(1, 2) {
+
+        @ColumnInfo(name = "AÑO") val anio: Int?,
+        @ColumnInfo(name = "MARCA") val marca: String,
+        @ColumnInfo(name = "MODELO") val modelo: String?,
+        @ColumnInfo(name = "NOMBREPINTURA") val nombrePintura: String,
+        @ColumnInfo(name = "CODIGO") val hexadecimal: String,
+        @ColumnInfo(name = "CATALOGO_URL") val catalogueURL: String?,
+        @ColumnInfo(name = "HEXADECIMAL") val codigo: String?,
+        @ColumnInfo(name = "RED") val red: Int,
+        @ColumnInfo(name = "GREEN") val green: Int,
+        @ColumnInfo(name = "BLUE") val blue: Int,
+        @ColumnInfo(name = "CATALOGO_URL") val colorsampleURL: String,
+        @ColumnInfo(name = "MATCHPERCENTAGE") val matchPercentage: String?
+        private val MIGRATION_1_2 = object : Migration(2, 3) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 // Crea la nueva tabla 'color_coche' con los mismos campos que 'color_fav'
                 database.execSQL(
                     "CREATE TABLE IF NOT EXISTS `color_coche` (" +
-                            "`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
-                            "`NOMBRE` TEXT, " +
+                            "`uid` INTEGER PRIMARY KEY  NOT NULL, " +
                             "`AÑO` INTEGER, " +
-                            "`MARCA` TEXT, " +
+                            "`MARCA` TEXT NOT NULL, " +
                             "`MODELO` TEXT, " +
-                            "`HEXADECIMAL` TEXT NOT NULL, " +
+                            "`NOMBREPINTURA` TEXT, " +
                             "`CODIGO` TEXT, " +
                             "`CATALOGO_URL` TEXT, " +
-                            "`RED` INTEGER, " +
-                            "`GREEN` INTEGER, " +
-                            "`BLUE` INTEGER, " +
+                            "`HEXADECIMAL` TEXT NOT NULL, " +
+                            "`RED` INTEGER NOT NULL, " +
+                            "`GREEN` INTEGER NOT NULL, " +
+                            "`BLUE` INTEGER NOT NULL, " +
                             "`MATCHPERCENTAGE` TEXT)"
                 )
             }

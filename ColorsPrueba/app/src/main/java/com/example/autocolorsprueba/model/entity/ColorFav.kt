@@ -8,15 +8,16 @@ import java.io.Serializable
 @Entity
 data class ColorFav(
     @PrimaryKey(autoGenerate = true) val uid: Long,
-    @ColumnInfo(name = "NOMBRE") val nombre: String?,
-    @ColumnInfo(name = "AÑO") val year: Int?,
-    @ColumnInfo(name = "MARCA") val marca: String?,
+    @ColumnInfo(name = "AÑO") val anio: Int?,
+    @ColumnInfo(name = "MARCA") val marca: String,
     @ColumnInfo(name = "MODELO") val modelo: String?,
-    @ColumnInfo(name = "HEXADECIMAL") val hexadecimal: String,
-    @ColumnInfo(name = "CODIGO") val codigo: String?,
+    @ColumnInfo(name = "NOMBREPINTURA") val nombrePintura: String,
+    @ColumnInfo(name = "CODIGO") val hexadecimal: String,
     @ColumnInfo(name = "CATALOGO_URL") val catalogueURL: String?,
-    @ColumnInfo(name = "RED") val red: Int?,
-    @ColumnInfo(name = "GREEN") val green: Int?,
-    @ColumnInfo(name = "BLUE") val blue: Int?,
+    @ColumnInfo(name = "HEXADECIMAL") val codigo: String?,
+    @ColumnInfo(name = "RED") val red: Int,
+    @ColumnInfo(name = "GREEN") val green: Int,
+    @ColumnInfo(name = "BLUE") val blue: Int,
+    @ColumnInfo(name = "CATALOGO_URL") val colorsampleURL: String,
     @ColumnInfo(name = "MATCHPERCENTAGE") val matchPercentage: String?
 ): Serializable
