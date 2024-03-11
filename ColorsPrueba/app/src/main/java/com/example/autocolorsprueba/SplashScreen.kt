@@ -28,14 +28,14 @@ class SplashActivity : AppCompatActivity() {
             val intent = Intent(this@SplashActivity, MainActivity::class.java)
             startActivity(intent)
             finish()
-        }, 5000)
+        }, 2000)
     }
 
 
     private fun girar(view: View) {
         val animation = RotateAnimation(0f, 360f, RotateAnimation.RELATIVE_TO_SELF,
             0.5f, RotateAnimation.RELATIVE_TO_SELF, 0.5f)
-        animation.duration = 2000
+        animation.duration = 1400
         animation.repeatCount = Animation.INFINITE
         view.startAnimation(animation)
     }
