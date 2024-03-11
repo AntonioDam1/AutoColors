@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.forEach
 import com.example.autocolorsprueba.database.CochesRoomDatabase
@@ -79,14 +80,74 @@ class Filtrar : AppCompatActivity(), HttpClient.HttpClientListener {
     }
 
     private fun buscarColor() {
+        val colorHex = hexadecimal.text.toString().trim()
+        val marcaText = marca.text.toString().trim()
+        val yearText = year.text.toString().trim()
+        val matchText = match.text.toString().trim()
 
-        params = mapOf(
-            "color" to hexadecimal.text.toString(),
-            "marca" to marca.text.toString(),
-            "año" to hexadecimal.text.toString(),
-            "match" to match.text.toString()
-        )
-        httpClient.executeGetRequest(serverUrl, params)
+        val errores = mutableListOf<String>()
+
+        if (!isValidColorHex(colorHex)) {
+            errores.add("Formato de color hexadecimal incorrecto")
+        }
+
+        if (marcaText.isNotBlank() && !isValidMarca(marcaText)) {
+            errores.add("Marca no válida. Marcas válidas: BMW, Ford, Lincoln, Acura, Honda, Mitsubishi, Sea, Volkswagen")
+        }
+
+        if (yearText.isNotBlank() && !isValidYear(yearText)) {
+            errores.add("Formato de año incorrecto (deben ser 4 dígitos numéricos)")
+        }
+
+        if (matchText.isNotBlank() && !isValidMatch(matchText)) {
+            errores.add("Porcentaje de coincidencia no válido (debe estar entre 0 y 100)")
+        }
+
+        if (errores.isNotEmpty()) {
+            // Mostrar todos los mensajes de error acumulados
+            for (error in errores) {
+                showToast(error)
+            }
+        } else {
+            // Todos los campos tienen valores válidos, puedes realizar la búsqueda
+            val params = mapOf(
+                "color" to colorHex,
+                "marca" to marcaText,
+                "año" to yearText,
+                "match" to matchText
+            )
+            httpClient.executeGetRequest(serverUrl, params)
+        }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+// Resto de las funciones de validación sin cambios
+
+
+    private fun isValidColorHex(colorHex: String): Boolean {
+        val hexRegex = Regex("^#?([0-9a-fA-F]{6})$")
+        return hexRegex.matches(colorHex)
+    }
+
+    private fun isValidMarca(marca: String): Boolean {
+        val marcasValidas = setOf("BMW", "Ford", "Lincoln", "Acura", "Honda", "Mitsubishi", "Sea", "Volkswagen")
+        return marca.isNotBlank() && marcasValidas.contains(marca)
+    }
+
+    private fun isValidYear(year: String): Boolean {
+        return year.matches(Regex("\\d{4}"))
+    }
+
+    private fun isValidMatch(match: String): Boolean {
+        return try {
+            val matchValue = match.toDouble()
+            matchValue >= 0 && matchValue <= 100
+        } catch (e: NumberFormatException) {
+            false
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

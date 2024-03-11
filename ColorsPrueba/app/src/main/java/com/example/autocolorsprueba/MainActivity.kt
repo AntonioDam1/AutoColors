@@ -92,8 +92,31 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
         setupBottomMenu()
         registerForContextMenu(alphaTileView)
 
+        //Conexión con el servidor
         httpClient = HttpClient(this)
         serverUrl = "https://52ad-176-12-82-226.ngrok-free.app/endpoint"
+
+        val database = CochesRoomDatabase.getInstance(this)
+        val cocheMock = ColorCoche(
+            uid = 1,
+            anio = 2022,
+            marca = "Toyota",
+            modelo = "Corolla",
+            nombrePintura = "Rojo Brillante",
+            codigo = "RR123",
+            catalogueURL = "https://example.com/catalogue",
+            hexadecimal = "#FF0000",
+            red = 255,
+            green = 0,
+            blue = 0,
+            colorsampleURL = "https://example.com/colorsample",
+            matchPercentage = 100.0
+        )
+        //Mock insert para que la bbdd despierte y este preparada. Estaria bien sustituirlo por arranque de la bbdd bien
+        GlobalScope.launch(Dispatchers.IO) {
+            database.colorCocheDao().insert(cocheMock)
+            database.colorCocheDao().deleteAll()
+        }
 
 
         colorPickerView.setColorListener(object : ColorEnvelopeListener {
@@ -131,7 +154,6 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
             }
         }
 
-        //Para poder abrir la Galeria
         //Cámara
         btnCamara = findViewById(R.id.botonCamara)
         btnCamara.setOnClickListener{
@@ -140,9 +162,12 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
 
         colorPickerView.setColorListener(object : ColorEnvelopeListener {
             override fun onColorSelected(envelope: ColorEnvelope, fromUser: Boolean) {
+                var hexa = envelope.getHexCode()
+                hexa = "#" + hexa.substring(2,hexa.length)
                 alphaTileView.setPaintColor(envelope.color)
-                textView.text = "#${envelope.hexCode}"
-                hexadecimal = "#${envelope.hexCode}"
+                textView.text = hexa
+                hexadecimal = "${hexa}"
+
                 toolbar.setBackgroundColor(envelope.color)
                 bottomNavigationView.setBackgroundColor(envelope.color)
 
