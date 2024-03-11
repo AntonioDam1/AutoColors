@@ -62,13 +62,15 @@ class ColorCocheDetail : AppCompatActivity() {
 
         botonBorrar = findViewById(R.id.buttonBorrar)
         botonFav = findViewById(R.id.buttonFav)
-            botonFav.visibility = View.GONE
-        if (origen.equals("fav")) {
+        if (origen.equals("fav")){
+            botonFav.isEnabled = false
+            botonFav.visibility = View.INVISIBLE
         }
 
 
         if (origen.equals("car")) {
-            botonBorrar.visibility = View.GONE
+            botonBorrar.isEnabled = false
+            botonBorrar.visibility = View.INVISIBLE
         }
 
 
