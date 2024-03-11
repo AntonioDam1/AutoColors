@@ -321,7 +321,7 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
                 R.id.comparar -> {
 
                     params = mapOf(
-                        "color" to hexadecimal.substring(3),
+                        "color" to hexadecimal.substring(1),
                         "marca" to "",
                         "año" to "",
                         "match" to "90"
