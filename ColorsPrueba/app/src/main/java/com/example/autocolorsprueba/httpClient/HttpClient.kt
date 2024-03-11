@@ -57,6 +57,7 @@ class HttpClient(private val listener: HttpClientListener) {
             } finally {
                 connection.disconnect()
             }
+
             return response.toString()
         }
 
