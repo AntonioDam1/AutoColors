@@ -28,7 +28,7 @@
 
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
+        android:background="@color/md_theme_surfaceContainer_mediumContrast"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
@@ -192,6 +192,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="35dp"
         android:text="@string/borrar"
+        style="@style/CustomButton"
         app:layout_constraintBaseline_toBaselineOf="@+id/buttonFav"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -199,6 +200,7 @@
         android:id="@+id/buttonFav"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/CustomButton"
         android:layout_marginStart="35dp"
         android:layout_marginTop="53dp"
         android:text="@string/agregar_favoritos"
