@@ -30,8 +30,10 @@ class ColorCocheDetail : AppCompatActivity() {
     private lateinit var alphaTileViewColor: ImageView
     private lateinit var tvNombreDetalle: TextView
     private lateinit var tvCodigoDetalle: TextView
-    private lateinit var favoritosActivity: FavoritosActivity
-    private lateinit var miAdaptador: ColorFavAdapter
+    private lateinit var textViewMarcaDetail: TextView
+    private lateinit var textViewModeloDetail: TextView
+    private lateinit var textViewAnioDetail: TextView
+
     lateinit var bottomNavigationView: BottomNavigationView
 
 
@@ -42,12 +44,20 @@ class ColorCocheDetail : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_color_coche_detail)
 
+        textViewMarcaDetail = findViewById(R.id.textViewMarcaDetail)
+        textViewModeloDetail = findViewById(R.id.textViewModeloDetail)
+        textViewAnioDetail = findViewById(R.id.textViewAnioDetail)
+
 
         val origen = intent.getStringExtra("origen")
         val marca = intent.getStringExtra("marca")
         val hexadecimal = intent.getStringExtra("hexadecimal")
+        val modelo = intent.getStringExtra("modelo")
+        val anio = intent.getStringExtra("anio")
 
-
+        textViewMarcaDetail.text = marca
+        textViewModeloDetail.text = modelo
+        textViewAnioDetail.text = anio
 
 
         botonBorrar = findViewById(R.id.buttonBorrar)
