@@ -56,6 +56,8 @@
         <item name="colorSurfaceContainerHigh">@color/md_theme_surfaceContainerHigh</item>
         <item name="colorSurfaceContainerHighest">@color/md_theme_surfaceContainerHighest</item>
     </style>
-
+    <style name="Botones">
+        <item name="colorOnSecondary">@color/md_theme_inversePrimary</item>
+    </style>
     <style name="Theme.AutoColorsPrueba" parent="Base.Theme.AutoColorsPrueba" />
 </resources>
