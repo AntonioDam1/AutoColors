@@ -1,5 +1,6 @@
 package com.example.autocolorsprueba.adapter
 
+
 import android.content.Intent
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.invoke
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.DecimalFormat
 
 class ColorCocheAdapter(val colorCocheList: MutableList<ColorCoche> ) : RecyclerView.Adapter<ColorCocheViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ColorCocheViewHolder {
@@ -26,27 +28,21 @@ class ColorCocheAdapter(val colorCocheList: MutableList<ColorCoche> ) : Recycler
     }
 
     override fun getItemCount(): Int = colorCocheList.size
-
-
     override fun onBindViewHolder(holder: ColorCocheViewHolder, position: Int) {
         val tamano = colorCocheList.size
         val item = colorCocheList[position]
         holder.render(item)
 
-        holder.itemView.setOnClickListener {
-//            // Llama a la función que maneja la eliminación del elemento
-//            eliminarElemento(item, holder, position)
-            val intent = Intent(it.context, ColorCocheDetail::class.java)
 
-            intent.putExtra("origen","fav")
+        holder.itemView.setOnClickListener {
+            val intent = Intent(it.context, ColorCocheDetail::class.java)
+            intent.putExtra("origen","car")
             intent.putExtra("marca", item.marca)
             intent.putExtra("hexadecimal", item.hexadecimal)
-
             //intent.putExtras(item)
             holder.itemView.context.startActivity(intent)
-
         }
-   }
+    }
 
     private fun eliminarElemento(colorCoche: ColorCoche, holder: ColorCocheViewHolder, position: Int) {
         val database = CochesRoomDatabase.getInstance(holder.itemView.context)
@@ -83,7 +79,9 @@ class ColorCocheViewHolder(view: View): RecyclerView.ViewHolder(view){
         hexadecimal.text = colorCoche.hexadecimal
         marca.text = colorCoche.marca
         codigo.text = colorCoche.codigo + ", " + colorCoche.modelo
-        match.text = colorCoche.matchPercentage.toString()
+        val formato = DecimalFormat("#.##")
+        val valorRedondeado = formato.format(100-colorCoche.matchPercentage!!)
+        match.text = valorRedondeado
         anio.text = colorCoche.anio.toString()
         fondo.setBackgroundColor(Color.parseColor(colorCoche.hexadecimal))
 
