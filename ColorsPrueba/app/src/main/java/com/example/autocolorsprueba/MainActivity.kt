@@ -279,7 +279,7 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
 //                GlobalScope.launch(Dispatchers.IO) {
 //                    database.colorCocheDao().insertAll(colorCoche)
 //                }
-
+                ColorStorage.setString(hexadecimal)
                 // Crear un Intent para iniciar la actividad de Galería
                 val intent = Intent(this@MainActivity, FavoritosActivity::class.java)
                 // Iniciar la actividad
