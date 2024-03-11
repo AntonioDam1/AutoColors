@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
@@ -84,11 +85,13 @@ class ColorCocheDetail : AppCompatActivity() {
             var savedString = ColorStorage.getString()
             if (savedString != null) {
                 if (savedString.startsWith("#")) {
-                    savedString = "FF" + savedString
+                    savedString = "#FF" + savedString.substring(1)
                 }else{
                     savedString = "#FF" + savedString
                 }
             }
+            Log.d("saved", savedString.toString())
+
             alphaTileViewOriginal.setBackgroundColor(Color.parseColor(savedString))
         }
 
@@ -193,6 +196,11 @@ class ColorCocheDetail : AppCompatActivity() {
                 val b = Bundle()
 //                b.putString("hexadecimal",hexadecimal)
                 intent.putExtras(b)
+                startActivity(intent)
+            }
+            R.id.selector -> {
+                val intent = Intent(this, MainActivity::class.java)
+
                 startActivity(intent)
             }
 

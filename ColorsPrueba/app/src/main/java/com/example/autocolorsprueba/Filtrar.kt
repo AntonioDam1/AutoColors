@@ -21,7 +21,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class Filtrar : AppCompatActivity(), HttpClient.HttpClientListener {
-    lateinit var bottomNavigationView: BottomNavigationView
+    private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var toolbar: Toolbar
     private lateinit var itemFav: MenuItem
     private lateinit var hexadecimal : EditText
@@ -46,7 +46,7 @@ class Filtrar : AppCompatActivity(), HttpClient.HttpClientListener {
 
         //Para la peticion al servidor
         httpClient = HttpClient(this)
-        serverUrl = "https://52ad-176-12-82-226.ngrok-free.app/endpoint"
+        serverUrl = "https://ccd3-176-12-82-226.ngrok-free.app/endpoint"
 
         buttonBuscar = findViewById(R.id.buttonBuscar)
         buttonBuscar.setOnClickListener{
@@ -59,6 +59,13 @@ class Filtrar : AppCompatActivity(), HttpClient.HttpClientListener {
 
     override fun onCochesReceived(cochesList: List<HttpClient.Coches>){
         var database = CochesRoomDatabase.getInstance(this)
+        val listaHexadecimal  = mutableListOf<String>()
+        val uniqueEntries = mutableSetOf<Pair<String, String>>() // Usamos un conjunto de pares (hexadecimal, marca) para mantener únicos los registros
+
+        val listamarca  = mapOf<String, String>()
+
+
+
 
         GlobalScope.launch(Dispatchers.IO) {
             database.colorCocheDao().deleteAll()
@@ -67,14 +74,30 @@ class Filtrar : AppCompatActivity(), HttpClient.HttpClientListener {
             showToast("No hay resultados para ese color, año o marca")
         }else{
             for (coche in cochesList) {
-                Log.d("Coche", coche.toString())
-                var colorCoche  = ColorCoche(coche.id, coche.year, coche.maker, coche.model, coche.paintColorName,
-                    coche.code, coche.catalogueURL,coche.hexadecimal,coche.red,coche.green, coche.blue, coche.colorSampleURL, coche.matchPercentage)
-                Log.d("COLOR-COCHE", colorCoche.toString())
-                ColorStorage.setString(hexadecimal.text.toString().trim())
+                val pair = Pair(coche.hexadecimal, coche.maker)
+                if (pair !in uniqueEntries) { // Comprobamos si la combinación hexadecimal-marca ya está en la lista
+                    uniqueEntries.add(pair) // Agregamos la combinación al conjunto para evitar duplicados
+                    val colorCoche = ColorCoche(
+                        coche.id,
+                        coche.year,
+                        coche.maker,
+                        coche.model,
+                        coche.paintColorName,
+                        coche.code,
+                        coche.catalogueURL,
+                        coche.hexadecimal,
+                        coche.red,
+                        coche.green,
+                        coche.blue,
+                        coche.colorSampleURL,
+                        coche.matchPercentage
+                    )
+                    Log.d("COLOR-COCHE", colorCoche.toString())
+                    ColorStorage.setString(hexadecimal.text.toString().trim())
 
-                GlobalScope.launch(Dispatchers.IO) {
-                    database.colorCocheDao().insert(colorCoche)
+                    GlobalScope.launch(Dispatchers.IO) {
+                        database.colorCocheDao().insert(colorCoche)
+                    }
                 }
             }
 
@@ -84,6 +107,7 @@ class Filtrar : AppCompatActivity(), HttpClient.HttpClientListener {
         }
 
     }
+
 
     private fun buscarColor() {
         val colorHex = hexadecimal.text.toString().trim()
@@ -190,6 +214,7 @@ class Filtrar : AppCompatActivity(), HttpClient.HttpClientListener {
         }
 
     }
+
 
     private fun onItemSelectedListener(item: MenuItem): Boolean {
         val itemId = item.itemId

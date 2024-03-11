@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
 
         //Conexión con el servidor
         httpClient = HttpClient(this)
-        serverUrl = "https://52ad-176-12-82-226.ngrok-free.app/endpoint"
+        serverUrl = "https://ccd3-176-12-82-226.ngrok-free.app/endpoint"
 
         val database = CochesRoomDatabase.getInstance(this)
         val cocheMock = ColorCoche(
