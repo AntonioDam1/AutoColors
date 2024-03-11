@@ -1,6 +1,5 @@
 package com.example.autocolorsprueba.adapter
 
-
 import android.content.Intent
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -23,7 +22,7 @@ class ColorFavAdapter(val colorFavList: MutableList<ColorFav> ) : RecyclerView.A
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ColorFavViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return ColorFavViewHolder(layoutInflater.inflate(R.layout.item_colorcoche, parent, false))
-        TODO("Not yet implemented")
+
     }
 
     override fun getItemCount(): Int = colorFavList.size
@@ -33,7 +32,6 @@ class ColorFavAdapter(val colorFavList: MutableList<ColorFav> ) : RecyclerView.A
         val tamano = colorFavList.size
         val item = colorFavList[position]
         holder.render(item)
-
 
         holder.itemView.setOnClickListener {
             val intent = Intent(it.context, ColorCocheDetail::class.java)
@@ -45,7 +43,6 @@ class ColorFavAdapter(val colorFavList: MutableList<ColorFav> ) : RecyclerView.A
             holder.itemView.context.startActivity(intent)
         }
     }
-
 
 //    private fun eliminarElemento(colorFav: ColorFav, holder: ColorFavViewHolder, position: Int) {
 //        val database = CochesRoomDatabase.getInstance(holder.itemView.context)

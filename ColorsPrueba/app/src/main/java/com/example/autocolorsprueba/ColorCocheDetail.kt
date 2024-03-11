@@ -83,13 +83,39 @@ class ColorCocheDetail : AppCompatActivity() {
             borrarColor()
         }
         botonFav.setOnClickListener {
-            //agregarFavoritos()
+            agregarFavoritos()
         }
 
 
 
     }
+    private fun agregarFavoritos(){
 
+        val hexadecimal = intent.getStringExtra("hexadecimal")
+        val anio = intent.getStringExtra("anio")
+        val marca = intent.getStringExtra("marca")
+        val modelo = intent.getStringExtra("modelo")
+        val nombrePintuta = intent.getStringExtra("hexadecimal")
+        val codigo = intent.getStringExtra("codigo")
+        val catalog = intent.getStringExtra("CATALOGO_URL")
+        val red = intent.getIntExtra("red",0)
+        val green = intent.getIntExtra("green",0)
+        val blue = intent.getIntExtra("blue",0)
+        val colorsample = intent.getStringExtra("colorsample")
+        val match = intent.getStringExtra("match")
+
+
+         var colorCoche = ColorFav(0, anio?.toInt(),marca,modelo, nombrePintuta,codigo,
+             catalog,hexadecimal,red,green,blue, colorsample, match?.toDouble())
+         var database  = CochesRoomDatabase.getInstance(this)
+
+         GlobalScope.launch(Dispatchers.IO) {
+             database.colorFavDao().insert(colorCoche)
+         }
+
+
+         showToast("Agregado a Favoritos")
+    }
 
     private fun borrarColor() {
         val item = intent.getSerializableExtra("ITEM_KEY") as ColorFav
