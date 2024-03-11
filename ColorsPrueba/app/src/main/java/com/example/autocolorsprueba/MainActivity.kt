@@ -54,6 +54,7 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
     private lateinit var alphaTileView: AlphaTileView
     private lateinit var textView: TextView
 
+
     // private lateinit var appToolbar: Toolbar
     private lateinit var itemCopiar: MenuItem
     private lateinit var itemAgregar: MenuItem
@@ -324,8 +325,9 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
                         "color" to hexadecimal.substring(1),
                         "marca" to "",
                         "año" to "",
-                        "match" to "90"
+                        "match" to "93"
                     )
+
                     httpClient.executeGetRequest(serverUrl, params)
 
 //
@@ -357,21 +359,29 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
         GlobalScope.launch(Dispatchers.IO) {
             database.colorCocheDao().deleteAll()
         }
-        for (coche in cochesList) {
-            Log.d("Coche", coche.toString())
-            var colorCoche  = ColorCoche(coche.id, coche.year, coche.maker, coche.model, coche.paintColorName,
-                coche.code, coche.catalogueURL,coche.hexadecimal,coche.red,coche.green, coche.blue, coche.colorSampleURL, coche.matchPercentage)
-            Log.d("COLOR-COCHE", colorCoche.toString())
+        if (cochesList.size == 0) {
+            showToast("No hay resultados para ese color")
+        } else {
+            for (coche in cochesList) {
+//            Log.d("Coche", coche.toString())
+                var colorCoche  = ColorCoche(coche.id, coche.year, coche.maker, coche.model, coche.paintColorName,
+                    coche.code, coche.catalogueURL,coche.hexadecimal,coche.red,coche.green, coche.blue, coche.colorSampleURL, coche.matchPercentage)
+//            Log.d("COLOR-COCHE", colorCoche.toString())
 
 
-            GlobalScope.launch(Dispatchers.IO) {
-                database.colorCocheDao().insert(colorCoche)
+                GlobalScope.launch(Dispatchers.IO) {
+                    database.colorCocheDao().insert(colorCoche)
+                }
             }
-        }
-        val intent = Intent(this@MainActivity, ConsultasActivity::class.java)
+            ColorStorage.setString(hexadecimal.substring(1))
+            val intent = Intent(this@MainActivity, ConsultasActivity::class.java)
 
-        startActivity(intent)
+
+            startActivity(intent)
+        }
+
     }
+
 
 
 

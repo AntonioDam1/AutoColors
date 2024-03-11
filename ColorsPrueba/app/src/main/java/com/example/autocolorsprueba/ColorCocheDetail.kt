@@ -17,7 +17,6 @@ import com.example.autocolorsprueba.database.CochesRoomDatabase
 import com.example.autocolorsprueba.model.entity.ColorFav
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.skydoves.colorpickerview.AlphaTileView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -35,6 +34,7 @@ class ColorCocheDetail : AppCompatActivity() {
     private lateinit var textViewAnioDetail: TextView
 
     lateinit var bottomNavigationView: BottomNavigationView
+    private lateinit var colorOriginal: String
 
 
 
@@ -62,15 +62,13 @@ class ColorCocheDetail : AppCompatActivity() {
 
         botonBorrar = findViewById(R.id.buttonBorrar)
         botonFav = findViewById(R.id.buttonFav)
-        if (origen.equals("fav")){
-            botonFav.isEnabled = false
-            botonFav.visibility = View.INVISIBLE
+            botonFav.visibility = View.GONE
+        if (origen.equals("fav")) {
         }
 
 
         if (origen.equals("car")) {
-            botonBorrar.isEnabled = false
-            botonBorrar.visibility = View.INVISIBLE
+            botonBorrar.visibility = View.GONE
         }
 
 
@@ -80,7 +78,16 @@ class ColorCocheDetail : AppCompatActivity() {
 
 
         if (hexadecimal != null) {
-            alphaTileViewOriginal.setBackgroundColor(Color.parseColor(hexadecimal))
+            alphaTileViewColor.setBackgroundColor(Color.parseColor(hexadecimal))
+            var savedString = ColorStorage.getString()
+            if (savedString != null) {
+                if (savedString.startsWith("#")) {
+                    savedString = "FF" + savedString
+                }else{
+                    savedString = "#FF" + savedString
+                }
+            }
+            alphaTileViewOriginal.setBackgroundColor(Color.parseColor(savedString))
         }
 
         tvNombreDetalle = findViewById(R.id.tvNombreColorDetalle)

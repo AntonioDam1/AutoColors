@@ -9,7 +9,7 @@ import com.example.autocolorsprueba.model.entity.ColorCoche
 
 @Dao
 interface ColorCocheDao {
-    @Query("SELECT * FROM ColorCoche")
+    @Query("SELECT * FROM ColorCoche ORDER BY MATCHPERCENTAGE")
     fun getAll(): MutableList<ColorCoche>
 
     @Query("SELECT * FROM colorcoche  WHERE uid IN (:userIds)")

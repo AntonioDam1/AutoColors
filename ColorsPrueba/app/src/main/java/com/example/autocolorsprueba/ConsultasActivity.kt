@@ -24,6 +24,7 @@ class ConsultasActivity() : AppCompatActivity() {
     private lateinit var toolbar: Toolbar
     private lateinit var nombre : TextView
     private lateinit var recyclerView: RecyclerView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_consultas)
@@ -33,6 +34,7 @@ class ConsultasActivity() : AppCompatActivity() {
         setupBottomMenu()
         registerForContextMenu(recyclerView)
         initRecyclerView()
+
 
     }
 

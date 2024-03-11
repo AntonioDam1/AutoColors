@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.autocolorsprueba.ColorCocheDetail
 import com.example.autocolorsprueba.R
@@ -14,12 +13,13 @@ import com.example.autocolorsprueba.database.CochesRoomDatabase
 import com.example.autocolorsprueba.model.entity.ColorCoche
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.invoke
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.DecimalFormat
 
-class ColorCocheAdapter(val colorCocheList: MutableList<ColorCoche> ) : RecyclerView.Adapter<ColorCocheViewHolder>() {
+class ColorCocheAdapter(val colorCocheList: MutableList<ColorCoche>) : RecyclerView.Adapter<ColorCocheViewHolder>() {
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ColorCocheViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return ColorCocheViewHolder(layoutInflater.inflate(R.layout.item_colorcoche, parent, false))
@@ -30,6 +30,7 @@ class ColorCocheAdapter(val colorCocheList: MutableList<ColorCoche> ) : Recycler
 
 
     override fun onBindViewHolder(holder: ColorCocheViewHolder, position: Int) {
+        val coche : ColorCoche = colorCocheList[position]
         val tamano = colorCocheList.size
         val item = colorCocheList[position]
         holder.render(item)
@@ -47,11 +48,11 @@ class ColorCocheAdapter(val colorCocheList: MutableList<ColorCoche> ) : Recycler
             intent.putExtra("codigo", item.codigo)
             intent.putExtra("CATALOGO_URL", item.catalogueURL)
             intent.putExtra("red", item.red)
-            intent.putExtra("green", item.green)
             intent.putExtra("blue", item.blue)
+            intent.putExtra("green", item.green)
             intent.putExtra("colorsample", item.colorsampleURL)
             intent.putExtra("match", item.matchPercentage)
-
+//            intent.putExtra("coche", coche)
             //intent.putExtras(item)
             holder.itemView.context.startActivity(intent)
 

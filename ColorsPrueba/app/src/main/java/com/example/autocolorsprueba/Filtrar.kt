@@ -63,20 +63,26 @@ class Filtrar : AppCompatActivity(), HttpClient.HttpClientListener {
         GlobalScope.launch(Dispatchers.IO) {
             database.colorCocheDao().deleteAll()
         }
-        for (coche in cochesList) {
-            Log.d("Coche", coche.toString())
-            var colorCoche  = ColorCoche(coche.id, coche.year, coche.maker, coche.model, coche.paintColorName,
-                coche.code, coche.catalogueURL,coche.hexadecimal,coche.red,coche.green, coche.blue, coche.colorSampleURL, coche.matchPercentage)
-            Log.d("COLOR-COCHE", colorCoche.toString())
+        if (cochesList.size == 0) {
+            showToast("No hay resultados para ese color, año o marca")
+        }else{
+            for (coche in cochesList) {
+                Log.d("Coche", coche.toString())
+                var colorCoche  = ColorCoche(coche.id, coche.year, coche.maker, coche.model, coche.paintColorName,
+                    coche.code, coche.catalogueURL,coche.hexadecimal,coche.red,coche.green, coche.blue, coche.colorSampleURL, coche.matchPercentage)
+                Log.d("COLOR-COCHE", colorCoche.toString())
+                ColorStorage.setString(hexadecimal.text.toString().trim())
 
-
-            GlobalScope.launch(Dispatchers.IO) {
-                database.colorCocheDao().insert(colorCoche)
+                GlobalScope.launch(Dispatchers.IO) {
+                    database.colorCocheDao().insert(colorCoche)
+                }
             }
-        }
-        val intent = Intent(this@Filtrar, ConsultasActivity::class.java)
 
-        startActivity(intent)
+            val intent = Intent(this@Filtrar, ConsultasActivity::class.java)
+
+            startActivity(intent)
+        }
+
     }
 
     private fun buscarColor() {
