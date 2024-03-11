@@ -154,7 +154,6 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
             }
         }
 
-        //Para poder abrir la Galeria
         //Cámara
         btnCamara = findViewById(R.id.botonCamara)
         btnCamara.setOnClickListener{
@@ -163,9 +162,12 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
 
         colorPickerView.setColorListener(object : ColorEnvelopeListener {
             override fun onColorSelected(envelope: ColorEnvelope, fromUser: Boolean) {
+                var hexa = envelope.getHexCode()
+                hexa = "#" + hexa.substring(2,hexa.length)
                 alphaTileView.setPaintColor(envelope.color)
-                textView.text = "#${envelope.hexCode}"
-                hexadecimal = "#${envelope.hexCode}"
+                textView.text = hexa
+                hexadecimal = "${hexa}"
+
                 toolbar.setBackgroundColor(envelope.color)
                 bottomNavigationView.setBackgroundColor(envelope.color)
 
