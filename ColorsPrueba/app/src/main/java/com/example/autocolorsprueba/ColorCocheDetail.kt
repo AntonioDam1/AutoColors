@@ -5,6 +5,7 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -53,11 +54,13 @@ class ColorCocheDetail : AppCompatActivity() {
         botonFav = findViewById(R.id.buttonFav)
         if (origen.equals("fav")){
             botonFav.isEnabled = false
+            botonFav.visibility = View.INVISIBLE
         }
 
 
         if (origen.equals("car")) {
             botonBorrar.isEnabled = false
+            botonBorrar.visibility = View.INVISIBLE
         }
 
 
