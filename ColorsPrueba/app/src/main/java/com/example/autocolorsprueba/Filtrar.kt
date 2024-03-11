@@ -122,7 +122,7 @@ class Filtrar : AppCompatActivity(), HttpClient.HttpClientListener {
         }
 
         if (marcaText.isNotBlank() && !isValidMarca(marcaText)) {
-            errores.add("Marca no válida. Marcas válidas: BMW, Ford, Lincoln, Acura, Honda, Mitsubishi, Sea, Volkswagen")
+            errores.add("Marca no válida. Marcas válidas: BMW, Ford, Lincoln, Acura, Honda, Mitsubishi, Seat, Volkswagen")
         }
 
         if (yearText.isNotBlank() && !isValidYear(yearText)) {
@@ -163,7 +163,7 @@ class Filtrar : AppCompatActivity(), HttpClient.HttpClientListener {
     }
 
     private fun isValidMarca(marca: String): Boolean {
-        val marcasValidas = setOf("BMW", "Ford", "Lincoln", "Acura", "Honda", "Mitsubishi", "Sea", "Volkswagen")
+        val marcasValidas = setOf("BMW", "Ford", "Lincoln", "Acura", "Honda", "Mitsubishi", "Seat", "Volkswagen")
         return marca.isNotBlank() && marcasValidas.contains(marca)
     }
 

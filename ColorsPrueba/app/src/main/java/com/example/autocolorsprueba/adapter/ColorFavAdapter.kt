@@ -31,14 +31,14 @@ class ColorFavAdapter(val colorFavList: MutableList<ColorFav> ) : RecyclerView.A
 
 
     override fun onBindViewHolder(holder: ColorFavViewHolder, position: Int) {
-        val tamano = colorFavList.size
+//        val tamano = colorFavList.size
         val item = colorFavList[position]
         holder.render(item)
 
         holder.itemView.setOnClickListener {
             val intent = Intent(it.context, ColorCocheDetail::class.java)
             intent.putExtra("origen","fav")
-            intent.putExtra("marca", item.marca)
+            intent.putExtra("marca", item.marca ?: "N/A")
             intent.putExtra("hexadecimal", item.hexadecimal)
             intent.putExtra("ITEM_KEY",item)
             ColorStorage.setString(item.hexadecimal.toString())
@@ -80,8 +80,8 @@ class ColorFavViewHolder(view: View): RecyclerView.ViewHolder(view){
     val anio = view.findViewById<TextView>(R.id.tvAnio)
 
     fun render(colorCoche: ColorFav){
-        hexadecimal.text = colorCoche.hexadecimal
-        marca.text = colorCoche.marca
+        hexadecimal.text = colorCoche.hexadecimal ?: "N/A"
+        marca.text = colorCoche.marca ?: "N/A"
         codigo.text = colorCoche.codigo + ", " + colorCoche.modelo
         match.text = colorCoche.matchPercentage.toString()
         anio.text = colorCoche.anio.toString()

@@ -12,8 +12,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.forEach
-import com.example.autocolorsprueba.adapter.ColorFavAdapter
 import com.example.autocolorsprueba.database.CochesRoomDatabase
 import com.example.autocolorsprueba.model.entity.ColorFav
 import com.google.android.material.badge.BadgeDrawable
@@ -33,6 +34,7 @@ class ColorCocheDetail : AppCompatActivity() {
     private lateinit var textViewMarcaDetail: TextView
     private lateinit var textViewModeloDetail: TextView
     private lateinit var textViewAnioDetail: TextView
+    private lateinit var textViewMatchDetail: TextView
 
     lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var colorOriginal: String
@@ -48,18 +50,19 @@ class ColorCocheDetail : AppCompatActivity() {
         textViewMarcaDetail = findViewById(R.id.textViewMarcaDetail)
         textViewModeloDetail = findViewById(R.id.textViewModeloDetail)
         textViewAnioDetail = findViewById(R.id.textViewAnioDetail)
-
+        textViewMatchDetail = findViewById(R.id.textViewMatchDetail)
 
         val origen = intent.getStringExtra("origen")
         val marca = intent.getStringExtra("marca")
         val hexadecimal = intent.getStringExtra("hexadecimal")
         val modelo = intent.getStringExtra("modelo")
         val anio = intent.getStringExtra("anio")
+        val match = intent.getStringExtra("match")
 
         textViewMarcaDetail.text = marca
         textViewModeloDetail.text = modelo
         textViewAnioDetail.text = anio
-
+        textViewMatchDetail.text = match
 
         botonBorrar = findViewById(R.id.buttonBorrar)
         botonFav = findViewById(R.id.buttonFav)
@@ -90,13 +93,17 @@ class ColorCocheDetail : AppCompatActivity() {
                     savedString = "#FF" + savedString
                 }
             }
-            Log.d("saved", savedString.toString())
+            if (origen.equals("car")) {
+                alphaTileViewOriginal.setBackgroundColor(Color.parseColor(savedString))
+            } else {
+                alphaTileViewOriginal.isEnabled = false
+                alphaTileViewOriginal.visibility = View.INVISIBLE
 
-            alphaTileViewOriginal.setBackgroundColor(Color.parseColor(savedString))
+            }
         }
 
         tvNombreDetalle = findViewById(R.id.tvNombreColorDetalle)
-        tvNombreDetalle.text = marca
+        tvNombreDetalle.text = marca ?: "N/A"
         tvCodigoDetalle = findViewById(R.id.tvCodigoDetalle)
         tvCodigoDetalle.text = hexadecimal
         setupBottomMenu()

@@ -20,7 +20,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/md_theme_surfaceContainerLowest"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/constraintLayout">
 
 
     <com.google.android.material.appbar.MaterialToolbar
@@ -119,15 +120,18 @@
         tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textViewMatchDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="MATCH: "
         android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/alphaTileViewOriginal" />
+        app:layout_constraintTop_toTopOf="@+id/alphaTileViewOriginal"
+        app:layout_constraintVertical_bias="0.034" />
 
     <Button
         android:id="@+id/buttonBorrar"
