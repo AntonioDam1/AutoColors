@@ -14,6 +14,14 @@ import com.example.autocolorsprueba.model.entity.ColorFav
 
 import kotlin.concurrent.Volatile
 
+/**
+ * Clase que crea y representa la base de datos de la aplicación para almacenar colores e insertar a favoritos o a ColoresCoche
+ * Esta base de datos utiliza la arquitectura de Room, que es una capa de abstracción sobre SQLite.
+ * Proporciona métodos para acceder a las instancias de los DAOs para realizar operaciones CRUD en las tablas de la base de datos.
+ * Aquí se declara el nombre de las tablas y sus DAO
+ *
+ * @property DATABASE_NAME El nombre de la base de datos.
+ */
 @Database(entities = [ColorCoche::class, ColorFav::class], version = 10)
 abstract class CochesRoomDatabase : RoomDatabase() {
     abstract fun colorCocheDao(): ColorCocheDao
@@ -26,6 +34,12 @@ abstract class CochesRoomDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: CochesRoomDatabase? = null
 
+        /**
+         * Función para obtener una instancia de la base de datos.
+         * @param context
+         * @return Una instancia de la base de datos cocheRoomDatabase
+         * Hacemos fallbackDestructiveMigration para no tener que hacer migración de datos al cambiar datos de la columna de las tablas
+         */
         fun getInstance(context: Context): CochesRoomDatabase {
             synchronized(this) {
                 var instance = INSTANCE
@@ -38,61 +52,6 @@ abstract class CochesRoomDatabase : RoomDatabase() {
                 }
                 return instance
             }
-
-
         }
-
-
-//        private val MIGRATION_2_4 = object : Migration(2, 4) {
-//            override fun migrate(database: SupportSQLiteDatabase) {
-//                // Crea la nueva tabla 'color_coche' con los mismos campos que 'color_fav'
-//                database.execSQL(
-//                    "DROP TABLE IF EXISTS `ColorCoche`" +
-//                    "CREATE TABLE IF NOT EXISTS `ColorCoche` (" +
-//                            "`uid` INTEGER PRIMARY KEY  NOT NULL, " +
-//                            "`AÑO` INTEGER, " +
-//                            "`MARCA` TEXT NOT NULL, " +
-//                            "`MODELO` TEXT, " +
-//                            "`NOMBREPINTURA` TEXT, " +
-//                            "`CODIGO` TEXT, " +
-//                            "`CATALOGO_URL` TEXT, " +
-//                            "`HEXADECIMAL` TEXT NOT NULL, " +
-//                            "`RED` INTEGER NOT NULL, " +
-//                            "`GREEN` INTEGER NOT NULL, " +
-//                            "`BLUE` INTEGER NOT NULL, " +
-//                            "`COLORSAMPLE_URL` TEXT, " +
-//                            "`MATCHPERCENTAGE` TEXT)"
-//                )
-//            }
-//        }
-
-//        private val MIGRATION_2_3 = object : Migration(2, 3) {
-//            override fun migrate(database: SupportSQLiteDatabase) {
-//                // Aquí defines cómo migrar los datos de la versión 2 a la versión 3
-//            }
-//        }
-//
-//        private val MIGRATION_2_4 = object : Migration(2, 4) {
-//            override fun migrate(database: SupportSQLiteDatabase) {
-//                // Aquí defines cómo migrar los datos de la versión 3 a la versión 4
-//                database.execSQL(
-//                    "DROP TABLE IF EXISTS `ColorCoche`" +
-//                            "CREATE TABLE IF NOT EXISTS `ColorCoche` (" +
-//                            "`uid` INTEGER PRIMARY KEY  NOT NULL, " +
-//                            "`AÑO` INTEGER, " +
-//                            "`MARCA` TEXT NOT NULL, " +
-//                            "`MODELO` TEXT, " +
-//                            "`NOMBREPINTURA` TEXT, " +
-//                            "`CODIGO` TEXT, " +
-//                            "`CATALOGO_URL` TEXT, " +
-//                            "`HEXADECIMAL` TEXT NOT NULL, " +
-//                            "`RED` INTEGER NOT NULL, " +
-//                            "`GREEN` INTEGER NOT NULL, " +
-//                            "`BLUE` INTEGER NOT NULL, " +
-//                            "`COLORSAMPLE_URL` TEXT, " +
-//                            "`MATCHPERCENTAGE` TEXT)"
-//                )
-//            }
-//        }
     }
 }
