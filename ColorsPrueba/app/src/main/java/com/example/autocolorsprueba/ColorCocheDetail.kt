@@ -73,7 +73,8 @@ class ColorCocheDetail : AppCompatActivity() {
 
         tvMarcaDetail.text = marca ?: "N/A"
         tvNombrePinturaDetail = findViewById(R.id.tvNombrePinturaDetail)
-        tvNombrePinturaDetail.text = nombrePintura
+        val codigo = intent.getStringExtra("codigo")
+        tvNombrePinturaDetail.text = "$nombrePintura\n$codigo"
 
         textHexadecimalDetail.text = hexadecimal
         textHexadecimalOriginalDetail.text = ColorStorage.getString()
