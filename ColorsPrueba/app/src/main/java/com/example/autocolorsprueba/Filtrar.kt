@@ -93,14 +93,14 @@ class Filtrar : AppCompatActivity(), HttpClient.HttpClientListener {
                         coche.matchPercentage
                     )
                     Log.d("COLOR-COCHE", colorCoche.toString())
-                    ColorStorage.setString(hexadecimal.text.toString().trim())
+
 
                     GlobalScope.launch(Dispatchers.IO) {
                         database.colorCocheDao().insert(colorCoche)
                     }
                 }
             }
-
+            ColorStorage.setString(hexadecimal.text.toString().trim())
             val intent = Intent(this@Filtrar, ConsultasActivity::class.java)
 
             startActivity(intent)

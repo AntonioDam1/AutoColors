@@ -35,6 +35,7 @@ class ColorCocheDetail : AppCompatActivity() {
     private lateinit var textViewModeloDetail: TextView
     private lateinit var textViewAnioDetail: TextView
     private lateinit var textViewMatchDetail: TextView
+    private lateinit var textViewColorOriginal: TextView
 
     lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var colorOriginal: String
@@ -51,6 +52,7 @@ class ColorCocheDetail : AppCompatActivity() {
         textViewModeloDetail = findViewById(R.id.textViewModeloDetail)
         textViewAnioDetail = findViewById(R.id.textViewAnioDetail)
         textViewMatchDetail = findViewById(R.id.textViewMatchDetail)
+        textViewColorOriginal = findViewById(R.id.textViewColorOriginal)
 
         val origen = intent.getStringExtra("origen")
         val marca = intent.getStringExtra("marca")
@@ -60,21 +62,24 @@ class ColorCocheDetail : AppCompatActivity() {
         val match = intent.getStringExtra("match")
 
         textViewMarcaDetail.text = marca
-        textViewModeloDetail.text = modelo
-        textViewAnioDetail.text = anio
-        textViewMatchDetail.text = match
+        textViewModeloDetail.text = modelo ?: "N/A"
+        textViewAnioDetail.text = anio ?: "N/A"
 
         botonBorrar = findViewById(R.id.buttonBorrar)
         botonFav = findViewById(R.id.buttonFav)
+
         if (origen.equals("fav")){
+            textViewMatchDetail.isEnabled = false
+            textViewMatchDetail.visibility = View.INVISIBLE
+
             botonFav.isEnabled = false
             botonFav.visibility = View.INVISIBLE
         }
-
-
         if (origen.equals("car")) {
             botonBorrar.isEnabled = false
             botonBorrar.visibility = View.INVISIBLE
+
+            textViewMatchDetail.text = "Match: ${100 - String.format("%.3f", match!!.toDouble()).toDouble()}"
         }
 
 
@@ -98,6 +103,9 @@ class ColorCocheDetail : AppCompatActivity() {
             } else {
                 alphaTileViewOriginal.isEnabled = false
                 alphaTileViewOriginal.visibility = View.INVISIBLE
+
+                textViewColorOriginal.isEnabled = false
+                textViewColorOriginal.visibility = View.INVISIBLE
 
             }
         }

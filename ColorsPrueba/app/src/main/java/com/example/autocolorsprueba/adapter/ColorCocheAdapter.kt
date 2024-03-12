@@ -51,7 +51,7 @@ class ColorCocheAdapter(val colorCocheList: MutableList<ColorCoche>) : RecyclerV
             intent.putExtra("blue", item.blue)
             intent.putExtra("green", item.green)
             intent.putExtra("colorsample", item.colorsampleURL)
-            intent.putExtra("match", item.matchPercentage)
+            intent.putExtra("match", item.matchPercentage.toString())
 //            intent.putExtra("coche", coche)
             //intent.putExtras(item)
             holder.itemView.context.startActivity(intent)

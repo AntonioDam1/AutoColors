@@ -209,5 +209,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewMarcaDetail" />
 
+    <TextView
+        android:id="@+id/textViewColorOriginal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="191dp"
+        android:layout_marginTop="47dp"
+        android:layout_marginEnd="35dp"
+        android:layout_marginBottom="10dp"
+        android:text="Color original"
+        app:layout_constraintBottom_toTopOf="@+id/alphaTileViewOriginal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/textViewAnioDetail" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

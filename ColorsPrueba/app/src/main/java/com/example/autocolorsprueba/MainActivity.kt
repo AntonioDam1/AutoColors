@@ -79,6 +79,9 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
     //Cámara
     private lateinit var btnCamara: Button
 
+   //Auxiliar
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -354,6 +357,7 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
             }
         }
     override fun onCochesReceived(cochesList: List<HttpClient.Coches>){
+        val uniqueEntries = mutableSetOf<Pair<String, String>>() // Usamos un conjunto de pares (hexadecimal, marca) para mantener únicos los registros
         var database = CochesRoomDatabase.getInstance(this)
 
         GlobalScope.launch(Dispatchers.IO) {
@@ -363,16 +367,33 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
             showToast("No hay resultados para ese color")
         } else {
             for (coche in cochesList) {
-//            Log.d("Coche", coche.toString())
-                var colorCoche  = ColorCoche(coche.id, coche.year, coche.maker, coche.model, coche.paintColorName,
-                    coche.code, coche.catalogueURL,coche.hexadecimal,coche.red,coche.green, coche.blue, coche.colorSampleURL, coche.matchPercentage)
-//            Log.d("COLOR-COCHE", colorCoche.toString())
 
+                val pair = Pair(coche.hexadecimal, coche.maker)
+                if (pair !in uniqueEntries) { // Comprobamos si la combinación hexadecimal-marca ya está en la lista
+                    uniqueEntries.add(pair) // Agregamos la combinación al conjunto para evitar duplicados
+                    val colorCoche = ColorCoche(
+                        coche.id,
+                        coche.year,
+                        coche.maker,
+                        coche.model,
+                        coche.paintColorName,
+                        coche.code,
+                        coche.catalogueURL,
+                        coche.hexadecimal,
+                        coche.red,
+                        coche.green,
+                        coche.blue,
+                        coche.colorSampleURL,
+                        coche.matchPercentage
+                    )
+//                    Log.d("COLOR-COCHE", colorCoche.toString())
 
-                GlobalScope.launch(Dispatchers.IO) {
-                    database.colorCocheDao().insert(colorCoche)
+                    GlobalScope.launch(Dispatchers.IO) {
+                        database.colorCocheDao().insert(colorCoche)
+                    }
                 }
             }
+
             ColorStorage.setString(hexadecimal.substring(1))
             val intent = Intent(this@MainActivity, ConsultasActivity::class.java)
 
