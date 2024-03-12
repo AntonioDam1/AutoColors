@@ -4,7 +4,6 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
@@ -12,12 +11,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.view.forEach
 import com.example.autocolorsprueba.database.CochesRoomDatabase
 import com.example.autocolorsprueba.model.entity.ColorFav
-import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -36,19 +31,18 @@ class ColorCocheDetail : AppCompatActivity() {
     private lateinit var toolbar: Toolbar
     private lateinit var alphaTileViewOriginal: ImageView
     private lateinit var alphaTileViewColor: ImageView
-    private lateinit var tvNombreDetalle: TextView
-    private lateinit var tvCodigoDetalle: TextView
+    private lateinit var tvMarcaDetail: TextView
     private lateinit var textViewMarcaDetail: TextView
     private lateinit var textViewModeloDetail: TextView
     private lateinit var textViewAnioDetail: TextView
     private lateinit var textViewMatchDetail: TextView
     private lateinit var textViewColorOriginal: TextView
+    private lateinit var textHexadecimalDetail: TextView
+    private lateinit var textHexadecimalOriginalDetail : TextView
+    private lateinit var tvNombrePinturaDetail : TextView
 
     lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var colorOriginal: String
-
-
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,6 +54,10 @@ class ColorCocheDetail : AppCompatActivity() {
         textViewAnioDetail = findViewById(R.id.textViewAnioDetail)
         textViewMatchDetail = findViewById(R.id.textViewMatchDetail)
         textViewColorOriginal = findViewById(R.id.textViewColorOriginal)
+        textHexadecimalDetail = findViewById(R.id.tvHexadecimalDetail)
+        textHexadecimalOriginalDetail = findViewById(R.id.tvHexadecimalOriginalDetail)
+        tvNombrePinturaDetail = findViewById(R.id.tvNombrePinturaDetail)
+        tvMarcaDetail = findViewById(R.id.tvMarcaDetail)
 
         val origen = intent.getStringExtra("origen")
         val marca = intent.getStringExtra("marca")
@@ -67,10 +65,18 @@ class ColorCocheDetail : AppCompatActivity() {
         val modelo = intent.getStringExtra("modelo")
         val anio = intent.getStringExtra("anio")
         val match = intent.getStringExtra("match")
+        val nombrePintura = intent.getStringExtra("nombrePintura")
 
         textViewMarcaDetail.text = marca
         textViewModeloDetail.text = modelo ?: "N/A"
         textViewAnioDetail.text = anio ?: "N/A"
+
+        tvMarcaDetail.text = marca ?: "N/A"
+        tvNombrePinturaDetail = findViewById(R.id.tvNombrePinturaDetail)
+        tvNombrePinturaDetail.text = nombrePintura
+
+        textHexadecimalDetail.text = hexadecimal
+        textHexadecimalOriginalDetail.text = ColorStorage.getString()
 
         botonBorrar = findViewById(R.id.buttonBorrar)
         botonFav = findViewById(R.id.buttonFav)
@@ -79,8 +85,12 @@ class ColorCocheDetail : AppCompatActivity() {
             textViewMatchDetail.isEnabled = false
             textViewMatchDetail.visibility = View.INVISIBLE
 
+            textHexadecimalOriginalDetail.isEnabled = false
+            textHexadecimalOriginalDetail.visibility = View.INVISIBLE
+
             botonFav.isEnabled = false
             botonFav.visibility = View.INVISIBLE
+
         }
         if (origen.equals("car")) {
             botonBorrar.isEnabled = false
@@ -117,14 +127,9 @@ class ColorCocheDetail : AppCompatActivity() {
             }
         }
 
-        tvNombreDetalle = findViewById(R.id.tvNombreColorDetalle)
-        tvNombreDetalle.text = marca ?: "N/A"
-        tvCodigoDetalle = findViewById(R.id.tvCodigoDetalle)
-        tvCodigoDetalle.text = hexadecimal
+
+
         setupBottomMenu()
-
-
-
 
         botonBorrar.setOnClickListener {
             borrarColor()
@@ -132,9 +137,6 @@ class ColorCocheDetail : AppCompatActivity() {
         botonFav.setOnClickListener {
             agregarFavoritos()
         }
-
-
-
     }
 
     /**
@@ -149,7 +151,7 @@ class ColorCocheDetail : AppCompatActivity() {
         val anio = intent.getStringExtra("anio")
         val marca = intent.getStringExtra("marca")
         val modelo = intent.getStringExtra("modelo")
-        val nombrePintuta = intent.getStringExtra("hexadecimal")
+        val nombrePintura = intent.getStringExtra("nombrePintura")
         val codigo = intent.getStringExtra("codigo")
         val catalog = intent.getStringExtra("CATALOGO_URL")
         val red = intent.getIntExtra("red",0)
@@ -159,7 +161,7 @@ class ColorCocheDetail : AppCompatActivity() {
         val match = intent.getStringExtra("match")
 
 
-         var colorCoche = ColorFav(0, anio?.toInt(),marca,modelo, nombrePintuta,codigo,
+         var colorCoche = ColorFav(0, anio?.toInt(),marca,modelo, nombrePintura,codigo,
              catalog,hexadecimal,red,green,blue, colorsample, match?.toDouble())
          var database  = CochesRoomDatabase.getInstance(this)
 

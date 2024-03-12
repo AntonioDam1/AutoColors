@@ -44,7 +44,7 @@ class ColorCocheAdapter(val colorCocheList: MutableList<ColorCoche>) : RecyclerV
             intent.putExtra("hexadecimal", item.hexadecimal)
             intent.putExtra("anio", item.anio)
             intent.putExtra("modelo", item.modelo)
-            intent.putExtra("nombrePintuta", item.nombrePintura)
+            intent.putExtra("nombrePintura", item.nombrePintura)
             intent.putExtra("codigo", item.codigo)
             intent.putExtra("CATALOGO_URL", item.catalogueURL)
             intent.putExtra("red", item.red)
@@ -89,9 +89,11 @@ class ColorCocheViewHolder(view: View): RecyclerView.ViewHolder(view){
     val match = view.findViewById<TextView>(R.id.tvMatch)
     val fondo = view.findViewById<TextView>(R.id.colorin)
     val anio = view.findViewById<TextView>(R.id.tvAnio)
+    val nombrePintura = view.findViewById<TextView>(R.id.tvNombrePintura)
 
     fun render(colorCoche: ColorCoche){
         hexadecimal.text = colorCoche.hexadecimal
+        nombrePintura.text = colorCoche.nombrePintura
         marca.text = colorCoche.marca
         codigo.text = colorCoche.codigo + ", " + colorCoche.modelo
         val formato = DecimalFormat("#.##")

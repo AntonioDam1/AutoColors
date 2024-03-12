@@ -8,6 +8,11 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 
+import java.util.Base64
+import javax.crypto.Cipher
+import javax.crypto.spec.SecretKeySpec
+import java.security.Key
+
 
 /**
  * Esta clase representa un cliente HTTP que realiza solicitudes al servidor y maneja las respuestas.
@@ -38,14 +43,15 @@ class HttpClient(private val listener: HttpClientListener) {
             encodedParams.deleteCharAt(encodedParams.length - 1)
         }
 
-
-        val url = URL("$serverUrl?$encodedParams")
+        val paramsCypherString : String = CypherManagerAES.cifrar(encodedParams.toString(),CypherManagerAES.obtenerClave("unodostrecuacin1",16))
+        val url = URL("$serverUrl?$paramsCypherString")
         HttpGetTask().execute(url)
     }
 
 
     /**
-     * Clase interna que realiza una solicitud GET a una URL proporcionada en segundo plano y convierte la respuesta del servidor en una lista de objetos Coches.
+     * Clase interna que realiza una solicitud GET a una URL proporcionada en segundo plano
+     * y convierte la respuesta del servidor en una lista de objetos Coches.
      */
     private inner class HttpGetTask : AsyncTask<URL, Void, String>() {
 
@@ -86,7 +92,8 @@ class HttpClient(private val listener: HttpClientListener) {
 
         /**
          * Método llamado después de que se complete la tarea en segundo plano.
-         * @param result El resultado de la tarea en segundo plano, que es una cadena JSON que representa la lista de coches.
+         * @param result El resultado de la tarea en segundo plano, es una cadena JSON
+         * que representa la lista de coches.
          */
         override fun onPostExecute(result: String) {
             super.onPostExecute(result)
@@ -96,6 +103,7 @@ class HttpClient(private val listener: HttpClientListener) {
             listener.onCochesReceived(cochesList)
         }
     }
+
 
 
     /**
@@ -142,4 +150,27 @@ class HttpClient(private val listener: HttpClientListener) {
         val colorSampleURL: String,
         val matchPercentage: Double?
     )
+
+    object CypherManagerAES {
+        fun obtenerClave(password: String, longitud: Int): Key {
+            // La longitud puede ser de 16, 24 o 32 bytes.
+            return SecretKeySpec(password.toByteArray(), 0, longitud, "AES")
+        }
+
+        @Throws(Exception::class)
+        fun cifrar(textoEnClaro: String, key: Key): String {
+            val cipher = Cipher.getInstance("AES/ECB/PKCS5Padding")
+            cipher.init(Cipher.ENCRYPT_MODE, key)
+            val cipherText = cipher.doFinal(textoEnClaro.toByteArray())
+            return Base64.getEncoder().encodeToString(cipherText)
+        }
+
+        @Throws(Exception::class)
+        fun descifrar(textoCifrado: String, key: Key): String {
+            val cipher = Cipher.getInstance("AES/ECB/PKCS5Padding")
+            cipher.init(Cipher.DECRYPT_MODE, key)
+            val plainText = cipher.doFinal(Base64.getDecoder().decode(textoCifrado))
+            return String(plainText)
+        }
+    }
 }

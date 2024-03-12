@@ -37,7 +37,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvNombreColorDetalle"
+        android:id="@+id/tvMarcaDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
@@ -50,15 +50,18 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <TextView
-        android:id="@+id/tvCodigoDetalle"
+        android:id="@+id/tvNombrePinturaDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="9dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="157dp"
         android:text="TextView"
         android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="@+id/tvNombreColorDetalle"
-        app:layout_constraintTop_toBottomOf="@+id/tvNombreColorDetalle" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tvMarcaDetail"
+        app:layout_constraintTop_toBottomOf="@+id/tvMarcaDetail" />
 
     <TextView
         android:id="@+id/tvMarcaDetalle"
@@ -115,8 +118,8 @@
         android:layout_marginTop="37dp"
         android:text="Modelo:"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/tvCodigoDetalle"
-        app:layout_constraintTop_toBottomOf="@+id/tvCodigoDetalle"
+        app:layout_constraintStart_toStartOf="@+id/tvNombrePinturaDetail"
+        app:layout_constraintTop_toBottomOf="@+id/tvNombrePinturaDetail"
         tools:ignore="MissingConstraints" />
 
     <TextView
@@ -161,11 +164,11 @@
         android:id="@+id/tvAnio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="13dp"
-        android:layout_marginBottom="22dp"
+        android:layout_marginEnd="72dp"
         android:text="Año:"
-        app:layout_constraintBottom_toTopOf="@+id/textViewAnioDetail"
-        app:layout_constraintEnd_toEndOf="@+id/textViewAnioDetail" />
+        app:layout_constraintBottom_toBottomOf="@+id/tvModel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvModel" />
 
     <TextView
         android:id="@+id/textViewMarcaDetail"
@@ -189,23 +192,22 @@
         android:id="@+id/textViewAnioDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
         android:layout_marginEnd="60dp"
-        android:layout_marginBottom="2dp"
         android:text="Sin datos"
-        app:layout_constraintBottom_toBottomOf="@+id/textViewModeloDetail"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvAnio" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="53dp"
-        android:layout_marginTop="46dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="311dp"
-        android:layout_marginBottom="11dp"
         android:text="Tu color"
-        app:layout_constraintBottom_toTopOf="@+id/alphaTileViewColor"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewMarcaDetail" />
 
@@ -213,15 +215,34 @@
         android:id="@+id/textViewColorOriginal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="191dp"
-        android:layout_marginTop="47dp"
-        android:layout_marginEnd="35dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="20dp"
         android:text="Color original"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.89"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewAnioDetail" />
+
+    <TextView
+        android:id="@+id/tvHexadecimalDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="15dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/alphaTileViewColor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/tvHexadecimalOriginalDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="57dp"
+        android:text="TextView"
         app:layout_constraintBottom_toTopOf="@+id/alphaTileViewOriginal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/textViewAnioDetail" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewColorOriginal" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
