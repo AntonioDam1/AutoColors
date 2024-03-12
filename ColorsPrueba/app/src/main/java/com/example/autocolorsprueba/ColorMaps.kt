@@ -24,6 +24,10 @@ import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
+/**
+ * Actividad que muestra un mapa de Google Maps con funcionalidades relacionadas con la ubicación.
+ * Implementa las interfaces necesarias para interactuar con el mapa y gestionar eventos de clic en la ubicación del usuario.
+ */
 class ColorMaps : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocationClickListener {
 
 
@@ -53,57 +57,54 @@ class ColorMaps : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocatio
     }
 
 
+    /**
+     * Función para inflar la barra de navegación.
+     * Se le asigna un listener a cada item.
+     * Se pone seleccionado el item Taller por defecto
+     */
     private fun setupBottomMenu() {
-
-
         bottomNavigationView = findViewById(R.id.bottom_navigation)
         bottomNavigationView.selectedItemId = R.id.taller
-
-
         bottomNavigationView.setOnItemSelectedListener { item -> onItemSelectedListener(item) }
-
-
-        bottomNavigationView.menu.forEach { menuItem ->
-            val badge = bottomNavigationView.getOrCreateBadge(menuItem.itemId)
-            badge.isVisible = false
-            badge.badgeGravity = BadgeDrawable.TOP_START
-        }
     }
+
+    /**
+     * Función para la navegacion de la BottomNavigation.
+     * @param item El elemento del menú que se ha seleccionado.
+     * @return true para indicar que el evento ha sido consumido, false de lo contrario.
+     */
     private fun onItemSelectedListener(item: MenuItem): Boolean {
         val itemId = item.itemId
         when (item.itemId) {
             R.id.filtrar -> {
                 val intent = Intent(this, Filtrar::class.java).apply {  }
                 val b = Bundle()
-
-
                 startActivity(intent)
             }
             R.id.selector -> {
                 val intent = Intent(this, MainActivity::class.java)
-
-
                 startActivity(intent)
             }
-
-
-//            R.id. page_fav -> {
-//                showPageFragment(R.drawable. ic_fav, R.string. bottom_nav_fav)
-//                return true
-//            }
         }
         return true
     }
 
-
-
-
+    /**
+     * Crea el fragmento del mapa y lo muestra.
+     */
     private fun createFragment() {
         val mapFragment: SupportMapFragment = supportFragmentManager.findFragmentById(R.id.mapa) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
 
 
+    /**
+     * Método llamado cuando el mapa de Google está listo para ser utilizado.
+     * Se encarga de configurar el mapa, habilitar la detección de clics en la ubicación del usuario
+     * y agregar marcadores al mapa.
+     *
+     * @param googleMap El objeto GoogleMap que representa el mapa que se ha cargado y está listo para ser utilizado.
+     */
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
         map.setOnMyLocationClickListener(this)
@@ -112,6 +113,10 @@ class ColorMaps : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocatio
     }
 
 
+    /**
+     * Función con la lista de talleres
+     * Crea los marcadores
+     */
     private fun createMarkers() {
         val talleres = listOf(
             Taller("TALLERES MENDEBALDEA", 42.81068480607709, -1.673602270612605),
@@ -141,13 +146,30 @@ class ColorMaps : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocatio
     }
 
 
+    /**
+     * Clase de datos que representa un taller.
+     *
+     * @param name      El nombre del taller.
+     * @param latitude  La latitud del taller.
+     * @param longitude La longitud del taller.
+     */
     data class Taller(val name: String, val latitude: Double, val longitude: Double)
 
 
+    /**
+     * Verifica si se ha concedido el permiso de ubicación.
+     */
     private fun isLocationPermissionGranted() = ContextCompat.checkSelfPermission(this,
         Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
 
 
+    /**
+     * Habilita la funcionalidad de ubicación en el mapa.
+     * Verifica si el mapa está inicializado y si se han otorgado permisos de ubicación.
+     * Si los permisos están otorgados, activa la ubicación del usuario en el mapa y centra la cámara en su posición.
+     * Luego, agrega los marcadores de los talleres al mapa.
+     * Si los permisos no están otorgados, solicita al usuario que los conceda.
+     */
     private fun enableLocation() {
         if (!::map.isInitialized) return
         if (isLocationPermissionGranted()) {
@@ -177,6 +199,12 @@ class ColorMaps : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocatio
     }
 
 
+    /**
+     * Solicita al usuario que otorgue permisos de ubicación a la aplicación.
+     * Muestra un mensaje de solicitud de permisos si el usuario aún no ha otorgado permisos.
+     * Si el usuario ya ha denegado previamente los permisos, se muestra un mensaje explicativo.
+     * Si el usuario ha marcado la opción "No volver a preguntar", se lanza directamente la solicitud de permisos.
+     */
     private fun requestLocationPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
             Toast.makeText(this, "Debes otorgar permisos a la aplicación: Ajustes->Permisos->Aceptar",
@@ -187,6 +215,16 @@ class ColorMaps : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocatio
     }
 
 
+    /**
+     * Callback que se invoca cuando el usuario responde a la solicitud de permisos de la aplicación.
+     * Se verifica si los permisos de ubicación fueron otorgados.
+     * Si se otorgaron los permisos, se activa la ubicación del usuario en el mapa.
+     * Si los permisos no fueron otorgados, se muestra un mensaje explicativo al usuario.
+     *
+     * @param requestCode  Código de solicitud de permisos.
+     * @param permissions  Arreglo de permisos solicitados.
+     * @param grantResults Arreglo de resultados de la solicitud de permisos.
+     */
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -209,6 +247,11 @@ class ColorMaps : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocatio
     }
 
 
+    /**
+     * Método que se llama cuando se reanudan los fragmentos de la actividad.
+     * Verifica si el mapa está inicializado y si se han otorgado permisos de ubicación.
+     * Si los permisos no están otorgados, se activa la ubicación del usuario en el mapa y se muestra un mensaje informativo.
+     */
     override fun onResumeFragments() {
         super.onResumeFragments()
         if (!::map.isInitialized) return
@@ -223,6 +266,12 @@ class ColorMaps : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocatio
     }
 
 
+    /**
+     * Método que se invoca cuando el usuario hace clic en su ubicación en el mapa.
+     * Muestra un mensaje emergente que indica la latitud y longitud de la ubicación del usuario.
+     *
+     * @param p0 La ubicación del usuario en el mapa.
+     */
     override fun onMyLocationClick(p0: Location) {
         Toast.makeText(this, "Tu ubicación es ${p0.latitude}, ${p0.longitude}", Toast.LENGTH_SHORT).show()
     }

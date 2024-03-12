@@ -44,6 +44,13 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.FileNotFoundException
 
+/**
+ * Esta clase sirve para poder escoger un color de la rueda, de una foto de la galería o de nuestra cámara.
+ * Se puede mover el selector por toda la rueda y de la barra para crear nuestro color.
+ * Implementa la interfaz HttpClientListener
+ * También compara el color escogido con los de la base de datos, haciendo una consulta en esta
+ */
+
 class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
     //Navegación
     lateinit var bottomNavigationView: BottomNavigationView
@@ -81,8 +88,11 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
 
    //Auxiliar
 
-
-
+    /**
+     *Método que se ejecuta al iniciar la clase. Se declaran las variables.
+     * Se declara la url para hacer consultas al servidor.
+     * Se declaran los listener del colorPicker y también del botón para abrir la galeria.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -138,32 +148,28 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
         colorPickerView.attachBrightnessSlider(brightnessSlideBar)
 
 
-        //Para poder abrir la Galeria
+        /**
+         * Listener para abrir la galeria
+         */
         btnImage = findViewById(R.id.botonImagen)
         btnImage.setOnClickListener {
-            if (Build.VERSION.SDK_INT < 19) {
-                var intent = Intent()
-                intent.type = "image/*"
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-                intent.action = Intent.ACTION_GET_CONTENT
-                startActivityForResult(
-                    Intent.createChooser(intent, "Choose Pictures"), REQUEST_CODE_GALLERY
-                )
-            } else { // For latest versions API LEVEL 19+
-                var intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-                intent.addCategory(Intent.CATEGORY_OPENABLE)
-                intent.type = "image/*"
-                startActivityForResult(intent, REQUEST_CODE_GALLERY);
-            }
+            abrirGaleria()
         }
 
-        //Cámara
+        /**
+         * Listener para abrir la cámara
+         */
         btnCamara = findViewById(R.id.botonCamara)
         btnCamara.setOnClickListener{
             startForResult.launch(Intent(MediaStore.ACTION_IMAGE_CAPTURE))
         }
 
+        /**
+         * Listener para el colorPicker.
+         * Al mover el selector de la paleta este va a cambiar el código hexadecimal del color y también el color de la
+         * toolbar y la barra de navegación
+         * Guarda tambien el color en hexadecimal para su posterior uso
+         */
         colorPickerView.setColorListener(object : ColorEnvelopeListener {
             override fun onColorSelected(envelope: ColorEnvelope, fromUser: Boolean) {
                 var hexa = envelope.getHexCode()
@@ -179,7 +185,35 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
             }
         })
     }
-    //funcion de la camara
+
+    /**
+     * Método para abrir la galeria del móvil. Este método separa las versiones del sdk del dispositivo para abrir la galeria de una forma
+     * u otra. Se deja preparado para la selección múltiple de fotos pero no se usa.
+     * El método abre la galeria pero los resultados se procesan en el método onActivityResult
+     */
+
+    private fun abrirGaleria(){
+        if (Build.VERSION.SDK_INT < 19) {
+            var intent = Intent()
+            intent.type = "image/*"
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            intent.action = Intent.ACTION_GET_CONTENT
+            startActivityForResult(
+                Intent.createChooser(intent, "Choose Pictures"), REQUEST_CODE_GALLERY
+            )
+        } else { // For latest versions API LEVEL 19+
+            var intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            intent.addCategory(Intent.CATEGORY_OPENABLE)
+            intent.type = "image/*"
+            startActivityForResult(intent, REQUEST_CODE_GALLERY);
+        }
+
+    }
+
+    /**
+     * Función para abrir la cámara. Si todo va bien convierte esa foto en un mapa de bit y lo pone como paleta para escoger color
+     */
     private val startForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -189,6 +223,13 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
                 colorPickerView.setPaletteDrawable(drawable)
             }
         }
+
+
+    /**
+     * Función para la navegacion de la BottomNavigation.
+     * @param item El elemento del menú que se ha seleccionado.
+     * @return true para indicar que el evento ha sido consumido, false de lo contrario.
+     */
 
     private fun onItemSelectedListener(item: MenuItem): Boolean {
         val itemId = item.itemId
@@ -209,6 +250,15 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
         return true
     }
 
+    /**
+     * Método para la gestión de la foto escogida de la galeria. Si se ha escogido foto se asigna a una variable de tipo Uri
+     * para posteriormente pasarla a mapa de bit y ponerla como paleta
+     * @param resultCode código de resultado
+     * @param data la imagen escogida
+     * @param requestCode código de solicitud de acción
+     *
+     * @throws una excepción si hay error al pasar la imagen a mapa de bits
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -238,11 +288,15 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
 
                 var imageUri: Uri = data.data!!
 
-                //   iv_image.setImageURI(imageUri) Here you can assign the picked image uri to your imageview
-
             }
         }
     }
+
+    /**
+     * Función para inflar la barra de navegación.
+     * Se le asigna un listener a cada item.
+     * Se pone seleccionado el item selector por defecto
+     */
 
     private fun setupBottomMenu() {
 
@@ -251,14 +305,16 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
 
         bottomNavigationView.setOnItemSelectedListener { item -> onItemSelectedListener(item) }
 
-        bottomNavigationView.menu.forEach { menuItem ->
-            val badge = bottomNavigationView.getOrCreateBadge(menuItem.itemId)
-            badge.isVisible = false
-            badge.badgeGravity = BadgeDrawable.TOP_START
-        }
+
     }
 
 
+    /**
+     * Método para inflar el menú de el AlphaTileView.
+     * @param menu el menu a inflar
+     * @param v la view
+     * @param menuInfo
+     */
         override fun onCreateContextMenu(
             menu: ContextMenu,
             v: View,
@@ -271,33 +327,41 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
             itemComparar = menu.findItem(R.id.comparar)
         }
 
+    /**
+     * Método para inflar el menú de la toolbar, que nos llevará a favoritos
+     * @param menu El menú en el que se inflarán los elementos de la barra de herramientas.
+     * @return Devuelve true para mostrar el menú en la barra de herramientas, false de lo contrario.
+     */
         override fun onCreateOptionsMenu(menu: Menu): Boolean {
             menuInflater.inflate(R.menu.menu_toolbar, menu)
             itemFav = menu.findItem(R.id.corazon)
             // Asignar un click listener al ítem de menú corazón
             itemFav.setOnMenuItemClickListener {
-//                var colorCoche = ColorCoche(0,"rojo",2023,"seat", "altea", "FFFFFF", "X122d")
-//                var database  = CochesRoomDatabase.getInstance(this)
-//
-//                GlobalScope.launch(Dispatchers.IO) {
-//                    database.colorCocheDao().insertAll(colorCoche)
-//                }
+
                 ColorStorage.setString(hexadecimal)
                 // Crear un Intent para iniciar la actividad de Galería
                 val intent = Intent(this@MainActivity, FavoritosActivity::class.java)
                 // Iniciar la actividad
                 startActivity(intent)
                 // Devolver true para indicar que el evento ha sido consumido
-                true
+                  true
             }
-
-            // Devolver true para mostrar el menú en la barra de acción.
 
 
             return true
         }
 
-        override fun onContextItemSelected(item: MenuItem): Boolean {
+    /**
+     * Método para manejar las acciones del menú del alphaTileView.
+     * Si le damos a agregar a favoritos, nos inserta el color en la base de datos de los colores favoritos
+     * Si le damos a copiar hexadecimal nos copiará el hexadecimal al portapapeles
+     * Si le damos a comparar, nos comparará el color con los de la base de datos
+     * Cada acción tiene un toast, que mostrará un mensaje
+     * @param item el item para realizar la acción
+     * @return boolean. Devolvemos true si ha ido bien
+     */
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
             var i = 0
             when (item.itemId) {
                 R.id.agregarFavoritos -> {
@@ -333,22 +397,6 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
 
                     httpClient.executeGetRequest(serverUrl, params)
 
-//
-//                    val intent = Intent(this@MainActivity, ConsultasActivity()::class.java).apply {
-////
-////
-//                    }
-//                    val params = mutableMapOf<String, String>()
-//                    params["HEXADECIMAL"] = hexadecimal.substring(2,hexadecimal.length).toString()
-//                    var serverUrl : String = "https://0467-176-12-82-226.ngrok-free.app/endpoint"
-//                    var params = mapOf("color" to hexadecimal.substring(2,hexadecimal.length), "marca" to "", "año" to "","match" to "5")
-//
-//
-//                    val consulta = HttpClient("https://e579-176-12-82-226.ngrok-free.app",params, this )
-//                    consulta.executeGetRequest()
-
-
-//                    startActivity(intent)
                     return true
 
                 }
@@ -356,6 +404,17 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
                 else -> return super.onContextItemSelected(item)
             }
         }
+
+    /**
+     * Función que se tiene que implementar de la interfaz HttpClientListener
+     * Nos creamos una instancia de la base de datos
+     * Este método trata los objetos del JSON que viene de la consulta con la base de datos.
+     * Primero borramos lo que haya en la base de datos, para así borrar los resultados de consultas prevías en un hilo aparte
+     * Después recorremos la lista para insertar el objeto en nuestra base de datos para los resultados de las consultas
+     * Insertamos los coches en un hilo diferente. Nos guardamos el color a comparar para mostrarlo después
+     * Por último nos manda a ConsultasActivity para ver el resultado de la consulta
+     * @param cochesList recibe la lista de coches que devuelve la base de datos
+     */
     override fun onCochesReceived(cochesList: List<HttpClient.Coches>){
         val uniqueEntries = mutableSetOf<Pair<String, String>>() // Usamos un conjunto de pares (hexadecimal, marca) para mantener únicos los registros
         var database = CochesRoomDatabase.getInstance(this)
@@ -367,6 +426,9 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
             showToast("No hay resultados para ese color")
         } else {
             for (coche in cochesList) {
+            Log.d("Coche", coche.toString())
+                var colorCoche  = ColorCoche(coche.id, coche.year, coche.maker, coche.model, coche.paintColorName,
+                    coche.code, coche.catalogueURL,coche.hexadecimal,coche.red,coche.green, coche.blue, coche.colorSampleURL, coche.matchPercentage)
 
                 val pair = Pair(coche.hexadecimal, coche.maker)
                 if (pair !in uniqueEntries) { // Comprobamos si la combinación hexadecimal-marca ya está en la lista
@@ -404,14 +466,21 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
     }
 
 
-
-
-        private fun copyToClipboard(text: String) {
+    /**
+     * Función para copiar al portapapeles el color
+     * @param text el color a copiar
+     * Nos saca un mensaje de aviso de que se ha copiado
+     */
+    private fun copyToClipboard(text: String) {
             val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val clipData = ClipData.newPlainText("Texto copiado", text)
             clipboardManager.setPrimaryClip(clipData)
         }
 
+    /**
+     * Función para sacar un Toast por pantalla
+     * @param message el texto a sacar en el toat
+     */
         private fun showToast(message: String) {
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         }

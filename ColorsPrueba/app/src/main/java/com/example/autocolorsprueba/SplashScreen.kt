@@ -11,6 +11,11 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 
 
+/**
+ * Clase que hace de Splash Screen
+ * Hace que el icono de la app gire
+ * Hace que saltemos a la MainActivity a los 2 segundos
+ */
 class SplashActivity : AppCompatActivity() {
     private lateinit var imageRotativa: ImageView
 
@@ -32,6 +37,10 @@ class SplashActivity : AppCompatActivity() {
     }
 
 
+    /**
+     * Método que hace que gire la imagen que es icono de la apliacación
+     * @param view
+     */
     private fun girar(view: View) {
         val animation = RotateAnimation(0f, 360f, RotateAnimation.RELATIVE_TO_SELF,
             0.5f, RotateAnimation.RELATIVE_TO_SELF, 0.5f)

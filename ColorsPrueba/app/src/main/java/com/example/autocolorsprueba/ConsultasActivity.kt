@@ -19,6 +19,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
+/**
+ * En esta clase vamos a iniciar el recyclerView para los colores que nos han dado de resultado
+ * al hacer la consulta en filtrar
+ */
 class ConsultasActivity() : AppCompatActivity() {
     lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var toolbar: Toolbar
@@ -39,26 +43,24 @@ class ConsultasActivity() : AppCompatActivity() {
     }
 
 
+    /**
+     * Función para inflar la barra de navegación.
+     * Se le asigna un listener a cada item.
+     * Se pone seleccionado el item Filtrar por defecto
+     */
     private fun setupBottomMenu() {
 
         bottomNavigationView = findViewById(R.id.bottom_navigation)
-        bottomNavigationView.selectedItemId = R.id.selector
 
         bottomNavigationView.setOnItemSelectedListener { item -> onItemSelectedListener(item) }
 
-        bottomNavigationView.menu.forEach { menuItem ->
-            val badge = bottomNavigationView.getOrCreateBadge(menuItem.itemId)
-            badge.isVisible = false
-            badge.badgeGravity = BadgeDrawable.TOP_START
-        }
-
     }
 
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-
-
+    /**
+     * Función para la navegacion de la BottomNavigation.
+     * @param item El elemento del menú que se ha seleccionado.
+     * @return true para indicar que el evento ha sido consumido, false de lo contrario.
+     */
     private fun onItemSelectedListener(item: MenuItem): Boolean {
         val itemId = item.itemId
         when (item.itemId) {
@@ -78,14 +80,16 @@ class ConsultasActivity() : AppCompatActivity() {
                 startActivity(intent)
             }
 
-//            R.id. page_fav -> {
-//                showPageFragment(R.drawable. ic_fav, R.string. bottom_nav_fav)
-//                return true
-//            }
         }
         return true
     }
 
+    /**
+     * Método para iniciar el recyclerview de consultas y pasarle las lista necesaria
+     * Cogemos los datos con un getAll en un hilo distinto
+     * Le decimos al adapter que es esa lista la que debe meter
+     * Le decimos que van a ir los resultados en un Linear Layout
+     */
     fun initRecyclerView(){
         var database  = CochesRoomDatabase.getInstance(this)
 

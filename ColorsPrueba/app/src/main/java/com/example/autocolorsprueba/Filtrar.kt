@@ -20,6 +20,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
+/**
+ * Clase para poder filtrar los colores por hexadecimal, marca, año o porcentaje de match
+ * Implementa la interfaz HttpClienListener
+ * Lanza una consulta a la base de datos y nos trata los resultados para luego mandarnos al activity que los muestra
+ */
+
 class Filtrar : AppCompatActivity(), HttpClient.HttpClientListener {
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var toolbar: Toolbar
@@ -36,6 +42,12 @@ class Filtrar : AppCompatActivity(), HttpClient.HttpClientListener {
     private lateinit var params: Map<String,String>
 
     private lateinit var buttonBuscar : Button
+
+    /**
+     * Método que se ejecuta al iniciar la activity
+     * Declaramos la url del servidor para hacer la consulta
+     * establecemos los listeners del boton, el cual lanza la consulta
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_filtrar)
@@ -57,15 +69,20 @@ class Filtrar : AppCompatActivity(), HttpClient.HttpClientListener {
         setupBottomMenu()
     }
 
+    /**
+     * Función que se tiene que implementar de la interfaz HttpClientListener
+     * Nos creamos una instancia de la base de datos
+     * Este método trata los objetos del JSON que viene de la consulta con la base de datos.
+     * Primero borramos lo que haya en la base de datos, para así borrar los resultados de consultas prevías en un hilo aparte
+     * Después recorremos la lista para insertar el objeto en nuestra base de datos para los resultados de las consultas
+     * Si no existe ese color para una marca lo  insertamos en un hilo diferente, para así no repetir los mismos colores.
+     * Nos guardamos ese color para que al tocar un color de la lista lo comparemos con el original
+     * Por último nos manda a ConsultasActivity para ver el resultado de la consulta
+     * @param cochesList recibe la lista de coches que devuelve la base de datos
+     */
     override fun onCochesReceived(cochesList: List<HttpClient.Coches>){
         var database = CochesRoomDatabase.getInstance(this)
-        val listaHexadecimal  = mutableListOf<String>()
         val uniqueEntries = mutableSetOf<Pair<String, String>>() // Usamos un conjunto de pares (hexadecimal, marca) para mantener únicos los registros
-
-        val listamarca  = mapOf<String, String>()
-
-
-
 
         GlobalScope.launch(Dispatchers.IO) {
             database.colorCocheDao().deleteAll()
@@ -108,7 +125,11 @@ class Filtrar : AppCompatActivity(), HttpClient.HttpClientListener {
 
     }
 
-
+    /**
+     * Función para comprobar que se han introducido bien los parámetros de búsqueda
+     * Nos saca un toast con los errores
+     * Finalmente ejecuta la consulta
+     */
     private fun buscarColor() {
         val colorHex = hexadecimal.text.toString().trim()
         val marcaText = marca.text.toString().trim()
@@ -150,6 +171,11 @@ class Filtrar : AppCompatActivity(), HttpClient.HttpClientListener {
         }
     }
 
+    /**
+     * Función para copiar al portapapeles el color
+     * @param text el color a copiar
+     * Nos saca un mensaje de aviso de que se ha copiado
+     */
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
@@ -157,20 +183,44 @@ class Filtrar : AppCompatActivity(), HttpClient.HttpClientListener {
 // Resto de las funciones de validación sin cambios
 
 
+    /**
+     * Método para comprobar el formato de los colores en hexadecimal.
+     * @param colorHex La cadena que se va a validar como un valor hexadecimal de color.
+     * @return true si la cadena representa un valor hexadecimal de color válido, false de lo contrario.
+     */
     private fun isValidColorHex(colorHex: String): Boolean {
         val hexRegex = Regex("^#?([0-9a-fA-F]{6})$")
         return hexRegex.matches(colorHex)
     }
 
+    /**
+     * Valida si una marca dada es válida según una lista predefinida de marcas de automóviles.
+     * @param marca La marca que se va a validar.
+     * @return true si la marca es válida y no está en blanco, false de lo contrario.
+     */
     private fun isValidMarca(marca: String): Boolean {
         val marcasValidas = setOf("BMW", "Ford", "Lincoln", "Acura", "Honda", "Mitsubishi", "Seat", "Volkswagen")
         return marca.isNotBlank() && marcasValidas.contains(marca)
     }
 
+    /**
+     * Valida si un año dado es válido y está en el formato de cuatro dígitos (por ejemplo, "2024").
+     *
+     * @param year El año que se va a validar.
+     * @return true si el año es válido y está en el formato de cuatro dígitos, false de lo contrario.
+     */
     private fun isValidYear(year: String): Boolean {
         return year.matches(Regex("\\d{4}"))
     }
 
+    /**
+     * Valida si una cadena dada representa un valor de coincidencia válido, es decir, un valor numérico
+     * que está dentro del rango de 0 a 100, inclusive.
+     *
+     * @param match La cadena que se va a validar como un valor de coincidencia.
+     * @return true si la cadena representa un valor de coincidencia válido, false de lo contrario.
+     * @throws flase si se da una excepción
+     */
     private fun isValidMatch(match: String): Boolean {
         return try {
             val matchValue = match.toDouble()
@@ -180,6 +230,12 @@ class Filtrar : AppCompatActivity(), HttpClient.HttpClientListener {
         }
     }
 
+    /**
+     * Este método se llama cuando se debe crear el menú de opciones en la barra de herramientas.
+     *
+     * @param menu El menú en el que se inflarán los elementos de la barra de herramientas.
+     * @return Devuelve true para mostrar el menú en la barra de herramientas, false de lo contrario.
+     */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_toolbar, menu)
         itemFav = menu.findItem(R.id.corazon)
@@ -193,29 +249,29 @@ class Filtrar : AppCompatActivity(), HttpClient.HttpClientListener {
             // Devolver true para indicar que el evento ha sido consumido
             true
         }
-
-        // Devolver true para mostrar el menú en la barra de acción.
-
-
         return true
     }
 
+
+    /**
+     * Función para inflar la barra de navegación.
+     * Se le asigna un listener a cada item.
+     * Se pone seleccionado el item Filtrar por defecto
+     */
     private fun setupBottomMenu() {
 
         bottomNavigationView = findViewById(R.id.bottom_navigation)
         bottomNavigationView.selectedItemId = R.id.filtrar
 
         bottomNavigationView.setOnItemSelectedListener { item -> onItemSelectedListener(item) }
-
-        bottomNavigationView.menu.forEach { menuItem ->
-            val badge = bottomNavigationView.getOrCreateBadge(menuItem.itemId)
-            badge.isVisible = false
-            badge.badgeGravity = BadgeDrawable.TOP_START
-        }
-
     }
 
 
+    /**
+     * Función para la navegacion de la BottomNavigation.
+     * @param item El elemento del menú que se ha seleccionado.
+     * @return true para indicar que el evento ha sido consumido, false de lo contrario.
+     */
     private fun onItemSelectedListener(item: MenuItem): Boolean {
         val itemId = item.itemId
         when (item.itemId) {
@@ -231,10 +287,6 @@ class Filtrar : AppCompatActivity(), HttpClient.HttpClientListener {
                 startActivity(intent)
             }
 
-//            R.id. page_fav -> {
-//                showPageFragment(R.drawable. ic_fav, R.string. bottom_nav_fav)
-//                return true
-//            }
         }
         return true
     }

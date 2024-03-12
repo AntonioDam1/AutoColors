@@ -9,8 +9,22 @@ import java.net.URL
 import java.net.URLEncoder
 
 
+/**
+ * Esta clase representa un cliente HTTP que realiza solicitudes al servidor y maneja las respuestas.
+ * Utiliza un HttpClientListener para notificar cuando se reciben los datos del servidor.
+ *
+ * @param listener El objeto que escucha las respuestas del servidor.
+ */
 class HttpClient(private val listener: HttpClientListener) {
 
+
+    /**
+     * Ejecuta una solicitud GET al servidor con los parámetros proporcionados y espera la respuesta.
+     * @param serverUrl La URL del servidor al que se enviará la solicitud.
+     * @param params Los parámetros de la solicitud, representados como un mapa de clave-valor.
+     * @throws MalformedURLException Si la URL proporcionada no es válida.
+     * @throws UnsupportedEncodingException Si ocurre un error al codificar los parámetros de la solicitud.
+     */
 
     fun executeGetRequest(serverUrl: String, params: Map<String, String>) {
         val encodedParams = StringBuilder()
@@ -30,9 +44,17 @@ class HttpClient(private val listener: HttpClientListener) {
     }
 
 
+    /**
+     * Clase interna que realiza una solicitud GET a una URL proporcionada en segundo plano y convierte la respuesta del servidor en una lista de objetos Coches.
+     */
     private inner class HttpGetTask : AsyncTask<URL, Void, String>() {
 
 
+        /**
+         * Realiza la tarea en segundo plano para realizar una solicitud GET a la URL proporcionada.
+         * @param urls Las URL a las que se va a realizar la solicitud GET.
+         * @return Una cadena que representa la respuesta del servidor.
+         */
         override fun doInBackground(vararg urls: URL): String {
             val url = urls[0]
             val connection = url.openConnection() as HttpURLConnection
@@ -62,20 +84,48 @@ class HttpClient(private val listener: HttpClientListener) {
         }
 
 
+        /**
+         * Método llamado después de que se complete la tarea en segundo plano.
+         * @param result El resultado de la tarea en segundo plano, que es una cadena JSON que representa la lista de coches.
+         */
         override fun onPostExecute(result: String) {
             super.onPostExecute(result)
+            // Convierte la cadena JSON en una lista de objetos Coches utilizando la biblioteca Gson.
             val cochesList = Gson().fromJson<List<Coches>>(result, object : TypeToken<List<Coches>>() {}.type)
+            // Notifica al listener que se han recibido los coches.
             listener.onCochesReceived(cochesList)
-//            super.onPostExecute(result)
-//            listener.onCochesReceived(result)
         }
     }
 
 
+    /**
+     * Interfaz que define un listener para recibir la lista de coches desde el cliente HTTP.
+     */
     interface HttpClientListener {
+
+        /**
+         * Método llamado cuando se reciben los coches del cliente HTTP.
+         * @param cochesList La lista de coches recibida desde el cliente HTTP.
+         */
         fun onCochesReceived(cochesList: List<Coches>)
     }
 
+    /**
+     * Clase que representa un objeto Coches que contiene información sobre un coche para pasarselo a los métodos.
+     * @property id El identificador único del coche.
+     * @property year El año del coche.
+     * @property maker El fabricante del coche.
+     * @property model El modelo del coche.
+     * @property paintColorName El nombre del color de pintura del coche.
+     * @property code El código del color de pintura del coche.
+     * @property catalogueURL La URL del catálogo del coche.
+     * @property hexadecimal El valor hexadecimal del color de pintura del coche.
+     * @property red El componente rojo del color de pintura del coche.
+     * @property green El componente verde del color de pintura del coche.
+     * @property blue El componente azul del color de pintura del coche.
+     * @property colorSampleURL La URL de la muestra de color del coche.
+     * @property matchPercentage El porcentaje de coincidencia del color de pintura del coche, puede ser nulo.
+     */
 
     data class Coches(
         val id: Long,

@@ -23,6 +23,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
+/**
+ * Clase para mostrar lso detalles del color al que se lñe ha dado click en el recyclerview
+ * Se puede acceder a esta clase desde la lista de favoritos o cuando se hace una consulta
+ * Si venimos de favoritos no se va a comparar con el color escogido ya que eso no existe
+ * pero sí que saldrá si accedemos desde los resultados de filtrar o en la pantalla principal al
+ * comparar con la base de datos
+ */
 class ColorCocheDetail : AppCompatActivity() {
     private lateinit var botonBorrar: Button
     private lateinit var botonFav: Button
@@ -129,6 +136,13 @@ class ColorCocheDetail : AppCompatActivity() {
 
 
     }
+
+    /**
+     * Función para agregar un color de coche que aparece en una consulta a la lista de favoritos.
+     * Recupera los detalles del color de coche de los extras pasados a través del Intent.
+     * Crea un objeto [ColorFav] con los detalles recuperados y lo inserta en la base de datos de forma asincrónica.
+     * Muestra un mensaje de notificación al usuario para confirmar que el color de coche se ha agregado a favoritos.
+     */
     private fun agregarFavoritos(){
 
         val hexadecimal = intent.getStringExtra("hexadecimal")
@@ -157,59 +171,55 @@ class ColorCocheDetail : AppCompatActivity() {
          showToast("Agregado a Favoritos")
     }
 
+
+
+    /**
+     * Elimina el color de coche seleccionado de la lista de favoritos en la base de datos.
+     * Recupera el objeto ColorFav que se va a eliminar de los extras pasados a través del Intent.
+     * Realiza una consulta a la base de datos para obtener todos los colores favoritos.
+     * Elimina el color de coche de la lista y lo borra de la base de datos de forma asincrónica.
+     * Finaliza la actividad actual y abre la actividad de favoritos para mostrar la lista actualizada.
+     * Muestra un mensaje de notificación al usuario para confirmar que el color de coche ha sido borrado.
+     */
     private fun borrarColor() {
         val item = intent.getSerializableExtra("ITEM_KEY") as ColorFav
-
-
         var database = CochesRoomDatabase.getInstance(this)
         var coloresFavs: MutableList<ColorFav>
-
-
-
-
         GlobalScope.launch(Dispatchers.IO) {
             coloresFavs = database.colorFavDao().getAll()
             coloresFavs.remove(item)
             database.colorFavDao().delete(item)
-
-
         }
         finish()
-
-
         val intent = Intent(this, FavoritosActivity::class.java)
         startActivity(intent)
-
-
         showToast("Color borrado")
     }
 
 
+    /**
+     * Función para inflar la barra de navegación.
+     * Se le asigna un listener a cada item.
+     */
     private fun setupBottomMenu() {
 
 
         bottomNavigationView = findViewById(R.id.bottom_navigation)
-        bottomNavigationView.selectedItemId = R.id.selector
-
-
         bottomNavigationView.setOnItemSelectedListener { item -> onItemSelectedListener(item) }
-
-
-        bottomNavigationView.menu.forEach { menuItem ->
-            val badge = bottomNavigationView.getOrCreateBadge(menuItem.itemId)
-            badge.isVisible = false
-            badge.badgeGravity = BadgeDrawable.TOP_START
-        }
     }
 
 
+    /**
+     * Función para la navegacion de la BottomNavigation.
+     * @param item El elemento del menú que se ha seleccionado.
+     * @return true para indicar que el evento ha sido consumido, false de lo contrario.
+     */
     private fun onItemSelectedListener(item: MenuItem): Boolean {
         val itemId = item.itemId
         when (item.itemId) {
             R.id.taller -> {
                 val intent = Intent(this, ColorMaps::class.java).apply { }
                 val b = Bundle()
-//                b.putString("hexadecimal",hexadecimal)
                 intent.putExtras(b)
                 startActivity(intent)
             }
@@ -224,15 +234,15 @@ class ColorCocheDetail : AppCompatActivity() {
                 startActivity(intent)
             }
 
-
-//            R.id. page_fav -> {
-//                showPageFragment(R.drawable. ic_fav, R.string. bottom_nav_fav)
-//                return true
-//            }
         }
         return true
     }
 
+    /**
+     * Función para copiar al portapapeles el color
+     * @param text el color a copiar
+     * Nos saca un mensaje de aviso de que se ha copiado
+     */
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }

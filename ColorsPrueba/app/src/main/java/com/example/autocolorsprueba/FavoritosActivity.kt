@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.Point
 import android.os.Bundle
 import android.view.ContextMenu
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
@@ -27,12 +28,18 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
+/**
+ * Clase para ver el listado de los colores favortos ya insertado en Room.
+ * Nos va a mostrar un recyclerView con los elementos.
+ */
 class FavoritosActivity : AppCompatActivity() {
     lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var toolbar: Toolbar
     private lateinit var itemBorra :MenuItem
     private lateinit var nombre : TextView
     private lateinit var recyclerView: RecyclerView
+    private lateinit var itemFav: MenuItem
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,11 +58,16 @@ class FavoritosActivity : AppCompatActivity() {
             Point(20, 20)
         ) // manipulates the saved selector's position data.
 
-
-
-
         initRecyclerView()
     }
+
+
+
+    /**
+     * Función para inflar la barra de navegación.
+     * Se le asigna un listener a cada item.
+     * Se pone seleccionado el item Filtrar por defecto
+     */
     private fun setupBottomMenu() {
 
         bottomNavigationView = findViewById(R.id.bottom_navigation)
@@ -63,61 +75,13 @@ class FavoritosActivity : AppCompatActivity() {
 
         bottomNavigationView.setOnItemSelectedListener { item -> onItemSelectedListener(item) }
 
-        bottomNavigationView.menu.forEach { menuItem ->
-            val badge = bottomNavigationView.getOrCreateBadge(menuItem.itemId)
-            badge.isVisible = false
-            badge.badgeGravity = BadgeDrawable.TOP_START
-        }
-
     }
 
-    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?
-    ) {
-        super.onCreateContextMenu(menu, v, menuInfo)
-        menuInflater.inflate(R.menu.delete_item, menu)
-
-    }
-    override fun onContextItemSelected(item: MenuItem): Boolean {
-        var i = 0
-        when (item.itemId) {
-            R.id.borrar -> {
-
-//                var database = CochesRoomDatabase.getInstance(this)
-//
-//                GlobalScope.launch(Dispatchers.IO) {
-//                    database.colorCocheDao().delete()
-//                }
-                showToast("Eliminado")
-                return true
-            }
-            else -> return super.onContextItemSelected(item)
-
-        }
-
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-
-
-
-    //    override fun onContextItemSelected(item: MenuItem): Boolean {
-//        return when (item.itemId) {
-//            R.id.borrar -> {
-//                var database  = CochesRoomDatabase.getInstance(this)
-//                database.colorCocheDao().delete(itemBorra.isVisible)
-//
-//                // Lógica para la opción 1
-//                true
-//            }
-//            R.id.opcion_menu_2 -> {
-//                // Lógica para la opción 2
-//                true
-//            }
-//            else -> super.onContextItemSelected(item)
-//        }
-//    }
+    /**
+     * Función para la navegacion de la BottomNavigation.
+     * @param item El elemento del menú que se ha seleccionado.
+     * @return true para indicar que el evento ha sido consumido, false de lo contrario.
+     */
     private fun onItemSelectedListener(item: MenuItem): Boolean {
         val itemId = item.itemId
         when (item.itemId) {
@@ -137,14 +101,15 @@ class FavoritosActivity : AppCompatActivity() {
                 startActivity(intent)
             }
 
-//            R.id. page_fav -> {
-//                showPageFragment(R.drawable. ic_fav, R.string. bottom_nav_fav)
-//                return true
-//            }
         }
         return true
     }
 
+    /**
+     * Método para iniciar el recyclerview de favoritos y pasarle las lista necesaria
+     * Cogemos los datos con un getAll en un hilo distinto
+     * Le decimos al adapter que es esa lista la que debe meter
+     */
     fun initRecyclerView(){
         var database  = CochesRoomDatabase.getInstance(this)
         var coloresFavs : MutableList<ColorFav>
