@@ -97,7 +97,8 @@ class ColorCocheDetail : AppCompatActivity() {
             botonBorrar.isEnabled = false
             botonBorrar.visibility = View.INVISIBLE
 
-            textViewMatchDetail.text = "Match: ${100 - String.format("%.3f", match!!.toDouble()).toDouble()}"
+            textViewMatchDetail.text = "Match: ${String.format("%.3f", 100 - match!!.toDouble())}"
+
         }
 
 

@@ -44,22 +44,21 @@ class ColorCocheAdapter(val colorCocheList: MutableList<ColorCoche>) : RecyclerV
         holder.render(item)
 
         holder.itemView.setOnClickListener {
-//            // Llama a la función que maneja la eliminación del elemento
-//            eliminarElemento(item, holder, position)
+
             val intent = Intent(it.context, ColorCocheDetail::class.java)
             intent.putExtra("origen","car")
-            intent.putExtra("marca", item.marca)
-            intent.putExtra("hexadecimal", item.hexadecimal)
-            intent.putExtra("anio", item.anio)
-            intent.putExtra("modelo", item.modelo)
-            intent.putExtra("nombrePintura", item.nombrePintura)
-            intent.putExtra("codigo", item.codigo)
-            intent.putExtra("CATALOGO_URL", item.catalogueURL)
-            intent.putExtra("red", item.red)
-            intent.putExtra("blue", item.blue)
-            intent.putExtra("green", item.green)
-            intent.putExtra("colorsample", item.colorsampleURL)
-            intent.putExtra("match", item.matchPercentage.toString())
+            intent?.putExtra("marca", item.marca)
+            intent?.putExtra("hexadecimal", item.hexadecimal)
+            intent?.putExtra("anio", item.anio.toString())
+            intent?.putExtra("modelo", item.modelo)
+            intent?.putExtra("nombrePintura", item.nombrePintura)
+            intent?.putExtra("codigo", item.codigo)
+            intent?.putExtra("CATALOGO_URL", item.catalogueURL)
+            intent?.putExtra("red", item.red.toString())
+            intent?.putExtra("blue", item.blue.toString())
+            intent?.putExtra("green", item.green.toString())
+            intent?.putExtra("colorsample", item.colorsampleURL)
+            intent?.putExtra("match", item.matchPercentage.toString())
 //            intent.putExtra("coche", coche)
             //intent.putExtras(item)
             holder.itemView.context.startActivity(intent)
@@ -103,11 +102,11 @@ class ColorCocheViewHolder(view: View): RecyclerView.ViewHolder(view){
         hexadecimal.text = colorCoche.hexadecimal
         nombrePintura.text = colorCoche.nombrePintura
         marca.text = colorCoche.marca
-        codigo.text = colorCoche.codigo + ", " + colorCoche.modelo
+        codigo.text = colorCoche.codigo
         val formato = DecimalFormat("#.##")
         val valorRedondeado = formato.format(100-colorCoche.matchPercentage!!)
         match.text = valorRedondeado
-        anio.text = colorCoche.anio.toString()
+        anio.text = colorCoche.anio?.toString() ?: "N/A"
         fondo.setBackgroundColor(Color.parseColor(colorCoche.hexadecimal))
 
 

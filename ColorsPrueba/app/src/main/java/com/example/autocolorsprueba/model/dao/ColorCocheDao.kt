@@ -24,8 +24,8 @@ interface ColorCocheDao {
      * @param userIds Un array de IDs de usuarios.
      * @return Una lista de colores de coche cuyos IDs coinciden con los proporcionados.
      */
-    @Query("SELECT * FROM ColorCoche WHERE uid IN (:userIds)")
-    fun loadAllByIds(userIds: IntArray): List<ColorCoche>
+//    @Query("SELECT * FROM ColorCoche WHERE uid IN (:userIds)")
+//    fun loadAllByIds(userIds: IntArray): List<ColorCoche>
 
     /**
      * Inserta una lista de colores de coche en la base de datos.

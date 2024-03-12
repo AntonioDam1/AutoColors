@@ -164,7 +164,7 @@ class Filtrar : AppCompatActivity(), HttpClient.HttpClientListener {
             val params = mapOf(
                 "color" to colorHex,
                 "marca" to marcaText,
-                "año" to yearText,
+                "anio" to yearText,
                 "match" to matchText
             )
             httpClient.executeGetRequest(serverUrl, params)
