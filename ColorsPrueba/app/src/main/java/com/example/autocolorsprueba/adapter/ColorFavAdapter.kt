@@ -25,6 +25,7 @@ import kotlinx.coroutines.withContext
  * Este adaptador se utiliza para mostrar la lista de colores de coches favoritos en un RecyclerView.
  *
  * @property colorFavList La lista de colores de coches favoritos que se mostrará en el RecyclerView.
+ * @return el recyclerView con los elementos de la lista
  */
 class ColorFavAdapter(val colorFavList: MutableList<ColorFav> ) : RecyclerView.Adapter<ColorFavViewHolder>() {
 

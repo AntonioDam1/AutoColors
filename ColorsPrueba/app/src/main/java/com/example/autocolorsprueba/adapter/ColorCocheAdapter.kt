@@ -17,6 +17,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.DecimalFormat
 
+
+/**
+ * Adaptador para la lista con los resultados que .
+ * Este adaptador se utiliza para mostrar la lista de colores de coches favoritos en un RecyclerView.
+ *
+ * @property colorCocheList La lista de colores de coches favoritos que se mostrará en el RecyclerView.
+ * @return el recyclerView con los elementos de la lista
+ */
 class ColorCocheAdapter(val colorCocheList: MutableList<ColorCoche>) : RecyclerView.Adapter<ColorCocheViewHolder>() {
 
 
