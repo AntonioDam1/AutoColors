@@ -2,6 +2,9 @@ package com.example.autocolorsprueba
 
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.LayerDrawable
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -32,7 +35,7 @@ class ColorCocheDetail : AppCompatActivity() {
     private lateinit var alphaTileViewOriginal: ImageView
     private lateinit var alphaTileViewColor: ImageView
     private lateinit var tvMarcaDetail: TextView
-    private lateinit var textViewMarcaDetail: TextView
+    //private lateinit var textViewMarcaDetail: TextView
     private lateinit var textViewModeloDetail: TextView
     private lateinit var textViewAnioDetail: TextView
     private lateinit var textViewMatchDetail: TextView
@@ -40,6 +43,7 @@ class ColorCocheDetail : AppCompatActivity() {
     private lateinit var textHexadecimalDetail: TextView
     private lateinit var textHexadecimalOriginalDetail : TextView
     private lateinit var tvNombrePinturaDetail : TextView
+    private lateinit var textLogoMarca : ImageView
 
     lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var colorOriginal: String
@@ -49,7 +53,7 @@ class ColorCocheDetail : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_color_coche_detail)
 
-        textViewMarcaDetail = findViewById(R.id.textViewMarcaDetail)
+        //textViewMarcaDetail = findViewById(R.id.textViewMarcaDetail)
         textViewModeloDetail = findViewById(R.id.textViewModeloDetail)
         textViewAnioDetail = findViewById(R.id.textViewAnioDetail)
         textViewMatchDetail = findViewById(R.id.textViewMatchDetail)
@@ -58,6 +62,7 @@ class ColorCocheDetail : AppCompatActivity() {
         textHexadecimalOriginalDetail = findViewById(R.id.tvHexadecimalOriginalDetail)
         tvNombrePinturaDetail = findViewById(R.id.tvNombrePinturaDetail)
         tvMarcaDetail = findViewById(R.id.tvMarcaDetail)
+        textLogoMarca = findViewById(R.id.logo)
 
         val origen = intent.getStringExtra("origen")
         val marca = intent.getStringExtra("marca")
@@ -67,17 +72,38 @@ class ColorCocheDetail : AppCompatActivity() {
         val match = intent.getStringExtra("match")
         val nombrePintura = intent.getStringExtra("nombrePintura")
 
-        textViewMarcaDetail.text = marca
+        val marca_logo = intent.getStringExtra("marca")?.toLowerCase()
+        val resourceId = if (marca_logo != null) {
+            resources.getIdentifier("$marca_logo", "drawable", packageName)
+        } else {
+            resources.getIdentifier("nologo", "drawable", packageName)
+        }
+
+        if (resourceId != 0) {
+            val svgUri = Uri.parse("android.resource://$packageName/$resourceId")
+            textLogoMarca.setImageURI(svgUri)
+        } else {
+            // Manejar el caso en el que no se encuentre el recurso SVG
+        }
+
+        //textViewMarcaDetail.text = marca
         textViewModeloDetail.text = modelo ?: "N/A"
-        textViewAnioDetail.text = anio ?: "N/A"
+
+        val anioComoEntero = anio?.toIntOrNull()
+        val textoAnio = if (anioComoEntero != null && anioComoEntero >= 1900) {
+            anio
+        } else {
+            "N/A"
+        }
+        textViewAnioDetail.text = textoAnio
 
         tvMarcaDetail.text = marca ?: "N/A"
         tvNombrePinturaDetail = findViewById(R.id.tvNombrePinturaDetail)
         val codigo = intent.getStringExtra("codigo")
         tvNombrePinturaDetail.text = "$nombrePintura\n$codigo"
 
-        textHexadecimalDetail.text = hexadecimal
-        textHexadecimalOriginalDetail.text = ColorStorage.getString()
+        textHexadecimalDetail.text = hexadecimal?.toUpperCase()
+        textHexadecimalOriginalDetail.text = "#" + ColorStorage.getString()
 
         botonBorrar = findViewById(R.id.buttonBorrar)
         botonFav = findViewById(R.id.buttonFav)
@@ -97,12 +123,12 @@ class ColorCocheDetail : AppCompatActivity() {
             botonBorrar.isEnabled = false
             botonBorrar.visibility = View.INVISIBLE
 
-            textViewMatchDetail.text = "Match: ${String.format("%.3f", 100 - match!!.toDouble())}"
+            textViewMatchDetail.text = "Match: ${String.format("%.2f", 100 - match!!.toDouble())} %"
 
         }
 
 
-        toolbar = findViewById(R.id.toolbar)
+
         alphaTileViewColor = findViewById(R.id.alphaTileViewColor)
         alphaTileViewOriginal  =findViewById(R.id.alphaTileViewOriginal)
 
@@ -129,6 +155,26 @@ class ColorCocheDetail : AppCompatActivity() {
             }
         }
 
+        /*
+        //Por si queréis bordes en los dos cuadrados de color.
+        //
+        // Crear un drawable en capas con la imagen y el borde
+        val borderSize = 4// Tamaño del borde en píxeles
+        val borderColor = Color.BLACK // Color del borde, puedes cambiarlo según tus preferencias
+        val borderDrawable = GradientDrawable()
+        borderDrawable.shape = GradientDrawable.RECTANGLE
+        borderDrawable.setStroke(borderSize, borderColor)
+        val layers = arrayOf(borderDrawable, alphaTileViewColor.drawable)
+        val layers2 = arrayOf(borderDrawable, alphaTileViewOriginal.drawable)
+
+        // Crear un nuevo drawable en capas con el borde y la imagen
+        val layerDrawable = LayerDrawable(layers)
+        val layerDrawable2 = LayerDrawable(layers2)
+
+        // Establecer el nuevo drawable en capas como fuente de la imagen
+        alphaTileViewColor.setImageDrawable(layerDrawable)
+        alphaTileViewOriginal.setImageDrawable(layerDrawable2)
+        */
 
 
         setupBottomMenu()

@@ -99,14 +99,22 @@ class ColorCocheViewHolder(view: View): RecyclerView.ViewHolder(view){
     val nombrePintura = view.findViewById<TextView>(R.id.tvNombrePintura)
 
     fun render(colorCoche: ColorCoche){
-        hexadecimal.text = colorCoche.hexadecimal
+        hexadecimal.text = colorCoche.hexadecimal?.toUpperCase()
         nombrePintura.text = colorCoche.nombrePintura
         marca.text = colorCoche.marca
         codigo.text = colorCoche.codigo
-        val formato = DecimalFormat("#.##")
-        val valorRedondeado = formato.format(100-colorCoche.matchPercentage!!)
+        val formato = DecimalFormat("##.##' %'")
+        val valorRedondeado = formato.format(100 - colorCoche.matchPercentage!!)
         match.text = valorRedondeado
-        anio.text = colorCoche.anio?.toString() ?: "N/A"
+
+        val textoAnio = if (colorCoche.anio != null && colorCoche.anio >= 1900) {
+            colorCoche.anio
+        } else {
+            "N/A"
+        }
+
+        anio.text = textoAnio.toString()
+
         fondo.setBackgroundColor(Color.parseColor(colorCoche.hexadecimal))
 
 
