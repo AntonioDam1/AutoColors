@@ -42,7 +42,7 @@ class HttpClient(private val listener: HttpClientListener) {
         if (encodedParams.isNotEmpty()) {
             encodedParams.deleteCharAt(encodedParams.length - 1)
         }
-
+        // Cifra los parámetros codificados antes de agregarlos a la URL
         val paramsCypherString : String = CypherManagerAES.cifrar(encodedParams.toString(),CypherManagerAES.obtenerClave("unodostrecuacin1",16))
         val url = URL("$serverUrl?$paramsCypherString")
         HttpGetTask().execute(url)
@@ -151,12 +151,30 @@ class HttpClient(private val listener: HttpClientListener) {
         val matchPercentage: Double?
     )
 
+    /**
+     * Objeto que maneja el cifrado y descifrado utilizando el algoritmo AES.
+     */
     object CypherManagerAES {
+
+        /**
+         * Obtiene una clave secreta para el cifrado y descifrado AES.
+         *
+         * @param password La contraseña utilizada para generar la clave.
+         * @param longitud La longitud de la clave en bytes (16, 24 o 32).
+         * @return Una instancia de la clase Key que representa la clave secreta.
+         */
         fun obtenerClave(password: String, longitud: Int): Key {
             // La longitud puede ser de 16, 24 o 32 bytes.
             return SecretKeySpec(password.toByteArray(), 0, longitud, "AES")
         }
 
+        /**
+         * Cifra un texto utilizando el algoritmo AES.
+         *
+         * @param textoEnClaro El texto que se desea cifrar.
+         * @param key La clave secreta utilizada para el cifrado.
+         * @return Una cadena de texto cifrada.
+         */
         @Throws(Exception::class)
         fun cifrar(textoEnClaro: String, key: Key): String {
             val cipher = Cipher.getInstance("AES/ECB/PKCS5Padding")
@@ -165,6 +183,13 @@ class HttpClient(private val listener: HttpClientListener) {
             return Base64.getEncoder().encodeToString(cipherText)
         }
 
+        /**
+         * Descifra un texto cifrado utilizando el algoritmo AES.
+         *
+         * @param textoCifrado El texto cifrado que se desea descifrar.
+         * @param key La clave secreta utilizada para el descifrado.
+         * @return El texto descifrado.
+         */
         @Throws(Exception::class)
         fun descifrar(textoCifrado: String, key: Key): String {
             val cipher = Cipher.getInstance("AES/ECB/PKCS5Padding")

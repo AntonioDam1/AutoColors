@@ -28,15 +28,34 @@ import java.text.DecimalFormat
 class ColorCocheAdapter(val colorCocheList: MutableList<ColorCoche>) : RecyclerView.Adapter<ColorCocheViewHolder>() {
 
 
+    /**
+     * Crea y devuelve un nuevo ViewHolder.
+     *
+     * @param parent El ViewGroup al que se adjuntará el nuevo ViewHolder.
+     * @param viewType El tipo de vista del nuevo ViewHolder.
+     * @return El nuevo ViewHolder creado.
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ColorCocheViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return ColorCocheViewHolder(layoutInflater.inflate(R.layout.item_colorcoche, parent, false))
         TODO("Not yet implemented")
     }
 
+    /**
+     * Devuelve el número total de colores que hay en la lista.
+     *
+     * @return El número total de colores que hay en la lista.
+     */
     override fun getItemCount(): Int = colorCocheList.size
 
 
+
+    /**
+     * Actualiza el contenido de un ViewHolder en una posición específica.
+     *
+     * @param holder El ViewHolder que debe actualizarse.
+     * @param position La posición del elemento en la lista de datos.
+     */
     override fun onBindViewHolder(holder: ColorCocheViewHolder, position: Int) {
         val coche : ColorCoche = colorCocheList[position]
         val tamano = colorCocheList.size
@@ -65,30 +84,14 @@ class ColorCocheAdapter(val colorCocheList: MutableList<ColorCoche>) : RecyclerV
 
         }
     }
-
-    private fun eliminarElemento(colorCoche: ColorCoche, holder: ColorCocheViewHolder, position: Int) {
-        val database = CochesRoomDatabase.getInstance(holder.itemView.context)
-
-        // Utiliza coroutines para realizar operaciones en el hilo de trabajo
-        GlobalScope.launch(Dispatchers.IO) {
-//            // Llama al método para eliminar el colorCoche de la base de datos
-            database.colorCocheDao().delete(colorCoche)
-            colorCocheList.removeAt(position)
-
-            withContext(Dispatchers.Main) {
-                println(colorCocheList.size)
-                // Notifica al adaptador sobre el cambio en los datos
-                notifyItemRemoved(position)
-
-
-            }
-
-        }
-
-
-    }
 }
 
+/**
+ * Clase que modela el ViewHolder para un elemento de la lista de resultados colores de coches.
+ * Este ViewHolder se utiliza para mostrar la información de un color de coche en un elemento de la lista del RecyclerView.
+ *
+ * @property view La vista que contiene los elementos de la interfaz de usuario para mostrar la información del color del coche.
+ */
 class ColorCocheViewHolder(view: View): RecyclerView.ViewHolder(view){
     val hexadecimal = view.findViewById<TextView>(R.id.tvHexadecimal)
     val marca = view.findViewById<TextView>(R.id.tvMarca)
@@ -98,6 +101,11 @@ class ColorCocheViewHolder(view: View): RecyclerView.ViewHolder(view){
     val anio = view.findViewById<TextView>(R.id.tvAnio)
     val nombrePintura = view.findViewById<TextView>(R.id.tvNombrePintura)
 
+    /**
+     * Método para establecer los datos del color del coche en la interfaz de usuario.
+     *
+     * @param colorCoche El objeto ColorFav que contiene la información del color del coche favorito.
+     */
     fun render(colorCoche: ColorCoche){
         hexadecimal.text = colorCoche.hexadecimal?.toUpperCase()
         nombrePintura.text = colorCoche.nombrePintura
