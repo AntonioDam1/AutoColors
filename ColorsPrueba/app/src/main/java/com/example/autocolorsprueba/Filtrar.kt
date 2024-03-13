@@ -131,7 +131,14 @@ class Filtrar : AppCompatActivity(), HttpClient.HttpClientListener {
      * Finalmente ejecuta la consulta
      */
     private fun buscarColor() {
-        val colorHex = hexadecimal.text.toString().trim()
+        var colorHex  = ""
+        if(hexadecimal.text.trim().startsWith("#")){
+            colorHex = hexadecimal.text.toString().trim().substring(1)
+
+        }else{
+            colorHex = hexadecimal.text.toString().trim()
+
+        }
         val marcaText = marca.text.toString().trim()
         val yearText = year.text.toString().trim()
         val matchText = match.text.toString().trim()

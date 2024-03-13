@@ -109,6 +109,7 @@ class ColorCocheDetail : AppCompatActivity() {
         botonFav = findViewById(R.id.buttonFav)
 
         if (origen.equals("fav")){
+            textViewModeloDetail.text = intent.getStringExtra("modelo") ?: "N/A"
             textViewMatchDetail.isEnabled = false
             textViewMatchDetail.visibility = View.INVISIBLE
 
