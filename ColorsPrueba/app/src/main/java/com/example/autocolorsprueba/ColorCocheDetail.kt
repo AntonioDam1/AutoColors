@@ -11,9 +11,12 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import com.example.autocolorsprueba.database.CochesRoomDatabase
 import com.example.autocolorsprueba.model.entity.ColorFav
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -44,6 +47,8 @@ class ColorCocheDetail : AppCompatActivity() {
     private lateinit var textHexadecimalOriginalDetail : TextView
     private lateinit var tvNombrePinturaDetail : TextView
     private lateinit var textLogoMarca : ImageView
+    private lateinit var constraintLayout : ConstraintLayout
+
 
     lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var colorOriginal: String
@@ -110,14 +115,17 @@ class ColorCocheDetail : AppCompatActivity() {
 
         if (origen.equals("fav")){
             textViewModeloDetail.text = intent.getStringExtra("modelo") ?: "N/A"
+
             textViewMatchDetail.isEnabled = false
-            textViewMatchDetail.visibility = View.INVISIBLE
+            textViewMatchDetail.isVisible = false
 
             textHexadecimalOriginalDetail.isEnabled = false
-            textHexadecimalOriginalDetail.visibility = View.INVISIBLE
+            textHexadecimalOriginalDetail.isVisible = false
 
             botonFav.isEnabled = false
             botonFav.visibility = View.INVISIBLE
+
+            //constraintLayout.setBackgroundColor(Color.parseColor(hexadecimal))
 
         }
         if (origen.equals("car")) {
@@ -148,10 +156,10 @@ class ColorCocheDetail : AppCompatActivity() {
                 alphaTileViewOriginal.setBackgroundColor(Color.parseColor(savedString))
             } else {
                 alphaTileViewOriginal.isEnabled = false
-                alphaTileViewOriginal.visibility = View.INVISIBLE
+                alphaTileViewOriginal.isVisible = false
 
                 textViewColorOriginal.isEnabled = false
-                textViewColorOriginal.visibility = View.INVISIBLE
+                textViewColorOriginal.isVisible = false
 
             }
         }

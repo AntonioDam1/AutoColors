@@ -1,12 +1,17 @@
 package com.example.autocolorsprueba.adapter
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.autocolorsprueba.ColorCocheDetail
 import com.example.autocolorsprueba.ColorStorage
@@ -90,9 +95,11 @@ class ColorFavViewHolder(view: View): RecyclerView.ViewHolder(view){
     val marca = view.findViewById<TextView>(R.id.tvMarca)
     val codigo = view.findViewById<TextView>(R.id.tvCodigo)
     val match = view.findViewById<TextView>(R.id.tvMatch)
-    val fondo = view.findViewById<TextView>(R.id.colorin)
+    val imagen = view.findViewById<ImageView>(R.id.colorin)
     val anio = view.findViewById<TextView>(R.id.tvAnio)
     val nombrePintura = view.findViewById<TextView>(R.id.tvNombrePintura)
+    val fondoLayout = view.findViewById<ConstraintLayout>(R.id.item_layout)
+
 
 
     /**
@@ -111,10 +118,45 @@ class ColorFavViewHolder(view: View): RecyclerView.ViewHolder(view){
         } else {
             "N/A"
         }
-        anio.text = textoAnio.toString()
-        match.text = ""
-        fondo.setBackgroundColor(Color.parseColor(colorCoche.hexadecimal))
-    }
 
+        //Calculamos el color para los textos
+        val colorTextoHex = obtenerColorTexto(colorCoche.hexadecimal ?: "#FFFFFF")
+        val colorTextoHexParsed = android.graphics.Color.parseColor(colorTextoHex)
+        hexadecimal.setTextColor(colorTextoHexParsed)
+        nombrePintura.setTextColor(colorTextoHexParsed)
+        marca.setTextColor(colorTextoHexParsed)
+        codigo.setTextColor(colorTextoHexParsed)
+        anio.setTextColor(colorTextoHexParsed)
+
+        anio.text = textoAnio.toString()
+        match.isVisible=false
+        val colorId = android.graphics.Color.parseColor(colorCoche.hexadecimal)
+        fondoLayout.setBackgroundColor(colorId)
+
+        val nombreMarca = colorCoche.marca?.toLowerCase() ?: ""
+        val resourceId = if (nombreMarca.isNotEmpty()) {
+            imagen.context.resources.getIdentifier(nombreMarca, "drawable", imagen.context.packageName)
+        } else {
+            // Si no hay marca, establecer el recurso "nologo"
+            imagen.context.resources.getIdentifier("nologo", "drawable", imagen.context.packageName)
+        }
+
+        if (resourceId != 0) {
+            imagen.setImageResource(resourceId)
+        } else {
+            // Manejar el caso donde no hay un recurso de drawable para la marca específica ni "nologo"
+        }
+    }
+    fun obtenerColorTexto(colorFondoHex: String): String {
+        val colorFondo = Color.parseColor(colorFondoHex)
+        val luminanciaFondo = (0.299 * Color.red(colorFondo) + 0.587 * Color.green(colorFondo) + 0.114 * Color.blue(colorFondo)) / 255
+        return if (luminanciaFondo > 0.5) {
+            // Si el fondo es claro, usa texto oscuro
+            "#000000"
+        } else {
+            // Si el fondo es oscuro, usa texto claro
+            "#FFFFFF"
+        }
+    }
 
 }
