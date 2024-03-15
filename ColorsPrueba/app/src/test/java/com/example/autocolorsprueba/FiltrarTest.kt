@@ -1,50 +1,78 @@
 import com.example.autocolorsprueba.Filtrar
+import io.mockk.impl.annotations.RelaxedMockK
+import com.google.common.truth.Truth.assertThat
+import io.mockk.MockKAnnotations
+
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
 
 import java.util.HashMap
 
+/**
+ * Test para probar la clase de Filtrar, he puesto que corre con RobolectricTestRunner porque sino el Looper da error
+ *
+ */
+@RunWith(RobolectricTestRunner::class)
 class FiltrarTest {
-
+    @RelaxedMockK
     lateinit var filtrar: Filtrar
 
+    /**
+     * Se supone que esto es para inicializar la clase
+     */
     @Before
     fun setUp() {
+        MockKAnnotations.init(this)
         filtrar = Filtrar()
 
     }
 
+    /**
+     * Validación de colores hexadecimales
+     */
     @Test
     fun testValidColorHex() {
-        val validHexColor = "#f44336"
+        var validHexColor = "f44336"
         val invalidHexColor = "f44336"
-        assertTrue(filtrar.isValidColorHex(validHexColor))
-        assertFalse(filtrar.isValidColorHex(invalidHexColor))
+        val result = filtrar.isValidColorHex(validHexColor)
+
+        assertThat(result).isTrue()
     }
 
+    /**
+     * Validacion de marcas
+     */
     @Test
     fun testValidMarca() {
         val validMarca = "BMW"
         val invalidMarca = "Toyota"
-        assertTrue(filtrar.isValidMarca(validMarca))
-        assertFalse(filtrar.isValidMarca(invalidMarca))
+        assertThat(filtrar.isValidMarca(validMarca)).isTrue()
+        assertThat(filtrar.isValidMarca(invalidMarca)).isFalse()
     }
-
+//
+    /**
+     * Función que conprueba la validación de los años
+     */
     @Test
     fun testValidYear() {
         val validYear = "2024"
         val invalidYear = "24"
-        assertTrue(filtrar.isValidYear(validYear))
-        assertFalse(filtrar.isValidYear(invalidYear))
+    assertThat(filtrar.isValidMarca(validYear)).isTrue()
+    assertThat(filtrar.isValidMarca(invalidYear)).isFalse()
     }
-
+//
+    /**
+     * Comprobar que el macth este dentro de 0 y 100
+     */
     @Test
     fun testValidMatch() {
         val validMatch = "50"
         val invalidMatch = "101"
-        assertTrue(filtrar.isValidMatch(validMatch))
-        assertFalse(filtrar.isValidMatch(invalidMatch))
+    assertThat(filtrar.isValidMarca(validMatch)).isTrue()
+    assertThat(filtrar.isValidMarca(invalidMatch)).isFalse()
     }
 
     @Test

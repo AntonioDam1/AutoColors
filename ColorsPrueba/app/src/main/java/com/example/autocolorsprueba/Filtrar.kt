@@ -197,6 +197,7 @@
          */
         fun isValidColorHex(colorHex: String): Boolean {
             val hexRegex = Regex("^#?([0-9a-fA-F]{6})$")
+            println(hexRegex.matches(colorHex))
             return hexRegex.matches(colorHex)
         }
 

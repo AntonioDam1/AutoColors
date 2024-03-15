@@ -3,65 +3,61 @@ package com.example.autocolorsprueba
 import HttpClient
 import org.junit.Test
 import com.google.common.truth.Truth.assertThat
+import io.mockk.MockKAnnotations
+import io.mockk.impl.annotations.RelaxedMockK
+import kotlinx.coroutines.runBlocking
+import org.junit.Before
+import org.junit.runner.RunWith
+import org.mockito.Mock
+import org.mockito.Mockito.`when`
+import org.mockito.junit.MockitoJUnitRunner
+import org.robolectric.RobolectricTestRunner
 
-class HttpClientTest : HttpClient.HttpClientListener {
-
+/**
+ * Clase para probar HttpClient, se prueba si el servidor envía datos
+ */
+@RunWith(RobolectricTestRunner::class)
+//@RunWith(MockitoJUnitRunner::class)
+class HttpClientTest : HttpClient.HttpClientListener{
+    @RelaxedMockK
     private var cochesReceived: List<HttpClient.Coches>? = null
+//    @Mock
+//    lateinit var httpClientListener: HttpClient.HttpClientListener
+    @Before
+    fun setUp(){
+        MockKAnnotations.init(this)
+    }
 
     /**
-     * Test para probar la conexión entre la app y el servidor. Falla porque la clase AsyncTask no está diseñada para JUnit, habría que crear una interfaz para cambiar su comportamiento
-     * interface AsyncTaskExecutor {
-     *     fun <Params, Progress, Result> execute(task: AsyncTask<Params, Progress, Result>, vararg params: Params)
-     * }
-     *
-     * class RealAsyncTaskExecutor : AsyncTaskExecutor {
-     *     override fun <Params, Progress, Result> execute(task: AsyncTask<Params, Progress, Result>, vararg params: Params) {
-     *         task.execute(*params)
-     *     }
-     * }
-     *
-     * class TestAsyncTaskExecutor : AsyncTaskExecutor {
-     *     override fun <Params, Progress, Result> execute(task: AsyncTask<Params, Progress, Result>, vararg params: Params) {
-     *         // Ejecuta la tarea de forma sincrónica en el hilo actual para las pruebas
-     *         task.execute(*params).get()
-     *     }
-     * }
-     *
-     * Nos daba este error:
-     *
-     *Method execute in android.os.AsyncTask not mocked. See https://developer.android.com/r/studio-ui/build/not-mocked for details.
-     * java.lang.RuntimeException: Method execute in android.os.AsyncTask not mocked. See https://developer.android.com/r/studio-ui/build/not-mocked for details.
-     * 	at android.os.AsyncTask.execute(AsyncTask.java)
-     * 	at HttpClient.executeGetRequest(HttpClient.kt:48)
-     * 	at com.example.autocolorsprueba.HttpClientTest.testExecuteGetRequest(HttpClientTest.kt:21)
-     * 	...
+     * Se comprueba la conexión con el servidor y que devuelva datos
      */
     @Test
-    fun testExecuteGetRequest() {
+    fun testExecuteGetRequest()  = runBlocking{
         // URL de prueba y parámetros
         val serverUrl = "https://ccd3-176-12-82-226.ngrok-free.app/endpoint"
         val params = mapOf("color" to "f44336", "match" to "97")
 
-        // Crea un objeto HttpClient y configura esta clase como el listener
-        val httpClient = HttpClient(this)
+        val httpClient = HttpClient(this@HttpClientTest)
 
-        // Ejecuta la solicitud GET
         httpClient.executeGetRequest(serverUrl, params)
-
-        // Espera un tiempo razonable para que la solicitud se complete (ajusta según sea necesario)
         Thread.sleep(5000)
-
         // Verifica que se hayan recibido los coches
         assertThat(cochesReceived).isNotNull()
         assertThat(cochesReceived).isNotEmpty()
         // Aquí puedes agregar más aserciones según la respuesta esperada del servidor
     }
 
+
+
     /**
      * Prueba para ver si se ha recibido algo
      */
+
+
+
     override fun onCochesReceived(cochesList: List<HttpClient.Coches>) {
-        // Almacena la lista de coches recibida para su verificación en el test
+        TODO("Not yet implemented")
         cochesReceived = cochesList
+
     }
 }
