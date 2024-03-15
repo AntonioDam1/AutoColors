@@ -1,6 +1,6 @@
 package com.example.autocolorsprueba
 
-import HttpClient
+import com.example.autocolorsprueba.httpClient.HttpClient
 import org.junit.Test
 import com.google.common.truth.Truth.assertThat
 import io.mockk.MockKAnnotations

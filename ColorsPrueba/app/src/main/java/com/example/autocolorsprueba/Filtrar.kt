@@ -1,6 +1,5 @@
     package com.example.autocolorsprueba
 
-    import HttpClient
     import android.content.Intent
     import androidx.appcompat.app.AppCompatActivity
     import android.os.Bundle
@@ -13,6 +12,7 @@
     import androidx.appcompat.widget.Toolbar
     import androidx.core.view.forEach
     import com.example.autocolorsprueba.database.CochesRoomDatabase
+    import com.example.autocolorsprueba.httpClient.HttpClient
     import com.example.autocolorsprueba.model.entity.ColorCoche
     import com.google.android.material.badge.BadgeDrawable
     import com.google.android.material.bottomnavigation.BottomNavigationView

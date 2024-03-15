@@ -92,6 +92,8 @@ class ColorFavViewHolder(view: View): RecyclerView.ViewHolder(view){
     val match = view.findViewById<TextView>(R.id.tvMatch)
     val fondo = view.findViewById<TextView>(R.id.colorin)
     val anio = view.findViewById<TextView>(R.id.tvAnio)
+    val nombrePintura = view.findViewById<TextView>(R.id.tvNombrePintura)
+
 
     /**
      * Método para establecer los datos del color del coche favorito en la interfaz de usuario.
@@ -99,12 +101,20 @@ class ColorFavViewHolder(view: View): RecyclerView.ViewHolder(view){
      * @param colorCoche El objeto ColorFav que contiene la información del color del coche favorito.
      */
     fun render(colorCoche: ColorFav){
-        hexadecimal.text = colorCoche.hexadecimal ?: "N/A"
-        marca.text = colorCoche.marca ?: "N/A"
-        codigo.text = colorCoche.codigo + ", " + colorCoche.modelo
-        match.text = colorCoche.matchPercentage.toString()
-        anio.text = colorCoche.anio.toString()
+        hexadecimal.text = colorCoche.hexadecimal?.toUpperCase()
+        nombrePintura.text = colorCoche.nombrePintura
+        marca.text = colorCoche.marca
+        codigo.text = colorCoche.codigo
+
+        val textoAnio = if (colorCoche.anio != null && colorCoche.anio >= 1900) {
+            colorCoche.anio
+        } else {
+            "N/A"
+        }
+        anio.text = textoAnio.toString()
+        match.text = ""
         fondo.setBackgroundColor(Color.parseColor(colorCoche.hexadecimal))
     }
+
 
 }
