@@ -38,7 +38,7 @@ class ColorCocheDetail : AppCompatActivity() {
     private lateinit var alphaTileViewOriginal: ImageView
     private lateinit var alphaTileViewColor: ImageView
     private lateinit var tvMarcaDetail: TextView
-    //private lateinit var textViewMarcaDetail: TextView
+    private lateinit var etiqueta: TextView
     private lateinit var textViewModeloDetail: TextView
     private lateinit var textViewAnioDetail: TextView
     private lateinit var textViewMatchDetail: TextView
@@ -68,6 +68,8 @@ class ColorCocheDetail : AppCompatActivity() {
         tvNombrePinturaDetail = findViewById(R.id.tvNombrePinturaDetail)
         tvMarcaDetail = findViewById(R.id.tvMarcaDetail)
         textLogoMarca = findViewById(R.id.logo)
+        constraintLayout = findViewById(R.id.constraintLayout)
+        etiqueta = findViewById(R.id.textView2)
 
         val origen = intent.getStringExtra("origen")
         val marca = intent.getStringExtra("marca")
@@ -122,10 +124,15 @@ class ColorCocheDetail : AppCompatActivity() {
             textHexadecimalOriginalDetail.isEnabled = false
             textHexadecimalOriginalDetail.isVisible = false
 
+            etiqueta.isEnabled = false
+            etiqueta.isVisible = false
+
             botonFav.isEnabled = false
             botonFav.visibility = View.INVISIBLE
 
-            //constraintLayout.setBackgroundColor(Color.parseColor(hexadecimal))
+            textHexadecimalDetail.setTextSize(48.0F)
+
+            constraintLayout.setBackgroundColor(Color.parseColor(hexadecimal))
 
         }
         if (origen.equals("car")) {
