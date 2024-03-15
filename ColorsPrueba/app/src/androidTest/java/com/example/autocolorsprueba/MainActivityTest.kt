@@ -56,15 +56,4 @@ class MainActivityTest {
 
     }
 
-    @Test
-    fun onActivityResult() {
-    }
-
-    @Test
-    fun onContextItemSelected() {
-    }
-
-    @Test
-    fun onCochesReceived() {
-    }
 }
