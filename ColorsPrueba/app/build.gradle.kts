@@ -1,3 +1,5 @@
+import org.jetbrains.dokka.gradle.DokkaTask
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -5,6 +7,30 @@ plugins {
     /* Persistencia de datos */
     kotlin("kapt")
 }
+
+
+
+tasks.withType<DokkaTask>().configureEach {
+
+
+    moduleName.set(project.name)
+    moduleVersion.set(project.version.toString())
+    outputDirectory.set(layout.buildDirectory.dir("../documentacion/dokka/$name"))
+    failOnWarning.set(false)
+    suppressInheritedMembers.set(true)
+    offlineMode.set(false)
+
+}
+tasks.dokkaHtml.configure{
+    dokkaSourceSets{
+        named("androidTest"){
+            sourceRoots.from(file("src/androidTest"))
+        }
+
+    }
+}
+
+
 
 android {
     namespace = "com.example.autocolorsprueba"
