@@ -1,0 +1,6 @@
+//[app](../../../../index.md)/[com.example.autocolorsprueba.httpClient](../../index.md)/[HttpClient](../index.md)/[Coches](index.md)/[Coches](-coches.md)
+
+# Coches
+
+[androidJvm]\
+constructor(id: [Long](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html), year: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html), maker: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), model: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), paintColorName: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), code: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), catalogueURL: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), hexadecimal: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), red: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html), green: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html), blue: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html), colorSampleURL: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), matchPercentage: [Double](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html)?)

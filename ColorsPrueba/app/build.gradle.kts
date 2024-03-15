@@ -9,26 +9,19 @@ plugins {
 }
 
 
-
-tasks.withType<DokkaTask>().configureEach {
-
-
-    moduleName.set(project.name)
-    moduleVersion.set(project.version.toString())
-    outputDirectory.set(layout.buildDirectory.dir("../documentacion/dokka/$name"))
-    failOnWarning.set(false)
-    suppressInheritedMembers.set(true)
-    offlineMode.set(false)
-
+tasks.dokkaHtml.configure {
+    outputDirectory.set(file("../documentacion/html"))
 }
-tasks.dokkaHtml.configure{
-    dokkaSourceSets{
-        named("androidTest"){
-            sourceRoots.from(file("src/androidTest"))
-        }
-
-    }
+tasks.dokkaGfm.configure {
+    outputDirectory.set(file("../documentacion/Gfm"))
 }
+tasks.dokkaJavadoc.configure {
+    outputDirectory.set(file("../documentacion/JavaDoc"))
+}
+
+
+
+
 
 
 

@@ -1,0 +1,17 @@
+$dokka.format:javadoc-v1
+$dokka.linkExtension:html
+$dokka.location:com.example.autocolorsprueba.database/CochesRoomDatabase.Companion///PointingToDeclaration/com/example/autocolorsprueba/database/CochesRoomDatabase.Companion.html
+$dokka.location:com.example.autocolorsprueba.httpClient/HttpClient.Coches///PointingToDeclaration/com/example/autocolorsprueba/httpClient/HttpClient.Coches.html
+$dokka.location:com.example.autocolorsprueba.httpClient/HttpClient.CypherManagerAES///PointingToDeclaration/com/example/autocolorsprueba/httpClient/HttpClient.CypherManagerAES.html
+$dokka.location:com.example.autocolorsprueba.httpClient/HttpClient.HttpClientListener///PointingToDeclaration/com/example/autocolorsprueba/httpClient/HttpClient.HttpClientListener.html
+$dokka.location:com.example.autocolorsprueba.test/ConsultasActivityTest.RecyclerViewItemCountAssertion.Companion///PointingToDeclaration/com/example/autocolorsprueba/test/ConsultasActivityTest.RecyclerViewItemCountAssertion.Companion.html
+$dokka.location:com.example.autocolorsprueba.test/ConsultasActivityTest.RecyclerViewItemCountAssertion///PointingToDeclaration/com/example/autocolorsprueba/test/ConsultasActivityTest.RecyclerViewItemCountAssertion.html
+$dokka.location:com.example.autocolorsprueba/ColorMaps.Taller///PointingToDeclaration/com/example/autocolorsprueba/ColorMaps.Taller.html
+com.example.autocolorsprueba
+com.example.autocolorsprueba.adapter
+com.example.autocolorsprueba.database
+com.example.autocolorsprueba.httpClient
+com.example.autocolorsprueba.model.dao
+com.example.autocolorsprueba.model.entity
+com.example.autocolorsprueba.test
+
