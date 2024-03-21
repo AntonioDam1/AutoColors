@@ -76,10 +76,12 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_gravity="center"
-        android:layout_marginStart="35dp"
         android:layout_marginTop="10dp"
         android:background="@color/md_theme_onBackground"
         android:orientation="horizontal"
+        app:layout_constraintEnd_toStartOf="@+id/textViewMatchDetail"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvHexadecimalDetail"
         app:tileSize="20" />
@@ -89,10 +91,12 @@
         android:layout_width="82dp"
         android:layout_height="80dp"
         android:layout_gravity="center"
-        android:layout_marginEnd="35dp"
         android:background="@color/md_theme_onBackground"
         android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/alphaTileViewColor"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textViewMatchDetail"
         app:layout_constraintTop_toTopOf="@+id/alphaTileViewColor"
         app:tileSize="20" />
 
@@ -116,11 +120,11 @@
         android:layout_height="wrap_content"
         android:text="MATCH: "
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/alphaTileViewOriginal"
+        app:layout_constraintBottom_toBottomOf="@+id/alphaTileViewColor"
         app:layout_constraintEnd_toStartOf="@+id/alphaTileViewOriginal"
-        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/alphaTileViewColor"
-        app:layout_constraintTop_toTopOf="@+id/alphaTileViewOriginal" />
+        app:layout_constraintTop_toTopOf="@+id/alphaTileViewColor" />
 
     <Button
         android:id="@+id/buttonBorrar"
@@ -138,11 +142,11 @@
         style="@style/CustomButton"
         android:layout_width="142dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="10dp"
         android:text="@string/agregar_favoritos"
-        app:layout_constraintBottom_toTopOf="@+id/buttonBorrar"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonBorrar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/buttonBorrar" />
 
     <TextView
         android:id="@+id/tvAnio"

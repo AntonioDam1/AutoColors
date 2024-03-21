@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_layout"
     android:layout_width="match_parent"
     android:layout_height="100dp">
 
@@ -9,98 +10,82 @@
         android:id="@+id/tvHexadecimal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
         android:text="#HEXADECIMAL"
-        android:textSize="15dp"
         android:textColor="@color/md_theme_onTertiary_mediumContrast"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.016"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.102" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    <ImageView
         android:id="@+id/colorin"
         android:layout_width="60dp"
-        android:layout_height="54dp"
-        android:textSize="12dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="10dp"
         android:textColor="@color/md_theme_onTertiary_mediumContrast"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.045"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.837" />
+        app:layout_constraintTop_toBottomOf="@+id/tvHexadecimal" />
 
     <TextView
         android:id="@+id/tvMarca"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="MARCA"
-        android:textSize="12dp"
         android:textColor="@color/md_theme_onTertiary_mediumContrast"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.541"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.506" />
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/tvMatch"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tvNombrePintura"
+        app:layout_constraintTop_toTopOf="@+id/tvNombrePintura" />
 
     <TextView
         android:id="@+id/tvMatch"
         android:layout_width="52dp"
         android:layout_height="wrap_content"
         android:text="match"
-        android:textSize="12dp"
         android:textColor="@color/md_theme_onTertiary_mediumContrast"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvAnio"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.838"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.546" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tvMarca"
+        app:layout_constraintTop_toTopOf="@+id/tvMarca" />
 
     <TextView
         android:id="@+id/tvAnio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="anio"
-        android:textSize="12dp"
         android:textColor="@color/md_theme_onTertiary_mediumContrast"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.54"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.802" />
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvCodigo"
+        app:layout_constraintStart_toStartOf="@+id/tvMarca" />
 
     <TextView
         android:id="@+id/tvCodigo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="CODIGO"
-        android:textSize="12dp"
         android:textColor="@color/md_theme_onTertiary_mediumContrast"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.302"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.802" />
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/tvNombrePintura"
+        app:layout_constraintTop_toBottomOf="@+id/tvNombrePintura" />
 
     <TextView
         android:id="@+id/tvNombrePintura"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="pintura"
-        android:textSize="12dp"
         android:textColor="@color/md_theme_onTertiary_mediumContrast"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.297"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.506" />
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/tvMarca"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/colorin"
+        app:layout_constraintTop_toTopOf="@+id/colorin"
+        app:layout_constraintVertical_chainStyle="spread" />
 
     <!--    <TextView-->
     <!--        android:id="@+id/tvMatch"-->

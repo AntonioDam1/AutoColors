@@ -11,9 +11,12 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import com.example.autocolorsprueba.database.CochesRoomDatabase
 import com.example.autocolorsprueba.model.entity.ColorFav
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -35,7 +38,7 @@ class ColorCocheDetail : AppCompatActivity() {
     private lateinit var alphaTileViewOriginal: ImageView
     private lateinit var alphaTileViewColor: ImageView
     private lateinit var tvMarcaDetail: TextView
-    //private lateinit var textViewMarcaDetail: TextView
+    private lateinit var etiqueta: TextView
     private lateinit var textViewModeloDetail: TextView
     private lateinit var textViewAnioDetail: TextView
     private lateinit var textViewMatchDetail: TextView
@@ -44,6 +47,9 @@ class ColorCocheDetail : AppCompatActivity() {
     private lateinit var textHexadecimalOriginalDetail : TextView
     private lateinit var tvNombrePinturaDetail : TextView
     private lateinit var textLogoMarca : ImageView
+    private lateinit var constraintLayout : ConstraintLayout
+    private lateinit var etiqueta_modelo : TextView
+    private lateinit var etiqueta_anio : TextView
 
     lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var colorOriginal: String
@@ -63,6 +69,10 @@ class ColorCocheDetail : AppCompatActivity() {
         tvNombrePinturaDetail = findViewById(R.id.tvNombrePinturaDetail)
         tvMarcaDetail = findViewById(R.id.tvMarcaDetail)
         textLogoMarca = findViewById(R.id.logo)
+        constraintLayout = findViewById(R.id.constraintLayout)
+        etiqueta = findViewById(R.id.textView2)
+        etiqueta_modelo = findViewById(R.id.tvModel)
+        etiqueta_anio = findViewById(R.id.tvAnio)
 
         val origen = intent.getStringExtra("origen")
         val marca = intent.getStringExtra("marca")
@@ -109,15 +119,34 @@ class ColorCocheDetail : AppCompatActivity() {
         botonFav = findViewById(R.id.buttonFav)
 
         if (origen.equals("fav")){
+
+            //Calculamos el color para los textos
+            val colorTextoHex = obtenerColorTexto(hexadecimal ?: "#FFFFFF")
+            val colorTextoHexParsed = android.graphics.Color.parseColor(colorTextoHex)
+            tvMarcaDetail.setTextColor(colorTextoHexParsed)
+            tvNombrePinturaDetail.setTextColor(colorTextoHexParsed)
+            textViewModeloDetail.setTextColor(colorTextoHexParsed)
+            textViewAnioDetail.setTextColor(colorTextoHexParsed)
+            textHexadecimalDetail.setTextColor(colorTextoHexParsed)
+            etiqueta_modelo.setTextColor(colorTextoHexParsed)
+            etiqueta_anio.setTextColor(colorTextoHexParsed)
             textViewModeloDetail.text = intent.getStringExtra("modelo") ?: "N/A"
+
             textViewMatchDetail.isEnabled = false
-            textViewMatchDetail.visibility = View.INVISIBLE
+            textViewMatchDetail.isVisible = false
 
             textHexadecimalOriginalDetail.isEnabled = false
-            textHexadecimalOriginalDetail.visibility = View.INVISIBLE
+            textHexadecimalOriginalDetail.isVisible = false
+
+            etiqueta.isEnabled = false
+            etiqueta.isVisible = false
 
             botonFav.isEnabled = false
             botonFav.visibility = View.INVISIBLE
+
+            textHexadecimalDetail.setTextSize(48.0F)
+
+            constraintLayout.setBackgroundColor(Color.parseColor(hexadecimal))
 
         }
         if (origen.equals("car")) {
@@ -148,10 +177,10 @@ class ColorCocheDetail : AppCompatActivity() {
                 alphaTileViewOriginal.setBackgroundColor(Color.parseColor(savedString))
             } else {
                 alphaTileViewOriginal.isEnabled = false
-                alphaTileViewOriginal.visibility = View.INVISIBLE
+                alphaTileViewOriginal.isVisible = false
 
                 textViewColorOriginal.isEnabled = false
-                textViewColorOriginal.visibility = View.INVISIBLE
+                textViewColorOriginal.isVisible = false
 
             }
         }
@@ -296,5 +325,17 @@ class ColorCocheDetail : AppCompatActivity() {
      */
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    fun obtenerColorTexto(colorFondoHex: String): String {
+        val colorFondo = Color.parseColor(colorFondoHex)
+        val luminanciaFondo = (0.299 * Color.red(colorFondo) + 0.587 * Color.green(colorFondo) + 0.114 * Color.blue(colorFondo)) / 255
+        return if (luminanciaFondo > 0.5) {
+            // Si el fondo es claro, usa texto oscuro
+            "#000000"
+        } else {
+            // Si el fondo es oscuro, usa texto claro
+            "#FFFFFF"
+        }
     }
 }

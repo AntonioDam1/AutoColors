@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.autocolorsprueba.ColorCocheDetail
@@ -97,7 +98,7 @@ class ColorCocheViewHolder(view: View): RecyclerView.ViewHolder(view){
     val marca = view.findViewById<TextView>(R.id.tvMarca)
     val codigo = view.findViewById<TextView>(R.id.tvCodigo)
     val match = view.findViewById<TextView>(R.id.tvMatch)
-    val fondo = view.findViewById<TextView>(R.id.colorin)
+    val fondo = view.findViewById<ImageView>(R.id.colorin)
     val anio = view.findViewById<TextView>(R.id.tvAnio)
     val nombrePintura = view.findViewById<TextView>(R.id.tvNombrePintura)
 
