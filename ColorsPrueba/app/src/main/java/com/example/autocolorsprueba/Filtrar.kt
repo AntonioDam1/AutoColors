@@ -1,6 +1,6 @@
     package com.example.autocolorsprueba
 
-    import HttpClient
+
     import android.content.Intent
     import androidx.appcompat.app.AppCompatActivity
     import android.os.Bundle
@@ -13,6 +13,7 @@
     import androidx.appcompat.widget.Toolbar
     import androidx.core.view.forEach
     import com.example.autocolorsprueba.database.CochesRoomDatabase
+    import com.example.autocolorsprueba.httpClient.HttpClient
     import com.example.autocolorsprueba.model.entity.ColorCoche
     import com.google.android.material.badge.BadgeDrawable
     import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -58,7 +59,7 @@
 
             //Para la peticion al servidor
             httpClient = HttpClient(this)
-            serverUrl = "https://ccd3-176-12-82-226.ngrok-free.app/endpoint"
+            serverUrl = "https://d70a-176-12-82-226.ngrok-free.app/endpoint"
 
             buttonBuscar = findViewById(R.id.buttonBuscar)
             buttonBuscar.setOnClickListener{

@@ -1,6 +1,6 @@
 package com.example.autocolorsprueba
 
-import HttpClient
+import com.example.autocolorsprueba.httpClient.HttpClient
 import android.app.Activity
 import android.os.Bundle
 import android.view.ContextMenu
@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity(), HttpClient.HttpClientListener{
 
         //Conexión con el servidor
         httpClient = HttpClient(this)
-        serverUrl = "https://ccd3-176-12-82-226.ngrok-free.app/endpoint"
+        serverUrl = "https://d70a-176-12-82-226.ngrok-free.app/endpoint"
 
         val database = CochesRoomDatabase.getInstance(this)
         val cocheMock = ColorCoche(
